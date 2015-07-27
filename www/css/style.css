@@ -16,7 +16,7 @@
     padding:0 1px 0 1px;
 }
 
-.button-2px-vertical-margin {
+.button.button-low-vertical-margin {
     margin-top:2px;
-    margin-bottom:2px
+    margin-bottom:2px;
 }
