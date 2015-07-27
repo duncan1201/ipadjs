@@ -96,6 +96,9 @@ app.controller('TodoCtrl', function($rootScope, $scope, $timeout, $ionicModal, P
                     } else if (submenuTitle == 'General') {
                         $rootScope.ion_header_bar_template = "modules/general/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/general/templates/main_content.htm";
+                    } else if (submenuTitle == 'Quick Keys'){
+                        $rootScope.ion_header_bar_template = "modules/quickKeys/templates/header_bar.htm";
+                        $rootScope.ion_content_template = "modules/quickKeys/templates/main_content.htm";
                     }
                };
                

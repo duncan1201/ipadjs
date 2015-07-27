@@ -1,1 +1,5 @@
 /* Empty. Add your own CSS if you like */
+.gray_gradient_bg{
+    color:white;
+    background: -webkit-linear-gradient(rgb(211,211,211), rgb(190,190,190), rgb(211,211,211))
+}
