@@ -30,15 +30,7 @@ document.addEventListener("deviceready", function(){
 
 
 
-app.controller('TodoCtrl', function($rootScope, $scope, $timeout, $ionicModal, Projects, Menus, $ionicSideMenuDelegate){
-               // A utility function for creating a new project
-               // with the given projectTitle
-               var createProject = function (projectTitle) {
-                    var newProject = Projects.newProject(projectTitle);
-                    $scope.projects.push(newProject);
-                    Projects.save($scope.projects);
-                    $scope.selectProject(newProject, $scope.projects.length - 1);
-               }
+app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Projects, Menus, $ionicSideMenuDelegate){
                
                $rootScope.ion_header_bar_template = "test.htm";
                $rootScope.ion_content_template = "test2.htm";
@@ -46,21 +38,10 @@ app.controller('TodoCtrl', function($rootScope, $scope, $timeout, $ionicModal, P
                // Load or initialize projects
                $scope.projects = Projects.all();
                $scope.menus = Menus.all();
-               
-               // Grab the last active, or the first project
-               $scope.activeProject = $scope.projects[Projects.getLastActiveIndex()];
-               
-               // Called to create a new project
-               $scope.newProject = function(){
-                    var projectTitle = prompt('Project name');
-                    if (projectTitle){
-                        createProject(projectTitle);
-                    }
-               };
-               
+  
                // Called to select the given project
                $scope.selectProject = function(project, index){
-                    $scope.activeProject = project;
+                    $scope.activeProject = "";
                     Projects.setLastActiveIndex(index);
                     $ionicSideMenuDelegate.toggleLeft(false);
                };
@@ -88,9 +69,12 @@ app.controller('TodoCtrl', function($rootScope, $scope, $timeout, $ionicModal, P
                };
                
                $scope.menuClick = function(submenuTitle) {
-                    console.log("test function:"+submenuTitle);
+                    if (submenuTitle == 'Supplier'){
+                        $rootScope.ion_header_bar_template = "modules/products/suppliers/templates/header_bar.htm";
+                        $rootScope.ion_content_template = "modules/products/suppliers/templates/main_content.htm";
+                    }
+               
                     if (submenuTitle == 'Sales Taxes') {
-                        //window.alert('inside if');
                         $rootScope.ion_header_bar_template = "modules/salesTax/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/salesTax/templates/main_content.htm";
                     } else if (submenuTitle == 'General') {
@@ -117,19 +101,9 @@ app.controller('TodoCtrl', function($rootScope, $scope, $timeout, $ionicModal, P
                // Try to create the first project, make sure to defer
                // this by using $timeout so everything is initialized
                // properly
+               /*
                $timeout(function(){
-                        
-                        if($scope.projects.length == 0) {
-                        
-                            while(true){
-                                var projectTitle = prompt('Your first project title:');
-                                if (projectTitle) {
-                                    createProject(projectTitle);
-                                    break;
-                                }
-                            }
-                        }
-                });
+                });*/
 });
 
 app.controller('menuCtrl', function($scope){
@@ -140,10 +114,6 @@ app.controller('menuCtrl', function($scope){
                     }
                }
 });
-
-app.controller('TestCtrl', function($scope){
-               
-               });
 
 app.factory('Projects', function(){
             return {
@@ -182,7 +152,7 @@ app.factory('Menus', function(){
                             },
                             {
                                 title: "Products",
-                                submenus: []
+                                submenus: ["Products", "Stock Control", "Supplier"]
                             },
                             {
                                 title: "Setup",
