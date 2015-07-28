@@ -6,7 +6,7 @@
 
 
 
-var app = angular.module('starter', ['ionic', 'salesTax', 'general']);
+var app = angular.module('starter', ['ionic', 'schemas', 'salesTax', 'general']);
 
 app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -22,27 +22,42 @@ app.run(function($ionicPlatform) {
 })
 
 document.addEventListener("deviceready", function(){
-                          var db = window.sqlitePlugin.openDatabase({name: "my.db", createFromLocation: 2});
+                          console.log("deviceready");
+                          var db = openDatabase('mydb1', '1.0', 'Test DB', 2 * 1024 * 1024);
+                          window.alert("after openDatabase");
                           db.transaction(function(tx){
-                                         tx.executeSql('Create table if not exists test_table(id integer primary key, data text, data_num integer)');
-                          });
+                                         
+                                         tx.executeSql('Drop table if exists sales_taxes');
+                                         console.log("after drop table");
+                                         tx.executeSql('Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255), rate real)');
+                                         console.log("after create table");
+                                         
+                                         tx.executeSql('insert into sales_taxes (name, rate) values ("GST", 1.2)');
+                                         console.log("after first insert");
+                                         tx.executeSql('insert into sales_taxes (name, rate) values ("Service Tax", 15)');
+                                         console.log("after second insert");
+                                         var query = "select * from sales_taxes";
+                                         tx.executeSql(query, [], function(tx, results){
+                                                       console.log("success callback:"+ results.rows.length);
+                                                       }, function(tx, e){
+                                                       window.alert("error");
+                                                       });
+                                         
+                                         });
+
 }, false);
 
-
-
-app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Projects, Menus, $ionicSideMenuDelegate){
+app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Menus, $ionicSideMenuDelegate){
                
                $rootScope.ion_header_bar_template = "test.htm";
                $rootScope.ion_content_template = "test2.htm";
                
-               // Load or initialize projects
-               $scope.projects = Projects.all();
+               // Load or initialize menus
                $scope.menus = Menus.all();
   
                // Called to select the given project
                $scope.selectProject = function(project, index){
                     $scope.activeProject = "";
-                    Projects.setLastActiveIndex(index);
                     $ionicSideMenuDelegate.toggleLeft(false);
                };
                
@@ -61,9 +76,6 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Pr
                         title: task.title
                     });
                     $scope.taskModal.hide();
-               
-                    // Inefficient, but save all the projects
-                    Projects.save($scope.projects);
                
                     task.title = "";
                };
@@ -101,45 +113,9 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Pr
                // Try to create the first project, make sure to defer
                // this by using $timeout so everything is initialized
                // properly
-               /*
+               
                $timeout(function(){
-                });*/
-});
-
-app.controller('menuCtrl', function($scope){
-               $scope.menuClick = function(submenuTitle) {
-                console.log("test function:"+submenuTitle);
-                    if (submenuTitle == 'Sales Taxes') {
-                        window.alert('inside if');
-                    }
-               }
-});
-
-app.factory('Projects', function(){
-            return {
-                all: function() {
-                    var projectString = window.localStorage['projects'];
-                    if (projectString){
-                        return angular.fromJson(projectString);
-                    }
-                    return [];
-                },
-                save: function(projects) {
-                    window.localStorage['projects'] = angular.toJson(projects);
-                },
-                newProject: function(projectTitle) {
-                    return {
-                        title: projectTitle,
-                        tasks:[]
-                    };
-                },
-                getLastActiveIndex: function(){
-                    return parseInt(window.localStorage['lastActiveProject']) || 0;
-                },
-                setLastActiveIndex: function(index) {
-                    window.localStorage['lastActiveProject'] = index;
-                }
-            }
+                }, 200);
 });
 
 app.factory('Menus', function(){

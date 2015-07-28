@@ -2,17 +2,51 @@
     <div class="col">Setup > Sales Taxes</div>
 </div>
 
-<div class="row">
-    <div class="col"><button class="button button-block">Add Sales Tax</button></div>
+<div class="card" ng-controller="salesTaxCtrl">
+    <div class="item item-divider"><button class="button button-small" ng-click="add_sales_tax_click()">Add Sales Tax</button></div>
 </div>
 
-<div class="row gray_gradient_bg">
-    <div class="col" style="color:white;border-style:solid;border-color:black">Name</div>
-    <div class="col" style="color:white;border-style:solid;border-color:black">Rate</div>
-    <div class="col" style="color:white;border-style:solid;border-color:black">&nbsp;</div>
+
+<div class="row row_header">
+    <div class="col">Name</div>
+    <div class="col">Rate</div>
+    <div class="col">&nbsp;</div>
 </div>
-<div class="row">
-    <div class="col" style="border-style:solid;border-color:black">GST</div>
-    <div class="col" style="border-style:solid;border-color:black">7%</div>
-    <div class="col" style="border-style:solid;border-color:black">Edit | Delete</div>
+<div class="row row_content">
+    <div class="col">GST</div>
+    <div class="col">8%</div>
+    <div class="col">Edit | Delete</div>
 </div>
+
+<script id="new-sales-tax.html" type="text/ng-template" ng-controller="salesTaxCtrl">
+    
+    <div class="modal">
+    
+    <!-- model header bar -->
+    <ion-header-bar class="bar-secondary">
+    <h1 class="title">New Sales Tax</h1>
+    <button class="button button-clear button-positive" ng-click="cancel_new_sales_tax_click()">Cancel</button>
+    </ion-header-bar>
+    
+    <!-- model content area -->
+    <ion-content>
+        <form ng-submit="create_new_sales_tax(task)">
+            <div class="list">
+                <label class="item item-input">
+                    <span>Name</span>
+                    <input type="text" placeholder="Enter name here" ng-model="task.title">
+                </label>
+                <label class="item item-input">
+                    <span>Rate</span>
+                    <input type="text" placeholder="Enter rate here" ng-model="task.title">
+                </label>
+            </div>
+            
+            <div class="padding">
+                <button type="submit" class="button button-block button-positive">Create Sales Tax</button>
+            </div>
+        </form>
+    </ion-content>
+    
+    </div>
+</script>

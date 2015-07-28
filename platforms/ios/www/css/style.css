@@ -17,3 +17,29 @@
     margin-top:2px;
     margin-bottom:2px;
 }
+
+/* table */
+.row_header .col{
+    color:black;
+    border-top-width:1px;
+    border-left-width:1px;
+    border-style: solid;
+    border-color: gray;
+}
+
+.row_header .col:last-child{
+    border-right-width:1px;
+}
+
+.row_content .col {
+    border-top-width:1px;
+    border-left-width:1px;
+    border-bottom-width:1px;
+    border-color:gray;
+    border-style:solid;
+}
+
+.row_content .col:last-child {
+    border-right-width:1px;
+}
+
