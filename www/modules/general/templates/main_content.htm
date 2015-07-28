@@ -2,7 +2,7 @@
     <div class="col">Setup > General</div>
 </div>
 
-<div class="card">
+<div class="card" ng-controller="GeneralCtrl">
     <div class="item item-divider">
         Store Settings
     </div>
@@ -11,7 +11,7 @@
             <div class="col">
                 <label class="item item-input">
                     <span class="input-label">Storename</span>
-                    <input type="text" placeholder="Enter storename here">
+                    <input type="text" placeholder="Enter storename here" value="{{storename}}">
                 </label>
             </div>
             <div class="col">
@@ -19,10 +19,7 @@
                     <span class="input-label">
                         Default Currency
                     </span>
-                    <select>
-                        <option>Blue</option>
-                        <option selected>Green</option>
-                        <option>Red</option>
+                    <select ng-options="currency.label for currency in currency_values track by currency.id" ng-model="selected_currency">
                     </select>
                 </label>
             </div>
@@ -31,7 +28,7 @@
             <div class="col-50">
                 <label class="item item-select">
                     <span class="input-label">Display prices</span>
-                    <select>
+                    <select ng-options="display_price.label for display_price in display_prices_values track by display_price.id" ng-model="selected_display_price">
                         <option>Tax exclusive</option>
                         <option selected>Tax inclusive</option>
                     </select>
@@ -40,23 +37,64 @@
         </div>
     </div>
     <div class="item item-divider item-divider-button-bar">
-        <div class="row row-button-bar">
-            <div class="col col-25 col-offset-50 col-button-bar">
-                <button class="button button-small button-block button-low-vertical-margin">Cancel</button>
+        <div class="row">
+            <div class="col col-25 col-offset-50">
+                <button class="button button-small button-block button-light" ng-click="cancelStoreSettingsClick()">
+                    Cancel
+                </button>
             </div>
-            <div class="col col-25 col-button-bar">
-                <button class="button button-small button-block button-low-vertical-margin">Save</button>
+            <div class="col col-25">
+                <button class="button button-small button-block button-light" ng-click="saveStoreSettingsClick()">
+                    Save
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="card">
+<div class="card" ng-controller="GeneralCtrl">
     <div class="item item-divider">
         Contact information
     </div>
     <div class="item">
-        
+        <div class="row">
+            <div class="col">
+                <label class="item item-input">
+                    <span class="input-label">Contact name</span>
+                    <input type="text" placeholder="Enter contact name here" value="{{contact_name}}">
+                </label>
+            </div>
+            <div class="col">
+                <label class="item item-input">
+                    <span class="input-label">Website</span>
+                    <input type="text" placeholder="Enter website here" value="{{website}}">
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="item item-input">
+                    <span class="input-label">Email</span>
+                    <input type="text" placeholder="Enter email here">
+                        </label>
+            </div>
+            <div class="col">
+                <label class="item item-input">
+                    <span class="input-label">Phone</span>
+                    <input type="text" placeholder="Enter phone here">
+                        </label>
+            </div>
+        </div>
+    </div>
+    <div class="item item-divider item-divider-button-bar">
+        <div class="row">
+            <div class="col col-25 col-offset-50">
+                <button class="button button-small button-block button-light">Cancel</button>
+            </div>
+            <div class="col col-25">
+                <button class="button button-small button-block button-light">Save</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -139,6 +177,16 @@
                                 </label>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="item item-divider item-divider-button-bar">
+        <div class="row">
+            <div class="col col-25 col-offset-50">
+                <button class="button button-small button-block button-light">Cancel</button>
+            </div>
+            <div class="col col-25">
+                <button class="button button-small button-block button-light">Save</button>
             </div>
         </div>
     </div>

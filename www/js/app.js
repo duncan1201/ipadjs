@@ -6,7 +6,7 @@
 
 
 
-var app = angular.module('starter', ['ionic', 'salesTax']);
+var app = angular.module('starter', ['ionic', 'salesTax', 'general']);
 
 app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

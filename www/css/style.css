@@ -1,22 +1,19 @@
-/* Empty. Add your own CSS if you like */
-.gray_gradient_bg{
-    color:white;
-    background: -webkit-linear-gradient(rgb(211,211,211), rgb(190,190,190), rgb(211,211,211))
-}
-
+/*
+ item-divider-button-bar 
+ */
 .item-divider-button-bar {
     padding:0;
 }
 
-.row-button-bar {
+.item-divider-button-bar .row {
     padding:0 1px 0 1px;
 }
 
-.col-button-bar {
+.item-divider-button-bar .col {
     padding:0 1px 0 1px;
 }
 
-.button.button-low-vertical-margin {
+.item-divider-button-bar .button {
     margin-top:2px;
     margin-bottom:2px;
 }
