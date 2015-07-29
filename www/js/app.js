@@ -6,14 +6,21 @@
 
 
 
-var app = angular.module('starter', ['ionic', 'schemas', 'salesTax', 'general']);
+var app = angular.module('starter', ['ionic', 'util', 'schemas', 'salesTax', 'general']);
 
-app.run(function($ionicPlatform) {
+app.run(function($ionicPlatform, DbUtil) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    if(window.cordova) {
+        if(window.cordova.plugins.Keyboard){
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        }
+        document.addEventListener("deviceready", function(){
+                                                    initApp(DbUtil);
+                                                 }, false);
+    }else{
+        initApp(DbUtil);
     }
     if(window.StatusBar) {
       StatusBar.styleDefault();
@@ -21,31 +28,30 @@ app.run(function($ionicPlatform) {
   });
 })
 
-document.addEventListener("deviceready", function(){
-                          console.log("deviceready");
-                          var db = openDatabase('mydb1', '1.0', 'Test DB', 2 * 1024 * 1024);
-                          window.alert("after openDatabase");
-                          db.transaction(function(tx){
-                                         
-                                         tx.executeSql('Drop table if exists sales_taxes');
-                                         console.log("after drop table");
-                                         tx.executeSql('Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255), rate real)');
-                                         console.log("after create table");
-                                         
-                                         tx.executeSql('insert into sales_taxes (name, rate) values ("GST", 1.2)');
-                                         console.log("after first insert");
-                                         tx.executeSql('insert into sales_taxes (name, rate) values ("Service Tax", 15)');
-                                         console.log("after second insert");
-                                         var query = "select * from sales_taxes";
-                                         tx.executeSql(query, [], function(tx, results){
-                                                       console.log("success callback:"+ results.rows.length);
-                                                       }, function(tx, e){
-                                                       window.alert("error");
-                                                       });
-                                         
-                                         });
+function initApp(DbUtil){
+    var db = DbUtil.openDb();
+    console.log("after openDatabase");
+    db.transaction(function(tx){
+                   
+                   //tx.executeSql('Drop table if exists sales_taxes');
+                   console.log("after drop table");
+                   tx.executeSql('Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255), rate real)');
+                   console.log("after create table");
+                   
+                   tx.executeSql('insert into sales_taxes (name, rate) values ("GST", 1.2)');
+                   console.log("after first insert");
+                   //tx.executeSql('insert into sales_taxes (name, rate) values ("Service Tax", 15)');
+                   console.log("after second insert");
+                   var query = "select * from sales_taxes";
+                   tx.executeSql(query, [], function(tx, results){
+                                 console.log("success callback:"+ results.rows.length);
+                                 }, function(tx, e){
+                                 window.alert("error");
+                                 });
+                   
+                   });
 
-}, false);
+}
 
 app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Menus, $ionicSideMenuDelegate){
                
@@ -97,14 +103,7 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                         $rootScope.ion_content_template = "modules/quickKeys/templates/main_content.htm";
                     }
                };
-               
-               $scope.newTask = function() {
-                    $scope.taskModal.show();
-               };
-               
-               $scope.closeNewTask = function () {
-                    $scope.taskModal.hide();
-               };
+
                
                $scope.toggleSideMenu = function() {
                     $ionicSideMenuDelegate.toggleLeft();
