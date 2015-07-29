@@ -36,19 +36,10 @@ function initApp(DbUtil){
                    //tx.executeSql('Drop table if exists sales_taxes');
                    console.log("after drop table");
                    tx.executeSql('Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255), rate real)');
+                   
+                   tx.executeSql('insert into sales_taxes (name, rate) values ("GST", 7)');
                    console.log("after create table");
-                   
-                   tx.executeSql('insert into sales_taxes (name, rate) values ("GST", 1.2)');
-                   console.log("after first insert");
-                   //tx.executeSql('insert into sales_taxes (name, rate) values ("Service Tax", 15)');
-                   console.log("after second insert");
-                   var query = "select * from sales_taxes";
-                   tx.executeSql(query, [], function(tx, results){
-                                 console.log("success callback:"+ results.rows.length);
-                                 }, function(tx, e){
-                                 window.alert("error");
-                                 });
-                   
+  
                    });
 
 }
@@ -66,13 +57,7 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                     $scope.activeProject = "";
                     $ionicSideMenuDelegate.toggleLeft(false);
                };
-               
-               // Create our modal
-               $ionicModal.fromTemplateUrl('new-task.html', function(modal){
-                                           $scope.taskModal = modal;
-                                           }, {
-                                                scope: $scope
-                                           });
+
                
                $scope.createTask = function(task){
                     if (!$scope.activeProject || !task){

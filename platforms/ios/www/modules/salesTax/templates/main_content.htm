@@ -1,4 +1,4 @@
-<ion-content scroll="true" ng-controller="salesTaxCtrl">
+<ion-content scroll="true" ng-controller="salesTaxCtrl" id="sales_taxes_main_content">
     <div class="row">
         <div class="col">Setup > Sales Taxes</div>
     </div>
@@ -13,10 +13,13 @@
         <div class="col">Rate</div>
         <div class="col">&nbsp;</div>
     </div>
-    <div class="row row_content">
-        <div class="col">GST</div>
-        <div class="col">8%</div>
-        <div class="col">Edit | Delete</div>
+    <div class="row row_content" ng-repeat="s in sales_taxes">
+        <div class="col">{{s.name}}</div>
+        <div class="col">{{s.rate}}%</div>
+        <div class="col">
+            <button class="button button-small button-clear button-positive">Edit</button>
+            <button class="button button-small button-clear button-positive" ng-click="delete_sales_tax_click({{s.id}})">Delete</button>
+        </div>
     </div>
     
     <script id="new-sales-tax.html" type="text/ng-template" >

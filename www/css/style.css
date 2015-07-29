@@ -23,6 +23,7 @@
     color:black;
     border-top-width:1px;
     border-left-width:1px;
+    border-bottom-width:1px;
     border-style: solid;
     border-color: gray;
 }
@@ -32,7 +33,6 @@
 }
 
 .row_content .col {
-    border-top-width:1px;
     border-left-width:1px;
     border-bottom-width:1px;
     border-color:gray;
