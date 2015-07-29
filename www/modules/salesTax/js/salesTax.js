@@ -1,27 +1,33 @@
 app.controller('salesTaxCtrl', function($scope, $ionicModal, SalesTaxes){
                
                SalesTaxes.all();
-               
+
                $ionicModal.fromTemplateUrl('new-sales-tax.html', function(modal){
-                                           $scope.taskModal = modal;
+                                           $scope.salesTaxModal = modal;
                                            }, {
                                            scope: $scope
                                            });
                
                $scope.add_sales_tax_click = function () {
-                    $scope.taskModal.show();
+                    $scope.salesTaxModal.show();
                };
                
-               $scope.create_new_sales_tax = function() {
-               
+               $scope.create_new_sales_tax_click = function(new_sales_tax) {
+                    console.log("name:" + new_sales_tax.name);
+                    console.log("rate:" + new_sales_tax.rate);
+                    SalesTaxes.create_sales_tax(new_sales_tax);
+                    $scope.salesTaxModal.hide();
                };
                
                $scope.cancel_new_sales_tax_click = function() {
-                    $scope.taskModal.hide();
+                    $scope.salesTaxModal.hide();
+               };
+               
+               $scope.edit_sales_tax_click = function(id) {
+               
                };
                
                $scope.delete_sales_tax_click = function(id) {
-                    console.log("delete sales tax:" + id);
                     SalesTaxes.delete_sales_tax(id);
                }
                
@@ -36,7 +42,7 @@ salesTax.factory('SalesTaxes', function(DbUtil){
                         var db = DbUtil.openDb();
                  
                         db.transaction(function(tx){
-                                tx.executeSql('select * from sales_taxes',
+                                tx.executeSql('SELECT * FROM sales_taxes ORDER BY name COLLATE NOCASE',
                                               [],
                                               function(tx, results){
                                                 ret += "[";
@@ -57,14 +63,11 @@ salesTax.factory('SalesTaxes', function(DbUtil){
                                                 console.log(ret);
                                           
                                                 var scope = angular.element(document.querySelector('#sales_taxes_main_content')).scope();
-                                              
+                                                
                                                 scope.$apply(function(){
                                                                 scope.sales_taxes = angular.fromJson(ret);
                                                               });
-                                              }/*,
-                                              function(tx, error){
-                                                console.log("error:" + error.message);
-                                              }*/);
+                                              });
                                 });
                     },
                  
@@ -78,6 +81,20 @@ salesTax.factory('SalesTaxes', function(DbUtil){
                                                           function(tx, r){
                                                             self.all();
                                                           });
+                                       });
+                    },
+                 
+                    create_sales_tax: function(new_sales_tax){
+                        var self = this;
+                        var db = DbUtil.openDb();
+                        db.transaction(function(tx){
+                                       tx.executeSql('insert into sales_taxes (name, rate) values (?, ?)',
+                                                     [new_sales_tax.name, new_sales_tax.rate],
+                                                     function(tx, r){
+                                                        self.all();
+                                                        new_sales_tax.name = "";
+                                                        new_sales_tax.rate = "";
+                                                     });
                                        });
                     }
                  }

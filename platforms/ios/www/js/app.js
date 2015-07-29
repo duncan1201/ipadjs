@@ -33,7 +33,7 @@ function initApp(DbUtil){
     console.log("after openDatabase");
     db.transaction(function(tx){
                    
-                   //tx.executeSql('Drop table if exists sales_taxes');
+                   tx.executeSql('Drop table if exists sales_taxes');
                    console.log("after drop table");
                    tx.executeSql('Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255), rate real)');
                    

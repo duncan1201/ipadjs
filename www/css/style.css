@@ -33,6 +33,7 @@
 }
 
 .row_content .col {
+    color:darkgray;
     border-left-width:1px;
     border-bottom-width:1px;
     border-color:gray;
@@ -41,5 +42,12 @@
 
 .row_content .col:last-child {
     border-right-width:1px;
+}
+
+/* misc */
+span.center {
+    text-align:center;
+    display:block;
+    color:darkgray;
 }
 
