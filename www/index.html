@@ -25,6 +25,7 @@
     <script src="js/schema.js"></script>
     <script src="modules/general/js/general.js"></script>
     <script src="modules/salesTax/js/salesTax.js"></script>
+    <script src="modules/products/suppliers/js/supplier.js"></script>
     
   </head>
 
@@ -36,12 +37,11 @@
                   <div ng-include="ion_header_bar_template"></div>
               </ion-header-bar>
               
-              <!--ion-content scroll="true"-->
-                  <div ng-include="ion_content_template"></div>
-              <!--/ion-content-->
+              <div ng-include="ion_content_template"></div>
               
           </ion-side-menu-content>
-          
+
+
           <!-- left menu -->
           <ion-side-menu side="left" expose-aside-when="large">
               <ion-header-bar class="bar-dark">

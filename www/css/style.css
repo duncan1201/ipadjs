@@ -21,11 +21,13 @@
 /* table */
 .row_header .col{
     color:black;
+    background-color:#e8e8e8;
     border-top-width:1px;
     border-left-width:1px;
     border-bottom-width:1px;
     border-style: solid;
-    border-color: gray;
+    border-color: lightgray;
+    /*border-color:#d3d3d3;*/
 }
 
 .row_header .col:last-child{
@@ -33,10 +35,10 @@
 }
 
 .row_content .col {
-    color:darkgray;
+    color:black;
     border-left-width:1px;
     border-bottom-width:1px;
-    border-color:gray;
+    border-color:lightgray;
     border-style:solid;
 }
 

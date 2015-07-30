@@ -6,7 +6,7 @@
 
 
 
-var app = angular.module('starter', ['ionic', 'util', 'schemas', 'salesTax', 'general']);
+var app = angular.module('starter', ['ionic', 'util', 'schemas', 'salesTax', 'general', 'supplier']);
 
 app.run(function($ionicPlatform, DbUtil) {
   $ionicPlatform.ready(function() {
@@ -35,9 +35,10 @@ function initApp(DbUtil){
                    
                    tx.executeSql('Drop table if exists sales_taxes');
                    console.log("after drop table");
-                   tx.executeSql('Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255) NOT NULL, rate real NOT NULL)');
+                   tx.executeSql('Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255) NOT NULL, rate real NOT NULL, system_generated BOOLEAN DEFAULT 0)');
                    
-                   tx.executeSql('insert into sales_taxes (name, rate) values ("GST", 7)');
+                   
+                   tx.executeSql('insert into sales_taxes (name, rate, system_generated) values ("No Tax", 0, true)');
                    console.log("after create table");
   
                    });
@@ -48,6 +49,7 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                
                $rootScope.ion_header_bar_template = "test.htm";
                $rootScope.ion_content_template = "test2.htm";
+               //$rootScope.ion_menu_content_template = "blank.htm";
                
                // Load or initialize menus
                $scope.menus = Menus.all();
@@ -80,6 +82,7 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                     if (submenuTitle == 'Sales Taxes') {
                         $rootScope.ion_header_bar_template = "modules/salesTax/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/salesTax/templates/main_content.htm";
+                        //$rootScope.ion_menu_content_template = "modules/salesTax/templates/menu_content.htm";
                     } else if (submenuTitle == 'General') {
                         $rootScope.ion_header_bar_template = "modules/general/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/general/templates/main_content.htm";

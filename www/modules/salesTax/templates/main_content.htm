@@ -17,8 +17,8 @@
         <div class="col">{{s.name}}</div>
         <div class="col">{{s.rate}}%</div>
         <div class="col">
-            <button class="button button-small button-clear button-positive">Edit</button>
-            <button class="button button-small button-clear button-positive" ng-click="delete_sales_tax_click({{s.id}})">Delete</button>
+            <button class="button button-small button-clear button-positive" ng-click="edit_sales_tax_click({{s.id}})">Edit</button>
+            <button class="button button-small button-clear button-positive" ng-click="delete_sales_tax_click({{s.id}})" ng-hide="{{s.system_generated}} == 1">Delete</button>
         </div>
     </div>
     
@@ -28,7 +28,7 @@
         
         <!-- model header bar -->
         <ion-header-bar class="bar-secondary">
-        <h1 class="title">New Sales Tax</h1>
+        <h1 class="title">{{modal_title}}</h1>
         <button class="button button-clear button-positive" ng-click="cancel_new_sales_tax_click()">Cancel</button>
         </ion-header-bar>
         
