@@ -111,6 +111,10 @@ app.factory('Menus', function(){
                 all: function() {
                     return [
                             {
+                                title: "Reporting",
+                                submenus: ["Sales Reports", "Inventory Reports"]
+                            },
+                            {
                                 title: "Sell",
                                 submenus: []
                             },
@@ -123,6 +127,6 @@ app.factory('Menus', function(){
                                 submenus: ["General", "Quick Keys", "Sales Taxes"]
                             }
                             ];
-                }
-            }
+                } // end of all
+            } // end of return
 });
