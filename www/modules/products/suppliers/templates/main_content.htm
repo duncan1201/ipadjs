@@ -1,12 +1,22 @@
-<ion-content scroll="true" ng-controller="supplierCtrl">
+<ion-content scroll="true" ng-controller="supplierCtrl" id="suppliers_main_content">
     <div class="row">
         <div class="col">Products > Suppliers</div>
     </div>
     
     <div class="row row_header">
         <div class="col">Name</div>
-        <div class="col">Description</div>
         <div class="col">Markup</div>
+        <div class="col">Description</div>
         <div class="col">&nbsp;</div>
+    </div>
+    <div class="row row_content" ng-repeat="s in suppliers">
+        <div class="col">{{s.name}}</div>
+        <div class="col">{{s.default_markup}} %</div>
+        <div class="col">{{s.desc}}</div>
+        <div class="col">
+            <button class="button button-small button-clear button-positive">View</button>
+            <button class="button button-small button-clear button-positive" ng-click="edit_supplier_click({{s.id}})">Edit</button>
+            <button class="button button-small button-clear button-positive">Delete</button>
+        </div>
     </div>
 </ion-content>

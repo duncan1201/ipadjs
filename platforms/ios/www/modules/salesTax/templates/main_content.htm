@@ -18,7 +18,7 @@
         <div class="col">{{s.rate}}%</div>
         <div class="col">
             <button class="button button-small button-clear button-positive" ng-click="edit_sales_tax_click({{s.id}})">Edit</button>
-            <button class="button button-small button-clear button-positive" ng-click="delete_sales_tax_click({{s.id}})">Delete</button>
+            <button class="button button-small button-clear button-positive" ng-click="delete_sales_tax_click({{s.id}})" ng-hide="{{s.system_generated}} == 1">Delete</button>
         </div>
     </div>
     

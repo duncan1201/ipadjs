@@ -33,14 +33,20 @@ function initApp(DbUtil){
     console.log("after openDatabase");
     db.transaction(function(tx){
                    
-                   tx.executeSql('Drop table if exists sales_taxes');
-                   console.log("after drop table");
-                   tx.executeSql('Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255) NOT NULL, rate real NOT NULL, system_generated BOOLEAN DEFAULT 0)');
+                        var sqls = [
+                                    /* sales tax table */
+                                'Drop table if exists sales_taxes',
+                                'Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255) NOT NULL, rate real NOT NULL, system_generated BOOLEAN DEFAULT 0)',
+                                'insert into sales_taxes (name, rate, system_generated) values ("No Tax", 0, 1)',
+                                    /* suppliers table */
+                                    //'Drop table if exists suppliers',
+                                    'Create table if not exists suppliers(id integer primary key, name varchar(100) NOT NULL, default_markup integer, desc varchar(255), company varchar(100), contact_name varchar(100), phone varchar(100), mobile varchar(100), fax varchar(50), email varchar(50), website varchar(50))'
+                               ];
                    
+                        for(i = 0; i < sqls.length; i++){
+                            tx.executeSql(sqls[i]);
+                        }
                    
-                   tx.executeSql('insert into sales_taxes (name, rate, system_generated) values ("No Tax", 0, true)');
-                   console.log("after create table");
-  
                    });
 
 }
@@ -82,7 +88,6 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                     if (submenuTitle == 'Sales Taxes') {
                         $rootScope.ion_header_bar_template = "modules/salesTax/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/salesTax/templates/main_content.htm";
-                        //$rootScope.ion_menu_content_template = "modules/salesTax/templates/menu_content.htm";
                     } else if (submenuTitle == 'General') {
                         $rootScope.ion_header_bar_template = "modules/general/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/general/templates/main_content.htm";
@@ -96,10 +101,6 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                $scope.toggleSideMenu = function() {
                     $ionicSideMenuDelegate.toggleLeft();
                };
-               
-               // Try to create the first project, make sure to defer
-               // this by using $timeout so everything is initialized
-               // properly
                
                $timeout(function(){
                 }, 200);

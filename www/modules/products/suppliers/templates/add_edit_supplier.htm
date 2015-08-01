@@ -1,0 +1,180 @@
+<ion-content scroll="true" ng-controller="supplierCtrl" id="add_edit_supplier">
+    <form ng-submit="supplier_form_submit_click(supplier)">
+        <div class="row">
+            <div class="col">Products > Suppliers</div>
+        </div>
+        
+        <div class="card">
+            <div class="item item-divider">Details</div>
+            <div class="item">
+                <div class="row">
+                    <div class="col">
+                        <label class="item item-input">
+                            <span class="input-label">Supplier name</span>
+                            <input type="text" placeholder="Enter supplier name here" ng-model="supplier.name">
+                                </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="item item-input">
+                            <span class="input-label">Default markup</span>
+                            <input type="number" placeholder="Enter default markup here" ng-model="supplier.default_markup">
+                                </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="item item-input">
+                            <span class="input-label">Description</span>
+                            <textarea rows="5" placeholder="Enter description here" ng-model="supplier.desc"></textarea>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="item item-divider">Contact Information</div>
+            <div class="item" style='background-color:red'>
+                <div class="row" style='background-color:yellow'>
+                    <div class="col col-50" style='background-color:blue'>
+                        <div class="list">
+                            <label class="item item-input item-stacked-label">
+                                <span>Company</span>
+                                <input type="text" placeholder="Enter company here" ng-model="supplier.company">
+                                    </label>
+                            <label class="item item-input item-stacked-label">
+                                <span>Contact name</span>
+                                <input type="text" placeholder="Enter contact name here" ng-model="supplier.contact_name">
+                                    </label>
+                            <label class="item item-input item-stacked-label">
+                                <span>Phone</span>
+                                <input type="tel" placeholder="Enter phone here" ng-model="supplier.phone">
+                                    </label>
+                            <label class="item item-input item-stacked-label">
+                                <span>Mobile</span>
+                                <input type="tel" placeholder="Enter mobile here" ng-model="supplier.mobile">
+                                    </label>
+                            <label class="item item-input item-stacked-label">
+                                <span>Fax</span>
+                                <input type="text" placeholder="Enter fax here" ng-model="supplier.fax">
+                                    </label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="list">
+                            <label class="item item-input item-stacked-label">
+                                <span>Email</span>
+                                <input type="email" placeholder="Enter email here">
+                                    </label>
+                            <label class="item item-input item-stacked-label">
+                                <span>Website</span>
+                                <input type="url" placeholder="Enter website here">
+                                    </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="item item-divider">
+                Address
+            </div>
+            <div class="item" style='background-color:blue'>
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="item item-divider">
+                                Physical Address
+                            </div>
+                            <div class="item">
+                                <div class="list">
+                                    <label class="item item-input item-stacked-label">
+                                        <span>Street</span>
+                                        <input type="text" placeholder="Enter street here">
+                                            </label>
+                                    <label class="item item-input item-stacked-label">
+                                        <span>Street</span>
+                                        <input type="text" placeholder="Enter street here">
+                                            </label>
+                                    <label class="item item-input item-stacked-label">
+                                        <span>City</span>
+                                        <input type="text" placeholder="Enter city here">
+                                            </label>
+                                    <label class="item item-input item-stacked-label">
+                                        <span>Postcode</span>
+                                        <input type="text" placeholder="Enter postcode here">
+                                            </label>
+                                    <label class="item item-input item-stacked-label">
+                                        <span>State</span>
+                                        <input type="text" placeholder="Enter street here">
+                                            </label>
+                                    <label class="item item-select item-stacked-label">
+                                        <span>Country</span>
+                                        <select>
+                                            <option>Test</option>
+                                            <option>Test2</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <div class="item item-divider">
+                                Postal Address <button class="button button-small button-positive button-clear" style='background-color:gray;padding:0;margin:0;border-width:0'>Same as Physical Address</button>
+                            </div>
+                            <div class="item">
+                                <div class="list">
+                                    <label class="item item-input item-stacked-label">
+                                        <span>Street</span>
+                                        <input type="text" placeholder="Enter street here">
+                                            </label>
+                                    <label class="item item-input item-stacked-label">
+                                        <span>Street</span>
+                                        <input type="text" placeholder="Enter street here">
+                                            </label>
+                                    <label class="item item-input item-stacked-label">
+                                        <span>City</span>
+                                        <input type="text" placeholder="Enter city here">
+                                            </label>
+                                    <label class="item item-input item-stacked-label">
+                                        <span>Postcode</span>
+                                        <input type="text" placeholder="Enter postcode here">
+                                            </label>
+                                    <label class="item item-input item-stacked-label">
+                                        <span>State</span>
+                                        <input type="text" placeholder="Enter street here">
+                                            </label>
+                                    <label class="item item-select item-stacked-label">
+                                        <span>Country</span>
+                                        <select>
+                                            <option>Test</option>
+                                            <option>Test2</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="item item-divider item-divider-paddingless">
+                <div class="row">
+                    <div class="col col-25 col-offset-50">
+                        <button class="button button-small button-block button-light">Cancel</button>
+                    </div>
+                    <div class="col col-25">
+                        <button class="button button-small button-block button-light" type="submit">Save Supplier</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</ion-content>

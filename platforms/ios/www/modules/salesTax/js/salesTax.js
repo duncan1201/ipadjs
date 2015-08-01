@@ -24,8 +24,8 @@ app.controller('salesTaxCtrl', function($scope, $ionicModal, SalesTaxes){
                };
                
                $scope.cancel_new_sales_tax_click = function() {
-                    $scope.new_sales_tax = {"name": "", "rate": 0};
                     $scope.salesTaxModal.hide();
+                    $scope.new_sales_tax = {"name": "", "rate": ""};
                };
                
                $scope.edit_sales_tax_click = function(id) {
@@ -66,6 +66,8 @@ salesTax.factory('SalesTaxes', function(DbUtil){
                                                     ret += results.rows.item(i).rate;
                                                     ret += ",\"id\":";
                                                     ret += results.rows.item(i).id;
+                                                    ret += ",\"system_generated\":";
+                                                    ret += results.rows.item(i).system_generated;
                                                     ret += "}";
                                               
                                                     if (i < results.rows.length - 1){
@@ -73,7 +75,7 @@ salesTax.factory('SalesTaxes', function(DbUtil){
                                                     }
                                                 }
                                                 ret += "]";
-                                                //console.log(ret);
+                                                console.log(ret);
                                           
                                                 var scope = angular.element(document.querySelector('#sales_taxes_main_content')).scope();
                                                 

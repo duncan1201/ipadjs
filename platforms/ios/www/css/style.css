@@ -1,22 +1,26 @@
 /*
- item-divider-button-bar 
+ item-divider-paddingless
  */
-.item-divider-button-bar {
+.item-divider-paddingless {
     padding:0;
 }
 
-.item-divider-button-bar .row {
+.item-divider-paddingless .row {
     padding:0 1px 0 1px;
 }
 
-.item-divider-button-bar .col {
+.item-divider-paddingless .col {
     padding:0 1px 0 1px;
 }
 
-.item-divider-button-bar .button {
+.item-divider-paddingless .button {
     margin-top:2px;
     margin-bottom:2px;
 }
+
+/*
+ item-paddingless
+ */
 
 /* table */
 .row_header .col{
