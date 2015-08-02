@@ -17,6 +17,15 @@ app.controller('supplierCtrl', function($rootScope, $scope, Suppliers){
                         Suppliers.create_new_supplier(supplier);
                     };
                
+                    $scope.same_as_physical_address_click = function(){
+                        console.log("same_as_physical_address_click");
+                    };
+               
+                    $scope.delete_supplier_click = function(id){
+                        console.log("delete click:" + id);
+                        Suppliers.delete_supplier(id);
+                    };
+               
                });
 
 var supplier = angular.module('supplier', ['ionic', 'util']);
@@ -40,10 +49,16 @@ salesTax.factory('Suppliers', function(DbUtil){
                                                 ret += "\"default_markup\":" + "" + results.rows.item(i).default_markup + ",";
                                                 ret += "\"desc\":" + "\"" + results.rows.item(i).desc + "\"";
                                                 ret += "}"
+                                                if( i < results.rows.length - 1){
+                                                    ret += ",";
+                                                }
                                               }
                                               ret += "]";
                                               console.log(ret);
+                                              
                                               var scope = angular.element(document.querySelector('#suppliers_main_content')).scope();
+                                              
+                                              console.log("scope=" + scope);
                                               scope.$apply(function(){
                                                                 scope.suppliers = angular.fromJson(ret);
                                                            });
@@ -61,7 +76,7 @@ salesTax.factory('Suppliers', function(DbUtil){
                  console.log("before inserting into suppliers table");
                  var insertSql = 'insert into suppliers (name, default_markup, desc, company, contact_name, phone, mobile, fax, email, website) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
                 db.transaction(function(tx){
-                               tx.executeSql('',
+                               tx.executeSql(insertSql,
                                              [new_supplier.name, new_supplier.default_markup, new_supplier.desc, new_supplier.company, new_supplier.contact_name, new_supplier.phone, new_supplier.mobile, new_supplier.fax, new_supplier.email, new_supplier.website],
                                              function(tx, results){
                                                 self.all_summary();
@@ -84,7 +99,7 @@ salesTax.factory('Suppliers', function(DbUtil){
                                                     ret += "\"id\":" + item.id + ",";
                                                     ret += "\"name\":\"" + item.name + "\",";
                                                     ret += "\"default_markup\":" + item.default_markup + ",";
-                                                    ret += "\"desc\":\"" + item.id + "\"";
+                                                    ret += "\"desc\":\"" + item.desc + "\"";
                                                     ret += "}";
                                               console.log("get supplier:" + ret);
                                               var scope = angular.element(document.querySelector('#add_edit_supplier')).scope();
@@ -94,6 +109,18 @@ salesTax.factory('Suppliers', function(DbUtil){
                                                 }
                                               }); // end of tx.executeSql
                                 }); // end of db.transction
-            } // end of get_supplier
+            }, // end of get_supplier
+            delete_supplier: function(id){
+                 var self = this;
+                 var db = DbUtil.openDb();
+                 db.transaction(function(tx){
+                                    var deleteSql = "delete from suppliers where id = ?";
+                                    tx.executeSql(deleteSql,
+                                                  [id],
+                                                  function(tx, results){
+                                                    self.all_summary();
+                                                  });
+                                }); // end of db.transcation
+            } // end of delete_supplier
         }// end of return
 });

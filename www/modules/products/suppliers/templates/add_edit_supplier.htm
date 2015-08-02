@@ -38,7 +38,7 @@
             <div class="item item-divider">Contact Information</div>
             <div class="item" style='background-color:red'>
                 <div class="row" style='background-color:yellow'>
-                    <div class="col col-50" style='background-color:blue'>
+                    <div class="col col-50" style='background-color:gray'>
                         <div class="list">
                             <label class="item item-input item-stacked-label">
                                 <span>Company</span>
@@ -82,19 +82,15 @@
             <div class="item item-divider">
                 Address
             </div>
-            <div class="item" style='background-color:blue'>
+            <div class="item" style='padding:0'>
                 <div class="row">
                     <div class="col">
-                        <div class="card">
+                        <div class="card" style='margin:0'>
                             <div class="item item-divider">
                                 Physical Address
                             </div>
                             <div class="item">
                                 <div class="list">
-                                    <label class="item item-input item-stacked-label">
-                                        <span>Street</span>
-                                        <input type="text" placeholder="Enter street here">
-                                            </label>
                                     <label class="item item-input item-stacked-label">
                                         <span>Street</span>
                                         <input type="text" placeholder="Enter street here">
@@ -123,16 +119,12 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="card">
+                        <div class="card" style='margin:0'>
                             <div class="item item-divider">
-                                Postal Address <button class="button button-small button-positive button-clear" style='background-color:gray;padding:0;margin:0;border-width:0'>Same as Physical Address</button>
+                                Postal Address <a href='#' style='font-size:12px;text-decoration: none;' ng-click="same_as_physical_address_click()">Same as Physical Address</a>
                             </div>
                             <div class="item">
                                 <div class="list">
-                                    <label class="item item-input item-stacked-label">
-                                        <span>Street</span>
-                                        <input type="text" placeholder="Enter street here">
-                                            </label>
                                     <label class="item item-input item-stacked-label">
                                         <span>Street</span>
                                         <input type="text" placeholder="Enter street here">

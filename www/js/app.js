@@ -34,17 +34,26 @@ function initApp(DbUtil){
     db.transaction(function(tx){
                    
                         var sqls = [
-                                    /* sales tax table */
-                                'Drop table if exists sales_taxes',
+                                    /* development purpose */
+                                //'Drop table if exists sales_taxes',
+                                //'Drop table if exists suppliers',
+                                
+                                /* sales tax table */
                                 'Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255) NOT NULL, rate real NOT NULL, system_generated BOOLEAN DEFAULT 0)',
                                 'insert into sales_taxes (name, rate, system_generated) values ("No Tax", 0, 1)',
-                                    /* suppliers table */
-                                    //'Drop table if exists suppliers',
-                                    'Create table if not exists suppliers(id integer primary key, name varchar(100) NOT NULL, default_markup integer, desc varchar(255), company varchar(100), contact_name varchar(100), phone varchar(100), mobile varchar(100), fax varchar(50), email varchar(50), website varchar(50))'
+                                
+                                /* suppliers table */
+                                    
+                                'Create table if not exists suppliers(id integer primary key, name varchar(100) NOT NULL, default_markup integer, desc varchar(255), company varchar(100), contact_name varchar(100), phone varchar(100), mobile varchar(100), fax varchar(50), email varchar(50), website varchar(50), physical_street varchar(50), physical_city varchar(50), physical_postcode varchar(50), physical_state varchar(50), physical_country varchar(50), postal_street varchar(50), postal_city varchar(50), postal_postcode varchar(50), postal_state varchar(50), postal_country varchar(50))'
                                ];
                    
                         for(i = 0; i < sqls.length; i++){
-                            tx.executeSql(sqls[i]);
+                            tx.executeSql(sqls[i],
+                                          [],
+                                          function(tx, results){},
+                                          function(tx, e){
+                                            console.log("Error:" + e.message);
+                                          });// end of tx.executeSql
                         }
                    
                    });
@@ -64,19 +73,6 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                $scope.selectProject = function(project, index){
                     $scope.activeProject = "";
                     $ionicSideMenuDelegate.toggleLeft(false);
-               };
-
-               
-               $scope.createTask = function(task){
-                    if (!$scope.activeProject || !task){
-                        return;
-                    }
-                    $scope.activeProject.tasks.push({
-                        title: task.title
-                    });
-                    $scope.taskModal.hide();
-               
-                    task.title = "";
                };
                
                $scope.menuClick = function(submenuTitle) {
@@ -102,8 +98,6 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                     $ionicSideMenuDelegate.toggleLeft();
                };
                
-               $timeout(function(){
-                }, 200);
 });
 
 app.factory('Menus', function(){
@@ -120,7 +114,7 @@ app.factory('Menus', function(){
                             },
                             {
                                 title: "Products",
-                                submenus: ["Products", "Stock Control", "Supplier"]
+                                submenus: ["Products", "Stock Control", "Types", "Supplier", "Tags"]
                             },
                             {
                                 title: "Setup",
