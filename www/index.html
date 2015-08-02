@@ -26,6 +26,7 @@
     <script src="modules/general/js/general.js"></script>
     <script src="modules/salesTax/js/salesTax.js"></script>
     <script src="modules/products/suppliers/js/supplier.js"></script>
+    <script src="modules/products/products/js/product.js"></script>
     
   </head>
 
@@ -48,14 +49,14 @@
                   <h1 class="title">My company name</h1>
                   <!--button class="button button-icon ion-plus"></button-->
               </ion-header-bar>
-              <ion-content scroll="false">
+              <ion-content scroll="true">
                   <ion-list>
                       <ion-item ng-repeat="menu in menus">
                           <div class="list">
                               <div class="item item-divider">
                                   {{menu.title}}
                               </div>
-                              <a class="item" href="#" ng-repeat="submenu in menu.submenus" ng-click="menuClick('{{submenu}}')">
+                              <a class="item" href="#" ng-class="{active: active_submenu == submenu}" ng-repeat="submenu in menu.submenus" ng-click="submenuClick('{{submenu}}')">
                                   {{submenu}}
                               </a>
                           </div>

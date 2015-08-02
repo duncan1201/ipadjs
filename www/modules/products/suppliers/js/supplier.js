@@ -1,6 +1,10 @@
-app.controller('supplierCtrl', function($rootScope, $scope, Suppliers){
-               
-                    Suppliers.all_summary();
+app.controller('supplierCtrl',
+               function($rootScope, $scope, Suppliers){
+                    var main_content_scope = angular.element(document.querySelector('#suppliers_main_content')).scope();
+
+                    if (main_content_scope == $scope){
+                        Suppliers.all_summary();
+                    }
                
                     $scope.new_supplier_click = function() {
                         console.log("new supplier click");
@@ -58,7 +62,6 @@ salesTax.factory('Suppliers', function(DbUtil){
                                               
                                               var scope = angular.element(document.querySelector('#suppliers_main_content')).scope();
                                               
-                                              console.log("scope=" + scope);
                                               scope.$apply(function(){
                                                                 scope.suppliers = angular.fromJson(ret);
                                                            });

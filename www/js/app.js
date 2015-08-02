@@ -75,12 +75,19 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                     $ionicSideMenuDelegate.toggleLeft(false);
                };
                
-               $scope.menuClick = function(submenuTitle) {
-                    if (submenuTitle == 'Supplier'){
+               $scope.submenuClick = function(submenuTitle) {
+                    $rootScope.active_submenu = submenuTitle;
+               
+                    // Products
+                    if (submenuTitle == 'Products') {
+                        $rootScope.ion_header_bar_template = "modules/products/products/templates/header_bar.htm";
+                        $rootScope.ion_content_template = "modules/products/products/templates/main_content.htm";
+                    } else if (submenuTitle == 'Supplier'){
                         $rootScope.ion_header_bar_template = "modules/products/suppliers/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/products/suppliers/templates/main_content.htm";
                     }
                
+                    // Setup
                     if (submenuTitle == 'Sales Taxes') {
                         $rootScope.ion_header_bar_template = "modules/salesTax/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/salesTax/templates/main_content.htm";
