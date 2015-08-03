@@ -50,6 +50,15 @@
     border-right-width:1px;
 }
 
+/* input outline*/
+input.lightgray-outline{
+    outline-color: lightgray;
+    padding-left:.5em;
+    outline-width: 1px;
+    outline-style: solid;
+    width:89%;
+}
+
 /* misc */
 span.center {
     text-align:center;
