@@ -8,51 +8,43 @@
 
 var app = angular.module('starter', ['ionic', 'util', 'schemas', 'salesTax', 'general', 'supplier', 'product']);
 
-app.run(function($ionicPlatform, DbUtil) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if(window.cordova) {
-        if(window.cordova.plugins.Keyboard){
-            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        }
-        document.addEventListener("deviceready", function(){
-                                                    initApp(DbUtil);
-                                                 }, false);
-    }else{
-        initApp(DbUtil);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-  });
-})
+app.run(function($ionicPlatform, DbUtil, App_URLs, Schema_SQLs) {
+        var ready_function = function(){
+            /*
+             Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+             for form inputs)
+             */
+            if(window.cordova) {
+                if(window.cordova.plugins.Keyboard){
+                    cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                }
+                document.addEventListener("deviceready",
+                                          function(){
+                                            initApp(DbUtil, Schema_SQLs);
+                                          },
+                                          false);
+                }else{
+                    initApp(DbUtil, Schema_SQLs);
+                }
+                if(window.StatusBar) {
+                    StatusBar.styleDefault();
+                }
+        };
+        
+        $ionicPlatform.ready(ready_function);
+});// end of run
 
-function initApp(DbUtil){
+app.constant('App_URLs',
+             {
+                product_add_edit_url: 'modules/products/products/templates/add_edit_product.htm',
+                supplier_add_edit_url: 'modules/products/suppliers/templates/add_edit_supplier.htm'
+             });
+
+function initApp(DbUtil, Schema_SQLs){
     var db = DbUtil.openDb();
-    console.log("after openDatabase");
     db.transaction(function(tx){
-                   
-                        var sqls = [
-                                    /* development purpose */
-                                //'Drop table if exists sales_taxes',
-                                //'Drop table if exists suppliers',
-                                'Drop table if exists products',
-                                    
-                                /* sales tax table */
-                                'Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255) NOT NULL, rate real NOT NULL, system_generated BOOLEAN DEFAULT 0)',
-                                'insert into sales_taxes (name, rate, system_generated) values ("No Tax", 0, 1)',
-                                
-                                /* suppliers table */
-                                    
-                                'Create table if not exists suppliers(id integer primary key, name varchar(100) NOT NULL, default_markup integer, desc varchar(255), company varchar(100), contact_name varchar(100), phone varchar(100), mobile varchar(100), fax varchar(50), email varchar(50), website varchar(50), physical_street varchar(50), physical_city varchar(50), physical_postcode varchar(50), physical_state varchar(50), physical_country varchar(50), postal_street varchar(50), postal_city varchar(50), postal_postcode varchar(50), postal_state varchar(50), postal_country varchar(50))',
-                                 
-                                /* products */
-                                'Create table if not exists products(id integer primary key, product_name varchar(100), product_handle)'
-                               ];
-                   
-                        for(i = 0; i < sqls.length; i++){
-                            tx.executeSql(sqls[i],
+                        for(i = 0; i < Schema_SQLs.length; i++){
+                            tx.executeSql(Schema_SQLs[i],
                                           [],
                                           function(tx, results){},
                                           function(tx, e){
@@ -89,6 +81,9 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                     } else if (submenuTitle == 'Supplier'){
                         $rootScope.ion_header_bar_template = "modules/products/suppliers/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/products/suppliers/templates/main_content.htm";
+                    } else if (submenuTitle == 'Brands'){
+                        $rootScope.ion_header_bar_template = "modules/products/brands/templates/header_bar.htm";
+                        $rootScope.ion_content_template = "modules/products/brands/templates/main_content.htm";
                     }
                
                     // Setup
@@ -125,7 +120,7 @@ app.factory('Menus', function(){
                             },
                             {
                                 title: "Products",
-                                submenus: ["Products", "Stock Control", "Types", "Supplier", "Tags"]
+                                submenus: ["Products", "Stock Control", "Types", "Supplier", "Brands", "Tags"]
                             },
                             {
                                 title: "Setup",

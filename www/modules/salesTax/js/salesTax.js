@@ -1,4 +1,5 @@
 app.controller('salesTaxCtrl', function($scope, $ionicModal, SalesTaxes){
+               var self = this;
                var main_content_scope = angular.element(document.querySelector('#sales_taxes_main_content')).scope();
                var compose_button_scope = angular.element(document.querySelector('#sales_taxes_compose_button')).scope();
                
@@ -6,7 +7,7 @@ app.controller('salesTaxCtrl', function($scope, $ionicModal, SalesTaxes){
                     SalesTaxes.all();
                }
 
-               $ionicModal.fromTemplateUrl('new-sales-tax.html', function(modal){
+               $ionicModal.fromTemplateUrl('sales-tax-popup.html', function(modal){
                                                 $scope.salesTaxModal = modal;
                                            }, {
                                                 scope: $scope

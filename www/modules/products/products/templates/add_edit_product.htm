@@ -10,7 +10,7 @@
                 <div class="col">
                     <label class="item item-input" style="width:100%">
                         <span class="input-label">Product name</span>
-                        <input type="text" class="lightgray-outline" placeholder="Enter product name here">
+                        <input type="text" class="lightgray-outline" placeholder="Enter product name here" ng-model="product.product_name">
                         <sub>&nbsp;</sub>
                     </label>
                 </div>
@@ -20,7 +20,7 @@
                     <label class="item item-input">
                         <span class="input-label">Product handle</span>
                         <!--div style="width:100%"-->
-                            <input type="text" class="lightgray-outline" placeholder="Enter product handle here">
+                            <input type="text" class="lightgray-outline" placeholder="Enter product handle here" ng-model="product.product_handle">
                             <sub style="color:gray;margin-left:1em">A unique identifier for this product</sub>
                         <!--/div-->
                     </label>
@@ -30,7 +30,7 @@
                 <div class="col">
                     <label class="item item-input">
                         <span class="input-label">Description</span>
-                        <input type="text" class="lightgray-outline" placeholder="Enter description here">
+                        <input type="text" class="lightgray-outline" placeholder="Enter description here" ng-model="product.desc">
                         <sub>&nbsp;</sub>
                     </label>
                 </div>
@@ -57,8 +57,7 @@
                 <div class="col col-50">
                     <label class="item item-select">
                         <span class="input-label">Supplier</span>
-                        <select>
-                            <option>type 1</option>
+                        <select ng-model="product.supplier_id" ng-change="add_new_supplier_choose()" ng-options="supplier.name for supplier in suppliers track by supplier.id">
                         </select>
                     </label>
                 </div>

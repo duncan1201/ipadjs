@@ -1,5 +1,6 @@
 <ion-content scroll="true" ng-controller="supplierCtrl" id="add_edit_supplier">
     <form ng-submit="supplier_form_submit_click(supplier)">
+        <input type='hidden' ng-model="supplier.id"/>
         <div class="row">
             <div class="col">Products > Suppliers</div>
         </div>
@@ -66,11 +67,11 @@
                         <div class="list">
                             <label class="item item-input item-stacked-label">
                                 <span>Email</span>
-                                <input type="email" placeholder="Enter email here">
+                                <input type="email" placeholder="Enter email here" ng-model="supplier.email">
                                     </label>
                             <label class="item item-input item-stacked-label">
                                 <span>Website</span>
-                                <input type="url" placeholder="Enter website here">
+                                <input type="url" placeholder="Enter website here" ng-model="supplier.website">
                                     </label>
                         </div>
                     </div>
