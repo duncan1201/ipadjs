@@ -7,7 +7,8 @@ app.controller('salesTaxCtrl', function($scope, $ionicModal, SalesTaxes){
                     SalesTaxes.all();
                }
 
-               $ionicModal.fromTemplateUrl('sales-tax-popup.html', function(modal){
+               $ionicModal.fromTemplateUrl('sales-tax-popup.html',
+                                           function(modal){
                                                 $scope.salesTaxModal = modal;
                                            }, {
                                                 scope: $scope
@@ -18,8 +19,8 @@ app.controller('salesTaxCtrl', function($scope, $ionicModal, SalesTaxes){
                     $scope.salesTaxModal.show();
                };
                
-               $scope.create_new_sales_tax_click = function(new_sales_tax) {
-                    //console.log("name:" + new_sales_tax.name);
+               $scope.sales_tax_form_click = function(new_sales_tax) {
+                    
                     SalesTaxes.create_sales_tax(new_sales_tax);
                     $scope.salesTaxModal.hide();
                };

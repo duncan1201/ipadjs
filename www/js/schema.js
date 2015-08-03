@@ -4,6 +4,7 @@ app.constant('Schema_SQLs',
               'Drop table if exists sales_taxes',
               //'Drop table if exists suppliers',
               'Drop table if exists products',
+              'Drop table if exists brands',
               
               /* sales tax table */
               'Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255) NOT NULL, rate real NOT NULL, system_generated BOOLEAN DEFAULT 0)',
