@@ -90,15 +90,17 @@ salesTax.factory('SalesTaxes', function(DbUtil){
                  
                     delete_sales_tax: function (id) {
                         var self = this;
-                        var db = DbUtil.openDb();
-                        db.transaction(function(tx){
-                                       
-                                            tx.executeSql('delete from sales_taxes where id = ?',
-                                                          [id],
-                                                          function(tx, r){
-                                                            self.all();
-                                                          });
-                                       });
+                        var callback_function =
+                            function(tx, r){
+                                self.all();
+                            };
+                 
+                        var json = {
+                                        sql: "delete from sales_taxes where id = ?",
+                                        params: [id],
+                                        callback: callback_function
+                                    };
+                        DbUtil.executeSql(json);
                     },
                  
                     create_sales_tax: function(new_sales_tax){

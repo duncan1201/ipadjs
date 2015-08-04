@@ -3,6 +3,10 @@
         <div class="col">Products &gt; Products</div>
     </div>
     
+    <div class="card">
+        <div class="item item-divider"><button class="button button-small" ng-click="add_new_product_click()">Add Product</button></div>
+    </div>
+    
     <div class="row row_header">
         <div class="col">Product</div>
         <div class="col">Created</div>
@@ -11,6 +15,18 @@
         <div class="col">Supplier</div>
         <div class="col">Price</div>
         <div class="col">&nbsp;</div>
+    </div>
+    <div class="row row_content" ng-repeat="product in products">
+        <div class="col">{{product.product_name}}&nbsp;</div>
+        <div class="col">&nbsp;</div>
+        <div class="col">&nbsp;</div>
+        <div class="col">{{product.brand_name}}&nbsp;</div>
+        <div class="col">{{product.supplier_name}}&nbsp;</div>
+        <div class="col">&nbsp;</div>
+        <div class="col">
+            <button class="button button-small button-clear button-positive">Edit</button>
+            <button class="button button-small button-clear button-positive">Deactivate</button>
+        </div>
     </div>
 
 </ion-content>

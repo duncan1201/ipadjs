@@ -3,7 +3,8 @@
         <div class="col">Products > Add a new product</div>
     </div>
     
-    <form ng-submit="product_form_submit_click()">
+    <form ng-submit="product_form_submit_click(product)">
+        <input type="hidden" ng-model="product.id"/>
         <div class="card">
             <div class="item item-divider">Details</div>
             <div class="row">
@@ -47,7 +48,7 @@
                 <div class="col">
                     <label class="item item-select">
                         <span class="input-label">Product brand</span>
-                        <select ng-model="product.brand_id" ng-change="add_new_supplier_choose()" ng-options="brand.brand_name for brand in brands track by brand.id">
+                        <select ng-model="product.brand" ng-change="add_new_supplier_choose()" ng-options="brand.brand_name for brand in brands track by brand.id">
                         </select>
                     </label>
                 </div>
@@ -56,7 +57,7 @@
                 <div class="col col-50">
                     <label class="item item-select">
                         <span class="input-label">Supplier</span>
-                        <select ng-model="product.supplier_id" ng-change="add_new_supplier_choose()" ng-options="supplier.name for supplier in suppliers track by supplier.id">
+                        <select ng-model="product.supplier" ng-change="add_new_supplier_choose()" ng-options="supplier.name for supplier in suppliers track by supplier.id">
                         </select>
                     </label>
                 </div>

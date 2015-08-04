@@ -32,7 +32,6 @@ app.controller('supplierCtrl',
                     $scope.supplier_form_submit_click = function(supplier) {
                         $scope.edit_supplier_id = null;
                         $rootScope.ion_content_template = "modules/products/suppliers/templates/main_content.htm";
-                        console.log("angular.isDefined(supplier.id)="+angular.isDefined(supplier.id));
                         if (angular.isDefined(supplier.id)){
                             Suppliers.update_supplier(supplier);
                         } else {
@@ -95,12 +94,10 @@ supplier.factory('Suppliers', function(DbUtil){
                     }
                  }
                  ret += "]";
-                 console.log(ret);
                  return angular.fromJson(ret);
             }, // end of parse_suppliers_summary
             create_new_supplier: function(new_supplier) {
                  var self = this;
-                console.log("Suppliers.save=" + new_supplier.name);
                 
                  console.log(new_supplier.company);
                  console.log(new_supplier.contact_name);
@@ -113,7 +110,6 @@ supplier.factory('Suppliers', function(DbUtil){
                                              [new_supplier.name, new_supplier.default_markup, new_supplier.desc, new_supplier.company, new_supplier.contact_name, new_supplier.phone, new_supplier.mobile, new_supplier.fax, new_supplier.email, new_supplier.website],
                                              function(tx, results){
                                                 self.all_summary_default_callback();
-                                                console.log("after creat_new_supplier...");
                                              }, function(tx, e){
                                              console.log("error=" + e.message);
                                              });

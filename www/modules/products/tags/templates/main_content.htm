@@ -1,0 +1,56 @@
+<ion-content scroll="true" ng-controller="tagCtrl" id="tags_main_content">
+    
+    <div class="row">
+        <div class="col">Products &gt; Tags</div>
+    </div>
+    
+    <div class="card">
+        <div class="item item-divider"><button class="button button-small" ng-click="add_new_tag_click()">New Tag</button></div>
+    </div>
+    
+    <div class="row row_header">
+        <div class="col">Name</div>
+        <div class="col">Number of Products</div>
+        <div class="col">&nbsp;</div>
+    </div>
+    
+    <div class="row row_content" ng-repeat="tag in tags">
+        <div class="col">&nbsp;</div>
+        <div class="col">&nbsp;</div>
+        <div class="col">
+            <button class="button button-small button-clear button-positive" ng-click="edit_click({{brand.id}})">View Products</button>
+            <button class="button button-small button-clear button-positive" ng-click="edit_click({{brand.id}})">Edit</button>
+            <button class="button button-small button-clear button-positive" ng-click="delete_click({{brand.id}})">Delete</button>
+        </div>
+    </div>
+    
+    <script id="tags-popup.html" type="text/ng-template" >
+        <div class="modal" style="width:60%">
+        
+        <!-- modal header bar -->
+        <ion-header-bar>
+        <h1 class="title">Create tag</h1>
+        <button class="button button-clear button-positive" ng-click="tag_popup_cancel_click()">Cancel</button>
+        </ion-header-bar>
+        
+        <!-- modal content area -->
+        <ion-content>
+        <form name="tag_form" ng-submit="tag_form_submit_click(tag)">
+            <input type="hidden" ng-model="tag.id"/>
+            <div class="row">
+                <div class="col col-20">Tag name</div>
+                <div class="col col-80">
+                    <input type="text" placeholder="Enter tag name here" ng-model="brand.brand_name" style="width:90%;outline-width:1px;outline-color:lightgray;outline-style:solid;padding-left:1em;">
+                </div>
+            </div>
+        
+            <div class="padding">
+                <button type="submit" class="button button-block button-positive">Save tag</button>
+            </div>
+        </form>
+        </ion-content>
+        
+        </div>
+        </script>
+    
+</ion-content>

@@ -6,7 +6,7 @@
 
 
 
-var app = angular.module('starter', ['ionic', 'util', 'schemas', 'salesTax', 'general', 'supplier', 'product', 'brand']);
+var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag']);
 
 app.run(function($ionicPlatform, DbUtil, App_URLs, Schema_SQLs) {
         var ready_function = function(){
@@ -84,6 +84,9 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                     } else if (submenuTitle == 'Brands'){
                         $rootScope.ion_header_bar_template = "modules/products/brands/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/products/brands/templates/main_content.htm";
+                    } else if (submenuTitle == 'Tags'){
+                        $rootScope.ion_header_bar_template = "modules/products/tags/templates/header_bar.htm";
+                        $rootScope.ion_content_template = "modules/products/tags/templates/main_content.htm";
                     }
                
                     // Setup
