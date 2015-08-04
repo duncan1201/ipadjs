@@ -15,10 +15,10 @@
     </div>
     
     <div class="row row_content" ng-repeat="tag in tags">
-        <div class="col">&nbsp;</div>
+        <div class="col">{{tag.name}}&nbsp;</div>
         <div class="col">&nbsp;</div>
         <div class="col">
-            <button class="button button-small button-clear button-positive" ng-click="edit_click({{brand.id}})">View Products</button>
+            <button class="button button-small button-clear button-positive" ng-click="edit_click({{tag.id}})">View Products</button>
             <button class="button button-small button-clear button-positive" ng-click="edit_click({{brand.id}})">Edit</button>
             <button class="button button-small button-clear button-positive" ng-click="delete_click({{brand.id}})">Delete</button>
         </div>
@@ -40,7 +40,7 @@
             <div class="row">
                 <div class="col col-20">Tag name</div>
                 <div class="col col-80">
-                    <input type="text" placeholder="Enter tag name here" ng-model="brand.brand_name" style="width:90%;outline-width:1px;outline-color:lightgray;outline-style:solid;padding-left:1em;">
+                    <input type="text" placeholder="Enter tag name here" ng-model="tag.name" style="width:90%;outline-width:1px;outline-color:lightgray;outline-style:solid;padding-left:1em;">
                 </div>
             </div>
         
