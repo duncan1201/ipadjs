@@ -47,8 +47,7 @@
                 <div class="col">
                     <label class="item item-select">
                         <span class="input-label">Product brand</span>
-                        <select>
-                            <option>type 1</option>
+                        <select ng-model="product.brand_id" ng-change="add_new_supplier_choose()" ng-options="brand.brand_name for brand in brands track by brand.id">
                         </select>
                     </label>
                 </div>

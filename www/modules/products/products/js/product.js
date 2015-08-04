@@ -1,12 +1,22 @@
 app.controller('productCtrl',
-               function($rootScope, $scope, Products, Suppliers, App_URLs){
+               function($rootScope, $scope, Products, Suppliers, Brands, App_URLs){
+               
+                    var brands_callback =
+                        function(tx, results){
+                            var brands = Brands.parse_results(results);
+                            $scope.$apply(function(){
+                                          brands.unshift({id:-1, brand_name: "+add brand", desc: ""});
+                                          $scope.brands = brands;
+                                          });
+                        };
                
                     var suppliers_callback =
                         function(tx, results){
-                            $scope.$apply(function(){
                             var suppliers = Suppliers.parse_suppliers_summary(results);
-                            suppliers.unshift({id:-1, name: "+add supplier", default_markup: 1, desc: ""});
-                            $scope.suppliers = suppliers;
+                            $scope.$apply(function(){
+                                          
+                                          suppliers.unshift({id:-1, name: "+add supplier", default_markup: 1, desc: ""});
+                                          $scope.suppliers = suppliers;
                         });
                     }; // end of suppliers_callback
                
@@ -14,6 +24,7 @@ app.controller('productCtrl',
                                    function(event, url){
                                         if(url == App_URLs.product_add_edit_url){
                                             console.log("product_add_edit_url");
+                                            Brands.all(brands_callback);
                                             Suppliers.all_summary(suppliers_callback);
                                         }
                                    });
