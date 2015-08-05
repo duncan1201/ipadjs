@@ -23,7 +23,7 @@ app.controller('tagCtrl',
                     };
                
                     $scope.delete_click = function(id){
-               
+                        Tags.delete_tag(id);
                     };
                }); // end of tagCtrl
 
@@ -76,6 +76,20 @@ tag.factory('Tags',
                             ret.push({id: rows.item(i).id, name: rows.item(i).name});
                         }
                         return ret;
-                    } // end of parse_results
+                    }, // end of parse_results
+                    delete_tag : function(id){
+                        var self = this;
+                        var callback_function =
+                            function(tx, results) {
+                                self.all_with_default_callback();
+                            };
+                        var deleteSql = "delete from tags where id = ?";
+                        var json = {
+                            sql: deleteSql,
+                            params:[id],
+                            callback:callback_function
+                        };
+                        DbUtil.executeSql(json);
+                    } // end of delete_tag
                 }
             });
