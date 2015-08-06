@@ -56,10 +56,14 @@ input.lightgray-outline{
     padding-left:.5em;
     outline-width: 1px;
     outline-style: solid;
-    width:89%;
+    width:90%;
 }
 
 /* misc */
+.gray-color {
+    color:gray;
+}
+
 span.center {
     text-align:center;
     display:block;

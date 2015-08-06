@@ -20,7 +20,9 @@ app.controller('productCtrl',
                         });
                     }; // end of suppliers_callback
                
-                    Products.all_summary_with_default_callback();
+                    if ($rootScope.main_content == App_URLs.product_main_content_url){
+                        Products.all_summary_with_default_callback();
+                    }
                
                     $rootScope.$on('$includeContentLoaded',
                                    function(event, url){
@@ -33,21 +35,43 @@ app.controller('productCtrl',
                
                     $scope.add_new_supplier_choose =
                         function(){
-                            console.log("add_newsupplier_choose");
+                            if (!angular.isDefined($scope.product.markup)){
+                                $scope.product.markup = $scope.product.supplier.default_markup;
+                            }
                         };
                
+                    $scope.supply_price_change =
+                        function() {
+                            calcuate_retail_price();
+                        };
+               
+                    $scope.markup_change =
+                        function() {
+                            calcuate_retail_price();
+                        };
+               
+                    var calcuate_retail_price =
+                        function(){
+                            var markup = $scope.product.markup;
+                            var supply_price = $scope.product.supply_price;
+                            if (angular.isDefined(markup) && angular.isDefined(supply_price)){
+                                console.log("calculating retail price...");
+                                $scope.product.retail_price = (1 + markup / 100.0) * supply_price;
+                            }
+                    };
+               
                     $scope.add_new_product_click = function() {
-                        $rootScope.ion_content_template = "modules/products/products/templates/add_edit_product.htm";
+                        $rootScope.ion_content_template = App_URLs.product_add_edit_url;
                     };
                
                     $scope.product_form_submit_click = function(product) {
                         console.log("product_form_submit_click");
-                        $rootScope.ion_content_template = "modules/products/products/templates/main_content.htm";
+                        $rootScope.ion_content_template = App_URLs.product_main_content_url;
                         Products.create_product(product);
                     };
                
                     $scope.product_form_cancel_click = function() {
-                        $rootScope.ion_content_template = "modules/products/products/templates/main_content.htm";
+                        $rootScope.ion_content_template = App_URLs.product_main_content_url;
                     };
                }); // end of controller
 
@@ -62,8 +86,6 @@ product.factory('Products',
                                     var rows = results.rows;
                                     var ret = [];
                                     for(i = 0; i < rows.length; i++) {
-                console.log(angular.toJson("item i="+angular.toJson(rows.item(i))));
-                
                                         ret.push({
                                             id: rows.item(i).id,
                                             product_name: rows.item(i).product_name,
@@ -96,10 +118,10 @@ product.factory('Products',
                                 function(){
                                     self.all_summary_with_default_callback();
                                 };
-                            var insertSql = "insert into products (product_name, product_handle, desc, brand_id, supplier_id) values (?, ?, ?, ?, ?)";
+                            var insertSql = "insert into products (product_name, product_handle, desc, brand_id, supplier_id, supply_price, markup) values (?, ?, ?, ?, ?, ?, ?)";
                             var json = {
                                 sql: insertSql,
-                                params: [product.product_name, product.product_handle, product.desc, product.brand.id, product.supplier.id],
+                                params: [product.product_name, product.product_handle, product.desc, product.brand.id, product.supplier.id, product.supply_price, product.markup],
                                 callback: callback_function};
                             DbUtil.executeSql(json);
                         } // end of create_product

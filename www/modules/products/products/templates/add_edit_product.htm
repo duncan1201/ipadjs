@@ -66,6 +66,27 @@
         
         <div class="card">
             <div class="item item-divider">Pricing</div>
+            <div class="item">
+                <div class="row">
+                    <div class="col">Supply price</div>
+                    <div class="col">X Markup (%)</div>
+                    <div class="col">= Retail price</div>
+                </div>
+                <div class="row">
+                    <div class="col"><input type="number" min="0" step="0.01" class="lightgray-outline" ng-model="product.supply_price" ng-change="supply_price_change()"></div>
+                    <div class="col">
+                        <input type="number" min="0" step="0.02" class="lightgray-outline" ng-model="product.markup" ng-change="markup_change()">
+                    </div>
+                    <div class="col">
+                        <input type="number" min="0" step="0.01" class="lightgray-outline" ng-model="product.retail_price">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col gray-color">Excluding tax</div>
+                    <div class="col gray-color">&nbsp;</div>
+                    <div class="col gray-color">Excluding tax</div>
+                </div>
+            </div>
         </div>
         
         <div class="card">
