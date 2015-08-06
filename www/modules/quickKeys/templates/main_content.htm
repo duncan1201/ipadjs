@@ -1,8 +1,21 @@
-<ion-content scroll="true">
-<!-- our list and list items -->
-<ion-list>
-    <ion-item>
-        quick keys my content
-    </ion-item>
-</ion-list>
+<ion-content scroll="true" ng-controller="layoutCtrl" id="layouts_main_content">
+    <div class="row">
+        <div class="col">Products &gt; Quick Keys</div>
+    </div>
+    
+    <div class="card">
+        <div class="item item-divider"><button class="button button-small" ng-click="add_new_layout_click()">Add Layout</button></div>
+    </div>
+    
+    <div class="row row_header">
+        <div class="col">Name</div>
+        <div class="col">Date Created</div>
+        <div class="col">&nbsp;</div>
+    </div>
+    
+    <div class="row row_content" ng-repeat="layout in layouts">
+        <div class="col">{{layout.name}}</div>
+        <div class="col">&nbsp;</div>
+        <div class="col">&nbsp;</div>
+    </div>
 </ion-content>

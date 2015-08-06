@@ -1,4 +1,21 @@
 /*
+ card-paddingless
+ */
+.card-marginless {
+    margin:0;
+}
+.card-paddingless .item{
+    padding:0 1px 0 1px;
+}
+
+.card-paddingless .row{
+    padding:0 1px 0 1px;
+}
+.card-divider-paddingless .col {
+    padding:0 1px 0 1px;
+}
+
+/*
  item-divider-paddingless
  */
 .item-divider-paddingless {
@@ -56,10 +73,14 @@ input.lightgray-outline{
     padding-left:.5em;
     outline-width: 1px;
     outline-style: solid;
-    width:89%;
+    width:90%;
 }
 
 /* misc */
+.gray-color {
+    color:gray;
+}
+
 span.center {
     text-align:center;
     display:block;

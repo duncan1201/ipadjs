@@ -6,7 +6,7 @@
 
 
 
-var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag']);
+var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout']);
 
 app.run(function($ionicPlatform, DbUtil, App_URLs, Schema_SQLs) {
         var ready_function = function(){
@@ -38,7 +38,8 @@ app.constant('App_URLs',
              {
                 product_add_edit_url: 'modules/products/products/templates/add_edit_product.htm',
                 product_main_content_url: 'modules/products/products/templates/main_content.htm',
-                supplier_add_edit_url: 'modules/products/suppliers/templates/add_edit_supplier.htm'
+                supplier_add_edit_url: 'modules/products/suppliers/templates/add_edit_supplier.htm',
+                layout_add_edit_url: 'modules/quickKeys/templates/add_edit_layout.htm'
              });
 
 function initApp(DbUtil, Schema_SQLs){
@@ -55,7 +56,7 @@ function initApp(DbUtil, Schema_SQLs){
                    
                    });
 
-}
+};
 
 app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Menus, $ionicSideMenuDelegate, App_URLs){
                
@@ -107,6 +108,9 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                $scope.toggleSideMenu = function() {
                     $ionicSideMenuDelegate.toggleLeft();
                };
+               
+               $scope.list1 = {title: 'AngularJS - Drag Me'};
+               $scope.list2 = {};
                
 });
 

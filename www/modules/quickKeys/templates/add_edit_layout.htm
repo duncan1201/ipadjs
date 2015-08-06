@@ -1,0 +1,59 @@
+<ion-content scroll="true" ng-controller="layoutCtrl">
+    <div class="row">
+        <div class="col">Setup &gt; Quick Keys > New Quick Key Layout</div>
+    </div>
+    <form ng-submit="layout_form_submit_click(layout)">
+    <div class="row">
+        <div class="col">
+            <input type="text" placeholder="Search Products" class="lightgray-outline" list="productList">
+            <datalist id="productlist">
+                <option value="Black" />
+                <option value="Blue" />
+                <option value="Dark Green" />
+                <option value="Grey" />
+                <option value="Green" />
+                <option value="Red" />
+                <option value="White" />
+                <option value="Yellow" />
+            </datalist>
+        </div>
+        <div class="col"><button>Add Product</button></div>
+        <div class="col">
+            <input type="text" placeholder="New Quick Key Layout" class="lightgray-outline" ng-model="layout.name">
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col col-80 col-offset-10" style='border:1px solid black;background-color:yellow;padding:0'>
+            <div class="card card-paddingless card-marginless" style='background-color:blue;'>
+                <div class="item item-divider">
+                    title
+                </div>
+                <div class="item">
+                    <div class="row">
+                        <div class="col" style='border:1px solid black' draggable="true">item 1</div>
+                        <div class="col" style='border:1px solid black' draggable="true">item 2</div>
+                        <div class="col" style='border:1px solid black' draggable="true">item 3</div>
+                    </div>
+                </div>
+                <div class="item item-divider">
+                    &lt; &gt;
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="item item-divider item-divider-paddingless">
+            <div class="row">
+                <div class="col col-25 col-offset-50">
+                    <button class="button button-small button-block button-light" ng-click="layout_form_cancel_click()">Cancel</button>
+                </div>
+                <div class="col col-25">
+                    <button class="button button-small button-block button-light" type="submit">Save Layout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</ion-content>
