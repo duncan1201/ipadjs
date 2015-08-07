@@ -20,7 +20,7 @@ app.controller('productCtrl',
                         });
                     }; // end of suppliers_callback
                
-                    if ($rootScope.main_content == App_URLs.product_main_content_url){
+                    if ($rootScope.ion_content_template == App_URLs.product_main_content_url){
                         Products.all_summary_with_default_callback();
                     }
                

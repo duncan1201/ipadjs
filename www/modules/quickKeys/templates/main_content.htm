@@ -15,7 +15,10 @@
     
     <div class="row row_content" ng-repeat="layout in layouts">
         <div class="col">{{layout.name}}</div>
-        <div class="col">&nbsp;</div>
-        <div class="col">&nbsp;</div>
+        <div class="col">{{layout.creation_date}}&nbsp;</div>
+        <div class="col">
+            <button class="button button-small button-clear button-positive">Edit</button>
+            <button class="button button-small button-clear button-positive" ng-click="delete_click({{layout.id}})">Delete</button>
+        </div>
     </div>
 </ion-content>

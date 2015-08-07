@@ -7,7 +7,7 @@ app.constant('Schema_SQLs',
               //'Drop table if exists brands',
               //'Drop table if exists tags',
               //'Drop table if exists layouts',
-              'Drop table if exists layout_groups',
+              //'Drop table if exists layout_groups',
               'Drop table if exists layout_keys',
               
               /* sales tax table */

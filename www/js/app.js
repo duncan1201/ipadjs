@@ -39,7 +39,8 @@ app.constant('App_URLs',
                 product_add_edit_url: 'modules/products/products/templates/add_edit_product.htm',
                 product_main_content_url: 'modules/products/products/templates/main_content.htm',
                 supplier_add_edit_url: 'modules/products/suppliers/templates/add_edit_supplier.htm',
-                layout_add_edit_url: 'modules/quickKeys/templates/add_edit_layout.htm'
+                layout_add_edit_url: 'modules/quickKeys/templates/add_edit_layout.htm',
+                layout_main_content_url: 'modules/quickKeys/templates/main_content.htm',
              });
 
 function initApp(DbUtil, Schema_SQLs){
@@ -100,7 +101,7 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                         $rootScope.ion_content_template = "modules/general/templates/main_content.htm";
                     } else if (submenuTitle == 'Quick Keys'){
                         $rootScope.ion_header_bar_template = "modules/quickKeys/templates/header_bar.htm";
-                        $rootScope.ion_content_template = "modules/quickKeys/templates/main_content.htm";
+                        $rootScope.ion_content_template = App_URLs.layout_main_content_url;
                     }
                };
 
@@ -113,6 +114,7 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                $scope.list2 = {};
                
 });
+
 
 app.factory('Menus', function(){
             return {
