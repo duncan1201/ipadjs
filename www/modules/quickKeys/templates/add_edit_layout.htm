@@ -17,31 +17,22 @@
                 <option value="Yellow" />
             </datalist>
         </div>
-        <div class="col"><button>Add Product</button></div>
+        <div class="col"><button type="button" ng-click="add_product_click()">Add Product</button></div>
         <div class="col">
             <input type="text" placeholder="New Quick Key Layout" class="lightgray-outline" ng-model="layout.name">
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col col-80 col-offset-10" style='border:1px solid black;background-color:yellow;padding:0'>
             <div class="card card-paddingless card-marginless" style='background-color:blue;'>
                 <div class="item item-divider">
                     <div class="row">
-                        <div class="col">
+                        <div class="col" ng-repeat="group in layout.groups">
                             <label class="item item-radio">
-                                <input type="radio" name="group">
-                                    <div class="item-content">
-                                        Group 1
-                                    </div>
-                                    <i class="radio-icon ion-checkmark"></i>
-                            </label>
-                        </div>
-                        <div class="col">
-                            <label class="item item-radio">
-                                <input type="radio" name="group">
-                                    <div class="item-content">
-                                        Group 2
+                                <input type="radio" name="group_radio">
+                                    <div class="item-content center" style="">
+                                        {{group.name}}
                                     </div>
                                     <i class="radio-icon ion-checkmark"></i>
                             </label>
@@ -57,7 +48,9 @@
                     <div class="row">
                         <div class="col">item 1</div>
                         <div class="col">item 2</div>
-                        <div class="col">item 3</div>
+                        <div class="col" ng-repeat="key in layout.groups[0].keys">
+                            {{key.display_name}}
+                        </div>
                     </div>
                 </div>
                 <div class="item item-divider">
@@ -71,7 +64,7 @@
         <div class="item item-divider item-divider-paddingless">
             <div class="row">
                 <div class="col col-25 col-offset-50">
-                    <button class="button button-small button-block button-light" ng-click="layout_form_cancel_click()">Cancel</button>
+                    <button type="button" class="button button-small button-block button-light" ng-click="layout_form_cancel_click()">Cancel</button>
                 </div>
                 <div class="col col-25">
                     <button class="button button-small button-block button-light" type="submit">Save Layout</button>

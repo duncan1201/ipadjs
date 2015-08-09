@@ -6,7 +6,7 @@ app.controller('layoutCtrl',
                
                     if ($rootScope.ion_content_template == App_URLs.layout_main_content_url){
                         Layouts.all_with_default_callback();
-                    }
+                    };
                
                     $scope.add_new_layout_click =
                         function () {
@@ -15,6 +15,7 @@ app.controller('layoutCtrl',
                
                     $scope.layout_form_submit_click =
                         function (layout) {
+               console.log("layout_form_submit_click");
                             Layouts.create_layout(layout);
                         };
                
@@ -28,6 +29,24 @@ app.controller('layoutCtrl',
                         function(id) {
                             Layouts.delete_layout(id);
                         };
+               
+                    $scope.add_product_click =
+                        function () {
+               console.log("add_product_click");
+                            var key = {id: 1, layout_group_id: 1, product_id: 1, color: 'red', display_name: 'Coffee'};
+                            var key2 = {id: 2, layout_group_id: 1, product_id: 2, color: 'red', display_name: 'Teh O'};
+               $scope.layout['groups'][0]['keys'] = [];
+               $scope.layout['groups'][0]['keys'].push(key);
+               $scope.layout['groups'][0]['keys'].push(key2);
+               console.log("add_product_click=" + $scope.layout['groups'][0]);
+                            $scope.$apply(function(){
+                                   
+                            });
+                        };
+               
+               $scope.layout_form_cancel_click = function(){
+               $rootScope.ion_content_template = App_URLs.layout_main_content_url;
+               };
                
                     $rootScope.$on('$includeContentLoaded',
                         function(event, url){
@@ -65,7 +84,7 @@ layout.factory('Layouts',
                
                             var callback_function = function(tx, results){
                                 var layout_id = results.insertId;
-                                console.log("results.insertId=" + results.insertId);
+                                console.log("results.insertId2=" + results.insertId);
                                 self.create_layout_group(layout_id);
                             };
                             var json = {sql: insertSql, params:[layout.name], callback: callback_function};
@@ -99,7 +118,7 @@ layout.factory('Layouts',
                         create_layout_group: function(layout_id){
                             var callback_function = function (tx, results) {};
                             var insertSql = "insert into layout_groups (name, is_active, layout_id) values (?, ?, ?)";
-                            var json = {sql: insertSql, params: ["group_name", 1, layout_id], callback: callback_function};
+                            var json = {sql: insertSql, params: ["group 1", 1, layout_id], callback: callback_function};
                             DbUtil.executeSql(json);
                         }, // end of create_layout_group
                         get_layout_group_for_edit : function (layout) {
@@ -112,14 +131,12 @@ layout.factory('Layouts',
                
                                 layout["groups"] = [];
                                 for(i = 0; i < rows.length; i++){
-                                    layout["groups"].push({id: rows.item(i).id, name: rows.item(i).name, isActive: rows.item(i).is_active});
+                                    layout["groups"].push({id: rows.item(i).id, name: rows.item(i).name, is_active: rows.item(i).is_active});
                                     console.log("rows.item(i).name="+rows.item(i).name);
-                                    if (layout["groups"][i].isActive == 1){
+                                    if (layout["groups"][i].is_active == 1){
                                         self.get_layout_group_keys_for_edit(layout, layout["groups"][i]);
                                     }
                                 }
-               
-
                             }; // end of callback_function
                             var selectSql = "select * from layout_groups where layout_id = ?";
                             var json = {sql: selectSql, params:[layout.id], callback:callback_function};
