@@ -1,6 +1,9 @@
 app.controller('layoutCtrl',
                function($rootScope, $scope, App_URLs, Layouts) {
                
+                    var self = this;
+                    var layout_id_for_edit = null;
+               
                     if ($rootScope.ion_content_template == App_URLs.layout_main_content_url){
                         Layouts.all_with_default_callback();
                     }
@@ -17,7 +20,8 @@ app.controller('layoutCtrl',
                
                     $scope.edit_click =
                         function(id) {
-                            Layouts.get_layout_for_edit(id);
+                            self.layout_id_for_edit = id;
+                            $rootScope.ion_content_template = App_URLs.layout_add_edit_url;
                         };
                
                     $scope.delete_click =
@@ -25,12 +29,22 @@ app.controller('layoutCtrl',
                             Layouts.delete_layout(id);
                         };
                
+                    $rootScope.$on('$includeContentLoaded',
+                        function(event, url){
+                            if(url == App_URLs.layout_add_edit_url){
+                                console.log("onload layout_add_edit_url");
+                                if (angular.isDefined(self.layout_id_for_edit)){
+                                   Layouts.get_layout_for_edit(self.layout_id_for_edit);
+                                }
+                            }
+                        });
+               
                }); // end of layoutCtrl
 
 var layout = angular.module('layout', ['ionic', 'util']);
 
 layout.factory('Layouts',
-               function(DbUtil) {
+               function(DbUtil, $rootScope, App_URLs) {
                     return {
                         all_with_default_callback : function () {
                             var self = this;
@@ -70,53 +84,60 @@ layout.factory('Layouts',
                             return ret;
                         }, // end of parse_results_summary
                         get_layout_for_edit: function (id){
-                            var myDb = DbUtil.openDb();
                             var self = this;
                             var selectSql = "select * from layouts where id = ? ";
-               var layout = null;
+                            var layout = null;
                             var callback_function = function(tx, results) {
+                            console.log("get_layout_for_edit length=" + results.rows.length);
                                 self.layout = self.parse_results_summary(results)[0];
-                                console.log("edit-layout.name=" + self.layout.name);
-                                self.get_layout_group_for_edit(layout);
+                                console.log("get_layout_for_edit .name=" + self.layout.name);
+                                self.get_layout_group_for_edit(self.layout);
                             };
-                            var json = {sql: selectSql, params:[id], callback: callback_function, db: myDb};
+                            var json = {sql: selectSql, params:[id], callback: callback_function};
                             DbUtil.executeSql(json);
-               
-               var groupsSql = "select * from layout_groups where layout_id = ?";
-               var group_callback = function(tx, results){};
-               json = {sql: groupsSql, params:[layout.id], callback: group_callback};
-                        }, // end of get_layout
+                        }, // end of get_layout_for_edit
                         create_layout_group: function(layout_id){
                             var callback_function = function (tx, results) {};
-                            var insertSql = "insert into layout_groups (name, layout_id) values (?, ?)";
-                            var json = {sql: insertSql, params: ["group_name", layout_id], callback: callback_function};
+                            var insertSql = "insert into layout_groups (name, is_active, layout_id) values (?, ?, ?)";
+                            var json = {sql: insertSql, params: ["group_name", 1, layout_id], callback: callback_function};
                             DbUtil.executeSql(json);
                         }, // end of create_layout_group
                         get_layout_group_for_edit : function (layout) {
-               /*
+               
                             console.log("layout.id=" + layout.id);
                             var self = this;
                             var callback_function = function (tx, results) {
                                 var rows = results.rows;
-                                console.log("results length=" + results.rows.length);
-                                var groups = [];
+                                console.log("get_layout_group_for_edit results len=" + results.rows.length);
+               
+                                layout["groups"] = [];
                                 for(i = 0; i < rows.length; i++){
-                                    groups.push({name: rows.item(i).name});
+                                    layout["groups"].push({id: rows.item(i).id, name: rows.item(i).name, isActive: rows.item(i).is_active});
                                     console.log("rows.item(i).name="+rows.item(i).name);
-                                    self.get_layout_group_keys_for_edit(group);
+                                    if (layout["groups"][i].isActive == 1){
+                                        self.get_layout_group_keys_for_edit(layout, layout["groups"][i]);
+                                    }
                                 }
-                                layout["groups"] = groups;
-                            };
+               
+
+                            }; // end of callback_function
                             var selectSql = "select * from layout_groups where layout_id = ?";
                             var json = {sql: selectSql, params:[layout.id], callback:callback_function};
-                            DbUtil.executeSql(json);*/
+                            DbUtil.executeSql(json);
                         }, // end of get_layout_group_for_edit
-                        get_layout_group_keys_for_edit : function(group){
+                        get_layout_group_keys_for_edit : function(layout, group){
+                            var self = this;
                             var callback_function = function(tx, results) {
-               console.log("get_layout_group_keys_for_edit" + results.rows.length);
-                            };
+                                console.log("get_layout_group_keys_for_edit=" + results.rows.length);
+                                var scope = angular.element(document.querySelector('#add_edit_layout')).scope();
                
-                            var selectSql = "select * from layout_group_keys where group_id = ?";
+                                scope.$apply(function(){
+                                             console.log("self.layout=" + self.layout.id);
+                                    scope.layout = self.layout;
+                                });
+                            }; // end of callback_function
+               
+                            var selectSql = "select * from layout_group_keys where layout_group_id = ? ";
                             var json = {sql: selectSql, params:[group.id], callback: callback_function};
                             DbUtil.executeSql(json);
                         }, // end of get_layout_group_keys_for_edit
@@ -140,7 +161,7 @@ layout.factory('Layouts',
                             DbUtil.executeSql(json);
                         }, // end of delete_orphaned_groups
                         delete_orphaned_keys : function() {
-                            var deleteSql = "delete from layout_keys where layout_group_id not in (select id from layout_groups)";
+                            var deleteSql = "delete from layout_group_keys where layout_group_id not in (select id from layout_groups)";
                             var json = {sql: deleteSql, params:[]};
                             DbUtil.executeSql(json);
                         } // end of delete_orphaned_keys
