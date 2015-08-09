@@ -20,13 +20,13 @@ app.controller('productCtrl',
                         });
                     }; // end of suppliers_callback
                
-                    if ($rootScope.ion_content_template == App_URLs.product_main_content_url){
+                    if ($rootScope.ion_content_template == App_URLs.product_main_content){
                         Products.all_summary_with_default_callback();
                     }
                
                     $rootScope.$on('$includeContentLoaded',
                                    function(event, url){
-                                        if(url == App_URLs.product_add_edit_url){
+                                        if(url == App_URLs.product_add_edit){
                                             console.log("product_add_edit_url");
                                             Brands.all(brands_callback);
                                             Suppliers.all_summary(suppliers_callback);
@@ -61,17 +61,17 @@ app.controller('productCtrl',
                     };
                
                     $scope.add_new_product_click = function() {
-                        $rootScope.ion_content_template = App_URLs.product_add_edit_url;
+                        $rootScope.ion_content_template = App_URLs.product_add_edit;
                     };
                
                     $scope.product_form_submit_click = function(product) {
                         console.log("product_form_submit_click");
-                        $rootScope.ion_content_template = App_URLs.product_main_content_url;
+                        $rootScope.ion_content_template = App_URLs.product_main_content;
                         Products.create_product(product);
                     };
                
                     $scope.product_form_cancel_click = function() {
-                        $rootScope.ion_content_template = App_URLs.product_main_content_url;
+                        $rootScope.ion_content_template = App_URLs.product_main_content;
                     };
                }); // end of controller
 
@@ -80,7 +80,18 @@ var product = angular.module('product', ['ionic', 'util']);
 product.factory('Products',
                 function(DbUtil){
                     return {
+                        all_summary: function(callback_function){
+                
+                            var selectSql = "select p.id, p.product_name, p.product_handle, p.desc, date(p.creation_date) as creation_date, s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id";
+                            var json = {
+                                sql: selectSql,
+                                params:[],
+                                callback: callback_function};
+                            DbUtil.executeSql(json);
+                        }, // end of all_summary
                         all_summary_with_default_callback: function(){
+                            var self = this;
+                
                             var callback_function =
                                 function(tx, results) {
                                     var rows = results.rows;
@@ -89,6 +100,7 @@ product.factory('Products',
                                         ret.push({
                                             id: rows.item(i).id,
                                             product_name: rows.item(i).product_name,
+                                            creation_date: rows.item(i).creation_date,
                                             brand_name: rows.item(i).brand_name,
                                             supplier_name: rows.item(i).supplier_name
                                         });
@@ -100,25 +112,20 @@ product.factory('Products',
                                     });
 
                                 };
-                            var selectSql = "select p.id, p.product_name, p.product_handle, p.desc, s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id";
-                            var json = {
-                                sql: selectSql,
-                                params:[],
-                                callback: callback_function};
-                            DbUtil.executeSql(json);
+                            self.all_summary(callback_function);
                         }, // end of all_summary_with_default_callback
                         create_product : function (product) {
                             console.log("create_product.product_name=" + product.product_name);
                             console.log("create_product.handle=" + product.product_handle);
                             console.log("create_product.desc=" + product.desc);
-                            console.log("create_product.supplier.id=" + product.supplier.id);
+                            //console.log("create_product.supplier.id=" + product.supplier.id);
                             console.log("create_product.brand.id=" + product.brand.id);
                             var self = this;
                             var callback_function =
                                 function(){
                                     self.all_summary_with_default_callback();
                                 };
-                            var insertSql = "insert into products (product_name, product_handle, desc, brand_id, supplier_id, supply_price, markup) values (?, ?, ?, ?, ?, ?, ?)";
+                            var insertSql = "insert into products (product_name, product_handle, desc, creation_date, brand_id, supplier_id, supply_price, markup) values (?, ?, ?, datetime('now'), ?, ?, ?, ?)";
                             var json = {
                                 sql: insertSql,
                                 params: [product.product_name, product.product_handle, product.desc, product.brand.id, product.supplier.id, product.supply_price, product.markup],

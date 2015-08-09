@@ -9,7 +9,7 @@ app.controller('supplierCtrl',
                     $rootScope.$on('$includeContentLoaded',
                           function(event, url){
                                    
-                            if(url == App_URLs.supplier_add_edit_url){
+                            if(url == App_URLs.supplier_add_edit){
                                    if(angular.isDefined($scope.edit_supplier_id)){
                                         Suppliers.get_supplier($scope.edit_supplier_id);
                                    }
@@ -18,14 +18,14 @@ app.controller('supplierCtrl',
                
                     $scope.new_supplier_click = function() {
                         console.log("new supplier click");
-                        $rootScope.ion_content_template = App_URLs.supplier_add_edit_url;
+                        $rootScope.ion_content_template = App_URLs.supplier_add_edit;
                     };
                
                
                
                     $scope.edit_supplier_click = function(id){
                         console.log("edit supplier click:" + id);
-                        $rootScope.ion_content_template = App_URLs.supplier_add_edit_url;
+                        $rootScope.ion_content_template = App_URLs.supplier_add_edit;
                         $scope.edit_supplier_id = id;
                     };
                

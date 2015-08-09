@@ -88,7 +88,7 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                         $rootScope.ion_content_template = "modules/products/brands/templates/main_content.htm";
                     } else if (submenuTitle == 'Tags'){
                         $rootScope.ion_header_bar_template = "modules/products/tags/templates/header_bar.htm";
-                        $rootScope.ion_content_template = App_URLs.product_add_edit_url;
+                        $rootScope.ion_content_template = App_URLs.product_add_edit;
                     }
                
                     // Setup

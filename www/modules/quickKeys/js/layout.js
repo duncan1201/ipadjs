@@ -1,28 +1,40 @@
 app.controller('layoutCtrl',
-               function($rootScope, $scope, App_URLs, Layouts) {
+               function($rootScope, $scope, App_URLs, Layouts, Products) {
                
                     var self = this;
                     var layout_id_for_edit = null;
                
-                    if ($rootScope.ion_content_template == App_URLs.layout_main_content_url){
+                    if ($rootScope.ion_content_template == App_URLs.layout_main_content){
                         Layouts.all_with_default_callback();
-                    };
+                    } else if ($rootScope.ion_content_template == App_URLs.layout_add_edit) {
+                        var callback = new function(tx, results) {
+                            
+                        };
+                        Products.all_summary(callback);
+                    }
+               
+               
                
                     $scope.add_new_layout_click =
                         function () {
-                            $rootScope.ion_content_template = App_URLs.layout_add_edit_url;
+                            $rootScope.ion_content_template = App_URLs.layout_add_edit;
                         };
                
                     $scope.layout_form_submit_click =
                         function (layout) {
-               console.log("layout_form_submit_click");
-                            Layouts.create_layout(layout);
+                            console.log("layout_form_submit_click");
+                            if (angular.isDefined(layout.id)){
+                                console.log("angular.isDefined()...");
+                                Layouts.update_layout(layout);
+                            }else{
+                                Layouts.create_layout(layout);
+                            }
                         };
                
                     $scope.edit_click =
                         function(id) {
                             self.layout_id_for_edit = id;
-                            $rootScope.ion_content_template = App_URLs.layout_add_edit_url;
+                            $rootScope.ion_content_template = App_URLs.layout_add_edit;
                         };
                
                     $scope.delete_click =
@@ -32,25 +44,22 @@ app.controller('layoutCtrl',
                
                     $scope.add_product_click =
                         function () {
-               console.log("add_product_click");
+                            console.log("add_product_click");
                             var key = {id: 1, layout_group_id: 1, product_id: 1, color: 'red', display_name: 'Coffee'};
                             var key2 = {id: 2, layout_group_id: 1, product_id: 2, color: 'red', display_name: 'Teh O'};
-               $scope.layout['groups'][0]['keys'] = [];
-               $scope.layout['groups'][0]['keys'].push(key);
-               $scope.layout['groups'][0]['keys'].push(key2);
-               console.log("add_product_click=" + $scope.layout['groups'][0]);
-                            $scope.$apply(function(){
-                                   
-                            });
+                                $scope.layout['groups'][0]['keys'] = [];
+                                $scope.layout['groups'][0]['keys'].push(key);
+                                $scope.layout['groups'][0]['keys'].push(key2);
+                                console.log("add_product_click=" + $scope.layout['groups'][0]);
                         };
                
-               $scope.layout_form_cancel_click = function(){
-               $rootScope.ion_content_template = App_URLs.layout_main_content_url;
-               };
+                    $scope.layout_form_cancel_click = function(){
+                        $rootScope.ion_content_template = App_URLs.layout_main_content;
+                    };
                
                     $rootScope.$on('$includeContentLoaded',
                         function(event, url){
-                            if(url == App_URLs.layout_add_edit_url){
+                            if(url == App_URLs.layout_add_edit){
                                 console.log("onload layout_add_edit_url");
                                 if (angular.isDefined(self.layout_id_for_edit)){
                                    Layouts.get_layout_for_edit(self.layout_id_for_edit);
@@ -78,6 +87,15 @@ layout.factory('Layouts',
                             var json = {sql: selectSql, params:[], callback: callback_function};
                             DbUtil.executeSql(json);
                         }, // end of all_with_default_callback
+                        update_layout: function (layout) {
+               console.log(angular.toJson(layout));
+                            var callback_fun = function(tx, results) {
+                                console.log(angular.toJson(results));
+                            };
+                            var update_sql = "update layouts set name = ? where id = ?";
+                            var json = {sql: update_sql, params:[layout.name, layout.id], callback: callback_fun};
+                            DbUtil.executeSql(json);
+                        }, // end of update_layout
                         create_layout : function(layout) {
                             var self = this;
                             var insertSql = "insert into layouts (name, creation_date) values (?, datetime('now'))";
@@ -90,6 +108,12 @@ layout.factory('Layouts',
                             var json = {sql: insertSql, params:[layout.name], callback: callback_function};
                             DbUtil.executeSql(json);
                         }, // end of create_layout
+                        create_layout_group: function(layout_id){
+                            var callback_function = function (tx, results) {};
+                            var insertSql = "insert into layout_groups (name, is_active, layout_id) values (?, ?, ?)";
+                            var json = {sql: insertSql, params: ["group 1", 1, layout_id], callback: callback_function};
+                            DbUtil.executeSql(json);
+                        }, // end of create_layout_group
                         parse_results_summary : function (results) {
                             var ret = [];
                             var rows = results.rows;
@@ -115,12 +139,6 @@ layout.factory('Layouts',
                             var json = {sql: selectSql, params:[id], callback: callback_function};
                             DbUtil.executeSql(json);
                         }, // end of get_layout_for_edit
-                        create_layout_group: function(layout_id){
-                            var callback_function = function (tx, results) {};
-                            var insertSql = "insert into layout_groups (name, is_active, layout_id) values (?, ?, ?)";
-                            var json = {sql: insertSql, params: ["group 1", 1, layout_id], callback: callback_function};
-                            DbUtil.executeSql(json);
-                        }, // end of create_layout_group
                         get_layout_group_for_edit : function (layout) {
                
                             console.log("layout.id=" + layout.id);
