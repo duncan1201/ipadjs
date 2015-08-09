@@ -8,7 +8,7 @@ app.constant('Schema_SQLs',
               //'Drop table if exists tags',
               //'Drop table if exists layouts',
               //'Drop table if exists layout_groups',
-              'Drop table if exists layout_keys',
+              'Drop table if exists layout_group_keys',
               
               /* sales tax table */
               'Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255) NOT NULL, rate real NOT NULL, system_generated BOOLEAN DEFAULT 0)',
@@ -34,6 +34,6 @@ app.constant('Schema_SQLs',
               'Create table if not exists layout_groups(id integer primary key, name varchar(50), layout_id integer)',
               
               /* Layout -> layout_keys */
-              'Create table if not exists layout_keys(id integer primary key, layout_group_id integer, product_id integer, color varchar(50), display_name varchar(50))'
+              'Create table if not exists layout_group_keys(id integer primary key, layout_group_id integer, product_id integer, color varchar(50), display_name varchar(50))'
               
               ]);

@@ -17,7 +17,9 @@
         <div class="col">{{layout.name}}</div>
         <div class="col">{{layout.creation_date}}&nbsp;</div>
         <div class="col">
-            <button class="button button-small button-clear button-positive">Edit</button>
+            <button class="button button-small button-clear button-positive" ng-click="edit_click({{layout.id}})">
+                Edit
+            </button>
             <button class="button button-small button-clear button-positive" ng-click="delete_click({{layout.id}})">Delete</button>
         </div>
     </div>

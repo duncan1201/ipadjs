@@ -9,7 +9,13 @@ util.factory('DbUtil',
                     }, // end of openDb
                     // {sql: "", params:[], callback: function}
                     executeSql: function(json) {
-                        var db = this.openDb();
+                        var db = null;
+                        if (angular.isDefined(json.db)){
+                            db = json.db;
+                        }else{
+                            db = this.openDb();
+                        }
+             
                         db.transaction(function(tx){
                                             var error_callback =
                                                 function(tx, e) {
