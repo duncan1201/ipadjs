@@ -1,6 +1,9 @@
 app.controller('productCtrl',
                function($rootScope, $scope, Products, Suppliers, Brands, App_URLs){
                
+                    var self = this;
+                    var product_id_for_edit = null;
+               
                     var brands_callback =
                         function(tx, results){
                             var brands = Brands.parse_results(results);
@@ -8,7 +11,7 @@ app.controller('productCtrl',
                                           brands.unshift({id:-1, brand_name: "+add brand", desc: ""});
                                           $scope.brands = brands;
                                           });
-                        };
+                        }; // end of brands_callback
                
                     var suppliers_callback =
                         function(tx, results){
@@ -26,10 +29,15 @@ app.controller('productCtrl',
                
                     $rootScope.$on('$includeContentLoaded',
                                    function(event, url){
+                                   console.log("product_id_for_edit=" + self.product_id_for_edit);
                                         if(url == App_URLs.product_add_edit){
                                             console.log("product_add_edit_url");
                                             Brands.all(brands_callback);
                                             Suppliers.all_summary(suppliers_callback);
+                                   
+                                            if (angular.isDefined(self.product_id_for_edit)){
+                                                Products.get_product(self.product_id_for_edit);
+                                            }
                                         }
                                    });
                
@@ -65,9 +73,18 @@ app.controller('productCtrl',
                     };
                
                     $scope.product_form_submit_click = function(product) {
-                        console.log("product_form_submit_click");
+                        console.log("product_submit_click=" + angular.toJson(product));
                         $rootScope.ion_content_template = App_URLs.product_main_content;
-                        Products.create_product(product);
+                        if(angular.isDefined(product.id)){
+                            Products.update_product(product);
+                        }else{
+                            Products.create_product(product);
+                        }
+                    };
+               
+                    $scope.edit_click = function(id){
+                        self.product_id_for_edit = id;
+                        $rootScope.ion_content_template = App_URLs.product_add_edit;
                     };
                
                     $scope.product_form_cancel_click = function() {
@@ -116,7 +133,6 @@ product.factory('Products',
                         }, // end of all_summary_with_default_callback
                         create_product : function (product) {
                             console.log("create_product.product_name=" + product.product_name);
-                            console.log("create_product.handle=" + product.product_handle);
                             console.log("create_product.desc=" + product.desc);
                             //console.log("create_product.supplier.id=" + product.supplier.id);
                             console.log("create_product.brand.id=" + product.brand.id);
@@ -131,6 +147,72 @@ product.factory('Products',
                                 params: [product.product_name, product.product_handle, product.desc, product.brand.id, product.supplier.id, product.supply_price, product.markup],
                                 callback: callback_function};
                             DbUtil.executeSql(json);
-                        } // end of create_product
+                        }, // end of create_product
+                        get_product : function(id){
+                            var self = this;
+                            var callback_fun = function(tx, results){
+                                var rows = results.rows;
+                                console.log("get_product.json="+angular.toJson(rows.item(0)));
+                
+                                if(rows.length > 0){
+                                    var item = rows.item(0);
+                                    var ret = {
+                                        id: item.id,
+                                        product_name: item.product_name,
+                                        product_handle: item.product_handle,
+                                        desc: item.desc,
+                                        supplier_id: item.supplier_id,
+                                        brand_id: item.brand_id
+                                    };
+                                    self.get_product_supplier(ret);
+                
+                                }// end of if
+                            }; // end of callback_fun
+                            var query = "select p.* from products p left join suppliers s on s.id = p.supplier_id left join brands b on b.id = p.brand_id where p.id = ? ";
+                            var query_with = "with all_tag_ids as (select tag_id from products_join_tags where product_id = ?) select p.* from products p left join suppliers s on s.id = p.supplier_id left join brands b on b.id = p.brand_id where p.id = ?";
+                            var json = {sql: query, params:[id], callback: callback_fun};
+                            DbUtil.executeSql(json);
+                        }, // end of get_product
+                        get_product_supplier: function(product){
+                            var self = this;
+                            var callback_fun = function(tx, results){
+                                var rows = results.rows;
+                                if (rows.length > 0){
+                                    var item = rows.item(0);
+                                    console.log("get_product_supplier="+angular.toJson(item));
+                                    product['supplier'] = {id: item.id, name: item.name, default_markup: item.default_markup, desc: item.desc};
+                                    self.get_product_brand(product);
+                                } // end of if
+                            }; // end of callback_fun
+                            var json = {sql: "select * from suppliers where id = ?", params:[product.supplier_id], callback: callback_fun};
+                            DbUtil.executeSql(json);
+                        },// end of get_product_supplier
+                        get_product_brand: function(product){
+                            var callback_fun = function(tx, results) {
+                                var rows = results.rows;
+                                if (rows.length > 0){
+                
+                                    var item = rows.item(0);
+                                    product['brand'] = {id: item.id, brand_name: item.brand_name, desc: item.desc};
+                                    var scope = angular.element(document.querySelector('#product_add_edit')).scope();
+                                    scope.$apply(function(){
+                                             scope.product = product;
+                                    });
+                                }
+                            }; // end of callback_fun
+                            var query = "select * from brands where id = ?";
+                            var json = {sql:query, params:[product.brand_id], callback: callback_fun};
+                            DbUtil.executeSql(json);
+                        }, // end of get_product_brand
+                        update_product: function(product) {
+                            console.log("update_product.json=" + angular.toJson(product));
+                            var self = this;
+                            var callback_fun = function() {
+                
+                            };
+                            var update_sql = "update products set product_name = ?, product_handle = ?, desc = ? where id = ?";
+                            var json = {sql: update_sql, params:[product.product_name, product.product_handle, product.desc, product.id], callback: callback_fun};
+                            DbUtil.executeSql(json);
+                        } // end of update_product
                     };
                 }); // end of product.factory

@@ -26,6 +26,9 @@ app.constant('Schema_SQLs',
               
               /* tags table */
               'Create table if not exists tags(id integer primary key, name varchar(50))',
+            
+              /* products and tags join table */
+              'Create table if not exists products_join_tags(id integer primary key, product_id integer, tag_id integer)',
               
               /* Layout */
               'Create table if not exists layouts(id integer primary key, name varchar(50), creation_date datetime)',

@@ -81,6 +81,9 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                     if (submenuTitle == 'Products') {
                         $rootScope.ion_header_bar_template = "modules/products/products/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/products/products/templates/main_content.htm";
+                    } else if (submenuTitle == 'Types'){
+                        $rootScope.ion_header_bar_template = "modules/products/productTypes/templates/header_bar.htm";
+                        $rootScope.ion_content_template = "modules/products/productTypes/templates/main_content.htm";
                     } else if (submenuTitle == 'Supplier'){
                         $rootScope.ion_header_bar_template = "modules/products/suppliers/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/products/suppliers/templates/main_content.htm";
