@@ -11,7 +11,7 @@ app.controller('supplierCtrl',
                                    
                             if(url == App_URLs.supplier_add_edit){
                                    if(angular.isDefined($scope.edit_supplier_id)){
-                                        Suppliers.get_supplier($scope.edit_supplier_id);
+                                        Suppliers.get_supplier_with_default_callback($scope.edit_supplier_id);
                                    }
                             }
                           });
@@ -115,30 +115,27 @@ supplier.factory('Suppliers', function(DbUtil){
                                              });
                 }); // end of db.transction
             }, // end of create_new_supplier
-            get_supplier: function(id){
-                 var db = DbUtil.openDb();
-                 
-                 db.transaction(function(tx){
-                                tx.executeSql('select * from suppliers where id = ?',
-                                              [id],
-                                              function(tx, results){
-                                                if (results.rows.length > 0){
-                                                    var item = results.rows.item(0);
-                                                    var ret = "{";
-                                                    ret += "\"id\":" + item.id + ",";
-                                                    ret += "\"name\":\"" + item.name + "\",";
-                                                    ret += "\"default_markup\":" + item.default_markup + ",";
-                                                    ret += "\"desc\":\"" + item.desc + "\"";
-                                                    ret += "}";
-                                              console.log("get supplier:" + ret);
-                                              var scope = angular.element(document.querySelector('#add_edit_supplier')).scope();
-                                              scope.$apply(function(){
-                                                           scope.supplier = angular.fromJson(ret);
-                                                           });
-                                                }
-                                              }); // end of tx.executeSql
-                                }); // end of db.transction
+            get_supplier: function(id, callback_fun){
+                 var query = 'select * from suppliers where id = ?';
+                 var json = {sql: query, params: [id], callback: callback_fun};
+                 DbUtil.executeSql(json);
             }, // end of get_supplier
+            get_supplier_with_default_callback: function(id){
+                 var self = this;
+                 var callback_fun = function(tx, results){
+                    if (results.rows.length > 0){
+                        var item = results.rows.item(0);
+                        var ret = {id: item.id, name: item.name, default_markup: item.default_markup, desc: item.desc};
+                        console.log("get supplier:" + ret);
+                        var scope = angular.element(document.querySelector('#add_edit_supplier')).scope();
+                        scope.$apply(function(){
+                              scope.supplier = ret;
+                        });
+                    }
+                 };// end of callback_fun
+                 self.get_supplier(id, callback_fun);
+                 
+            }, // end of get_supplier_with_default_callback
             delete_supplier: function(id){
                  var self = this;
                  var db = DbUtil.openDb();

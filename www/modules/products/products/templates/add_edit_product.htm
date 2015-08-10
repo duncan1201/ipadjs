@@ -80,7 +80,9 @@
                 <div class="col">
                     <label class="item item-select">
                         <span class="input-label">Product brand</span>
-                        <select ng-model="product.brand" ng-change="add_new_supplier_choose()" ng-options="brand.brand_name for brand in brands track by brand.id">
+                        <select ng-model="product.brand_id" ng-change="brand_change(product)">
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat="brand in brands" value="{{brand.id}}">{{brand.brand_name}}</option>
                         </select>
                     </label>
                 </div>
@@ -89,7 +91,8 @@
                 <div class="col col-50">
                     <label class="item item-select">
                         <span class="input-label">Supplier</span>
-                        <select ng-model="product.supplier" ng-change="add_new_supplier_choose()" ng-options="supplier.name for supplier in suppliers track by supplier.id">
+                        <select ng-model="product.supplier" ng-change="supplier_change()" ng-options='supplier.name for supplier in suppliers track by supplier.id'>
+
                         </select>
                     </label>
                 </div>

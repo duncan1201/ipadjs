@@ -41,7 +41,11 @@ app.controller('productCtrl',
                                         }
                                    });
                
-                    $scope.add_new_supplier_choose =
+                    $scope.brand_change = function(product){
+               console.log("brand_change=" + angular.toJson(product));
+                    };
+               
+                    $scope.supplier_change =
                         function(){
                             if (!angular.isDefined($scope.product.markup)){
                                 $scope.product.markup = $scope.product.supplier.default_markup;
@@ -181,29 +185,15 @@ product.factory('Products',
                                     var item = rows.item(0);
                                     console.log("get_product_supplier="+angular.toJson(item));
                                     product['supplier'] = {id: item.id, name: item.name, default_markup: item.default_markup, desc: item.desc};
-                                    self.get_product_brand(product);
+                                    var scope = angular.element(document.querySelector('#product_add_edit')).scope();
+                                    scope.$apply(function(){
+                                        scope.product = product;
+                                    });
                                 } // end of if
                             }; // end of callback_fun
                             var json = {sql: "select * from suppliers where id = ?", params:[product.supplier_id], callback: callback_fun};
                             DbUtil.executeSql(json);
                         },// end of get_product_supplier
-                        get_product_brand: function(product){
-                            var callback_fun = function(tx, results) {
-                                var rows = results.rows;
-                                if (rows.length > 0){
-                
-                                    var item = rows.item(0);
-                                    product['brand'] = {id: item.id, brand_name: item.brand_name, desc: item.desc};
-                                    var scope = angular.element(document.querySelector('#product_add_edit')).scope();
-                                    scope.$apply(function(){
-                                             scope.product = product;
-                                    });
-                                }
-                            }; // end of callback_fun
-                            var query = "select * from brands where id = ?";
-                            var json = {sql:query, params:[product.brand_id], callback: callback_fun};
-                            DbUtil.executeSql(json);
-                        }, // end of get_product_brand
                         update_product: function(product) {
                             console.log("update_product.json=" + angular.toJson(product));
                             var self = this;
