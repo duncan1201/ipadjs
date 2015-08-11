@@ -80,21 +80,13 @@ supplier.factory('Suppliers', function(DbUtil){
                  
             }, // end of all_summary_default_callback
             parse_suppliers_summary: function(results){
-                 var ret = "[";
-                 for(i = 0; i < results.rows.length; i++){
-                    //console.log("item.name=" + results.rows.item(i).name);
-                    ret += "{";
-                    ret += "\"id\":" + results.rows.item(i).id + ",";
-                    ret += "\"name\":" + "\"" + results.rows.item(i).name + "\",";
-                    ret += "\"default_markup\":" + "" + results.rows.item(i).default_markup + ",";
-                    ret += "\"desc\":" + "\"" + results.rows.item(i).desc + "\"";
-                    ret += "}";
-                    if( i < results.rows.length - 1){
-                        ret += ",";
-                    }
+                 var rows = results.rows;
+                 var ret = [];
+                 for(i = 0; i < rows.length; i++){
+                    var item = rows.item(i);
+                    ret.push({id: item.id, name: item.name, default_markup: item.default_markup, desc: item.desc});
                  }
-                 ret += "]";
-                 return angular.fromJson(ret);
+                 return ret;
             }, // end of parse_suppliers_summary
             create_new_supplier: function(new_supplier) {
                  var self = this;

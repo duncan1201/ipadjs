@@ -1,6 +1,11 @@
 <ion-content scroll="true" ng-controller="productCtrl" id="product_add_edit">
     <div class="row">
-        <div class="col">Products &gt; Add a new product</div>
+        <div class="col" ng-show="!isDefined(product.id)">
+            Products &gt; Add a new product {{product.id}}
+        </div>
+        <div class="col" ng-show="isDefined(product.id)">
+            Products &gt; Update a product
+        </div>
     </div>
     
     <form ng-submit="product_form_submit_click(product)">
@@ -72,8 +77,9 @@
                 <div class="col">
                     <label class="item item-select">
                         <span class="input-label">Product type</span>
-                        <select>
-                            <option>type 1</option>
+                        <select ng-model="product.product_type_id" ng-change="brand_change(product)">
+                            <option value="0">&nbsp;</option>
+                            <option ng-repeat="product_type in product_types" ng-selected="{{product.product_type_id == product_type.id}}" value="{{product_type.id}}">{{product_type.name}}</option>
                         </select>
                     </label>
                 </div>
@@ -81,8 +87,8 @@
                     <label class="item item-select">
                         <span class="input-label">Product brand</span>
                         <select ng-model="product.brand_id" ng-change="brand_change(product)">
-                            <option value="">&nbsp;</option>
-                            <option ng-repeat="brand in brands" value="{{brand.id}}">{{brand.brand_name}}</option>
+                            <option value="0">&nbsp;</option>
+                            <option ng-repeat="brand in brands" ng-selected="{{product.brand_id == brand.id}}" value="{{brand.id}}">{{brand.brand_name}}</option>
                         </select>
                     </label>
                 </div>
@@ -91,8 +97,9 @@
                 <div class="col col-50">
                     <label class="item item-select">
                         <span class="input-label">Supplier</span>
-                        <select ng-model="product.supplier" ng-change="supplier_change()" ng-options='supplier.name for supplier in suppliers track by supplier.id'>
-
+                        <select ng-model="product.supplier_id" ng-change="supplier_change()">
+                            <option value="0">&nbsp;</option>
+                            <option ng-repeat="supplier in suppliers" value="{{supplier.id}}" ng-selected="{{product.supplier_id == supplier.id}}">{{supplier.name}}</option>
                         </select>
                     </label>
                 </div>
@@ -110,7 +117,7 @@
                 <div class="row">
                     <div class="col"><input type="number" min="0" step="0.01" class="lightgray-outline" ng-model="product.supply_price" ng-change="supply_price_change()"></div>
                     <div class="col">
-                        <input type="number" min="0" step="0.02" class="lightgray-outline" ng-model="product.markup" ng-change="markup_change()">
+                        <input type="number" min="0" step="0.05" class="lightgray-outline" ng-model="product.markup" ng-change="markup_change()">
                     </div>
                     <div class="col">
                         <input type="number" min="0" step="0.01" class="lightgray-outline" ng-model="product.retail_price">
@@ -126,6 +133,36 @@
         
         <div class="card">
             <div class="item item-divider">Inventory</div>
+            <div class="item">
+                <div class="row">
+                    <div class="col">
+                        <label class="item item-input">
+                            <span class="input-label">Stock keeping unit</span>
+                            <input type="text" class="lightgray-outline" placeholder="Enter stock keeping unit here" ng-model="product.stock_keeping_unit">
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="item item-input item-stacked-label">
+                            <span class="input-label">Current stock</span>
+                            <input type="number" min="0" class="lightgray-outline" ng-model="product.current_stock">
+                                </label>
+                    </div>
+                    <div class="col">
+                        <label class="item item-input item-stacked-label">
+                            <span class="input-label">Re-order point</span>
+                            <input type="number" min="0" class="lightgray-outline" ng-model="product.reorder_point">
+                                </label>
+                    </div>
+                    <div class="col">
+                        <label class="item item-input item-stacked-label">
+                            <span class="input-label">Re-order amount</span>
+                            <input type="number" min="0" class="lightgray-outline" ng-model="product.reorder_amount">
+                                </label>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div class="card">

@@ -1,8 +1,19 @@
 app.controller('productCtrl',
-               function($rootScope, $scope, Products, Suppliers, Brands, App_URLs){
-               
+               function($rootScope, $scope, Products, ProductTypes, Suppliers, Brands, App_URLs){
                     var self = this;
-                    var product_id_for_edit = null;
+                    var product_types_callback = function(tx, results){
+                        console.log("product_types_callback.length=" + results.rows.length);
+                        var rows = results.rows;
+                        var product_types = [];
+                        for(var i = 0; i < rows.length; i++){
+                            var item = rows.item(i);
+                            product_types.push({id: item.id, name: item.name});
+                        }
+                        $scope.$apply(function(){
+                            product_types.unshift({id:-1, name: "+add product type"});
+                            $scope.product_types = product_types;
+                        }); // end of apply
+                    }; // end of product_types_callback
                
                     var brands_callback =
                         function(tx, results){
@@ -29,26 +40,33 @@ app.controller('productCtrl',
                
                     $rootScope.$on('$includeContentLoaded',
                                    function(event, url){
-                                   console.log("product_id_for_edit=" + self.product_id_for_edit);
                                         if(url == App_URLs.product_add_edit){
-                                            console.log("product_add_edit_url");
+                                            console.log("product_add_edit=" + $rootScope.product_id_for_edit);
                                             Brands.all(brands_callback);
                                             Suppliers.all_summary(suppliers_callback);
+                                            ProductTypes.all_summary(product_types_callback);
                                    
-                                            if (angular.isDefined(self.product_id_for_edit)){
-                                                Products.get_product(self.product_id_for_edit);
+                                            if (angular.isDefined($rootScope.product_id_for_edit)){
+                                                Products.get_product($rootScope.product_id_for_edit);
                                             }
                                         }
                                    });
                
                     $scope.brand_change = function(product){
-               console.log("brand_change=" + angular.toJson(product));
+                        console.log("brand_change=" + angular.toJson(product));
                     };
                
                     $scope.supplier_change =
                         function(){
                             if (!angular.isDefined($scope.product.markup)){
-                                $scope.product.markup = $scope.product.supplier.default_markup;
+                                var callback_fun = function(tx, results){
+                                    var rows = results.rows;
+                                    if(rows.length > 0){
+                                        var scope = angular.element(document.querySelector('#product_add_edit')).scope();
+                                        scope.product.markup = rows.item(0).default_markup;
+                                    }
+                                };
+                                Suppliers.get_supplier(1, callback_fun);
                             }
                         };
                
@@ -73,6 +91,7 @@ app.controller('productCtrl',
                     };
                
                     $scope.add_new_product_click = function() {
+                        $rootScope.product_id_for_edit = null;
                         $rootScope.ion_content_template = App_URLs.product_add_edit;
                     };
                
@@ -87,12 +106,17 @@ app.controller('productCtrl',
                     };
                
                     $scope.edit_click = function(id){
-                        self.product_id_for_edit = id;
+                        $rootScope.product_id_for_edit = id;
                         $rootScope.ion_content_template = App_URLs.product_add_edit;
                     };
                
                     $scope.product_form_cancel_click = function() {
+                        $rootScope.product_id_for_edit = null;
                         $rootScope.ion_content_template = App_URLs.product_main_content;
+                    };
+               
+                    $scope.isDefined = function(x) {
+                        return angular.isDefined(x);
                     };
                }); // end of controller
 
@@ -138,17 +162,15 @@ product.factory('Products',
                         create_product : function (product) {
                             console.log("create_product.product_name=" + product.product_name);
                             console.log("create_product.desc=" + product.desc);
-                            //console.log("create_product.supplier.id=" + product.supplier.id);
-                            console.log("create_product.brand.id=" + product.brand.id);
                             var self = this;
                             var callback_function =
                                 function(){
                                     self.all_summary_with_default_callback();
                                 };
-                            var insertSql = "insert into products (product_name, product_handle, desc, creation_date, brand_id, supplier_id, supply_price, markup) values (?, ?, ?, datetime('now'), ?, ?, ?, ?)";
+                            var insertSql = "insert into products (product_name, product_handle, desc, creation_date, product_type_id, brand_id, supplier_id, supply_price, markup, stock_keeping_unit, current_stock, reorder_point, reorder_amount) values (?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?)";
                             var json = {
                                 sql: insertSql,
-                                params: [product.product_name, product.product_handle, product.desc, product.brand.id, product.supplier.id, product.supply_price, product.markup],
+                                params: [product.product_name, product.product_handle, product.desc, product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount],
                                 callback: callback_function};
                             DbUtil.executeSql(json);
                         }, // end of create_product
@@ -156,52 +178,46 @@ product.factory('Products',
                             var self = this;
                             var callback_fun = function(tx, results){
                                 var rows = results.rows;
-                                console.log("get_product.json="+angular.toJson(rows.item(0)));
-                
                                 if(rows.length > 0){
+                                    console.log("get_product.json="+angular.toJson(rows.item(0)));
                                     var item = rows.item(0);
                                     var ret = {
                                         id: item.id,
                                         product_name: item.product_name,
                                         product_handle: item.product_handle,
                                         desc: item.desc,
+                                        product_type_id: item.product_type_id,
+                                        brand_id: item.brand_id,
                                         supplier_id: item.supplier_id,
-                                        brand_id: item.brand_id
+                                        supply_price: item.supply_price,
+                                        markup: item.markup,
+                                        stock_keeping_unit: item.stock_keeping_unit,
+                                        current_stock: item.current_stock,
+                                        reorder_point: item.reorder_point,
+                                        reorder_amount: item.reorder_amount
                                     };
-                                    self.get_product_supplier(ret);
-                
+                                    var scope = angular.element(document.querySelector('#product_add_edit')).scope();
+                                    scope.$apply(function(){
+                                        scope.product = ret;
+                                    });
                                 }// end of if
                             }; // end of callback_fun
                             var query = "select p.* from products p left join suppliers s on s.id = p.supplier_id left join brands b on b.id = p.brand_id where p.id = ? ";
-                            var query_with = "with all_tag_ids as (select tag_id from products_join_tags where product_id = ?) select p.* from products p left join suppliers s on s.id = p.supplier_id left join brands b on b.id = p.brand_id where p.id = ?";
                             var json = {sql: query, params:[id], callback: callback_fun};
                             DbUtil.executeSql(json);
                         }, // end of get_product
-                        get_product_supplier: function(product){
-                            var self = this;
-                            var callback_fun = function(tx, results){
-                                var rows = results.rows;
-                                if (rows.length > 0){
-                                    var item = rows.item(0);
-                                    console.log("get_product_supplier="+angular.toJson(item));
-                                    product['supplier'] = {id: item.id, name: item.name, default_markup: item.default_markup, desc: item.desc};
-                                    var scope = angular.element(document.querySelector('#product_add_edit')).scope();
-                                    scope.$apply(function(){
-                                        scope.product = product;
-                                    });
-                                } // end of if
-                            }; // end of callback_fun
-                            var json = {sql: "select * from suppliers where id = ?", params:[product.supplier_id], callback: callback_fun};
-                            DbUtil.executeSql(json);
-                        },// end of get_product_supplier
                         update_product: function(product) {
                             console.log("update_product.json=" + angular.toJson(product));
                             var self = this;
                             var callback_fun = function() {
                 
                             };
-                            var update_sql = "update products set product_name = ?, product_handle = ?, desc = ? where id = ?";
-                            var json = {sql: update_sql, params:[product.product_name, product.product_handle, product.desc, product.id], callback: callback_fun};
+                            var update_sql = "update products set product_name = ?, product_handle = ?, desc = ?, product_type_id = ?, brand_id = ?, supplier_id = ?, supply_price = ?, markup = ?, stock_keeping_unit = ?, current_stock = ?, reorder_point = ?, reorder_amount = ? where id = ?";
+                            var json = {
+                                    sql: update_sql,
+                                    params:[product.product_name, product.product_handle, product.desc, product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount,product.id],
+                                    callback: callback_fun
+                            };
                             DbUtil.executeSql(json);
                         } // end of update_product
                     };

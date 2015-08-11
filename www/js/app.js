@@ -6,7 +6,7 @@
 
 
 
-var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout']);
+var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout', 'productType']);
 
 app.run(function($ionicPlatform, DbUtil, App_URLs, Schema_SQLs) {
         var ready_function = function(){
