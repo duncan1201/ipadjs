@@ -1,5 +1,5 @@
 app.controller('productCtrl',
-               function($rootScope, $scope, Products, ProductTypes, Suppliers, Brands, App_URLs){
+               function($rootScope, $scope, $ionicModal, Products, ProductTypes, Suppliers, Brands, App_URLs){
                     var self = this;
                     var product_types_callback = function(tx, results){
                         console.log("product_types_callback.length=" + results.rows.length);
@@ -52,8 +52,11 @@ app.controller('productCtrl',
                                         }
                                    });
                
-                    $scope.brand_change = function(product){
-                        console.log("brand_change=" + angular.toJson(product));
+                    $scope.brand_change = function(brand_id){
+                        console.log("brand_change=" + angular.toJson(brand_id));
+                        if (brand_id == "-1"){ // + new brand
+                            $scope.brandModal.show();
+                        }
                     };
                
                     $scope.supplier_change =
@@ -118,7 +121,59 @@ app.controller('productCtrl',
                     $scope.isDefined = function(x) {
                         return angular.isDefined(x);
                     };
+               
+                    // start of brands dialog
+                    $ionicModal.fromTemplateUrl('modules/products/brands/templates/brands-popup.htm',
+                                                function(modal) {
+                                                    $scope.brandModal = modal;
+                                                }, {
+                                                    scope: $scope
+                                                });
+               
+                    $scope.brand_popup_cancel_click = function(){
+                        $scope.brandModal.hide();
+                    };
+               
+                    $scope.brand_name_form_submit_click = function(brand) {
+                        var callback_function = function (tx, results) {
+                            $scope.product.brand_id = results.insertId;
+                            Brands.all(brands_callback);
+                        };
+                        Brands.create_brand_name(brand, callback_function);
+                        $scope.brandModal.hide();
+                    };
+                    // end of brands dialog
+               
+                    // start of product type dialog
+                    $scope.product_type_change = function(product_type_id) {
+                        if (product_type_id == "-1"){
+                            $scope.productTypeModal.show();
+                        }
+                    };
+               
+                    $ionicModal.fromTemplateUrl('modules/products/productTypes/templates/product-types-popup.htm',
+                                                function(modal) {
+                                                    $scope.productTypeModal = modal;
+                                                }, {
+                                                    scope: $scope
+                                                });
+               
+                    $scope.product_type_popup_cancel_click = function () {
+                        $scope.productTypeModal.hide();
+                    };
+               
+                    $scope.product_type_form_submit_click = function (product_type) {
+                        var callback_fun = function (tx, results) {
+                            $scope.product.product_type_id = results.insertId;
+                            ProductTypes.all_summary(product_types_callback);
+                        };
+                        ProductTypes.create_product_type(product_type, callback_fun);
+                        $scope.productTypeModal.hide();
+                    };
+                    // end of product type dialog
+               
                }); // end of controller
+
 
 var product = angular.module('product', ['ionic', 'util']);
 

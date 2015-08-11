@@ -30,7 +30,7 @@ app.controller('brandCtrl',
                         function(brand) {
                             if (!angular.isDefined(brand.id)){
                                 console.log("brand_name_form_submit_click NOT defined");
-                                Brands.create_brand_name(brand);
+                                Brands.create_brand_name_w_default_callback(brand);
                                 $scope.brandModal.hide();
                             } else {
                                 console.log("brand_name_form_submit_click DEfined");
@@ -78,20 +78,26 @@ brand.factory('Brands',
                         }
                         return ret;
                     }, // end of parse_results
-                    create_brand_name : function(brand) {
-                        var self = this;
-                        var callback_function =
-                            function() {
-                                brand.brand_name = "";
-                                brand.desc = "";
-                                self.all_with_default_callback();
-                            };
+                    create_brand_name : function(brand, callback_function) {
                         var json = {
                                     sql: "insert into brands (name, desc) values (?, ?)",
                                     params:[brand.brand_name, brand.desc],
                                     callback: callback_function};
                         DbUtil.executeSql(json);
                     }, // end of create_brand_name
+                    create_brand_name_w_default_callback : function (brand){
+                        var self = this;
+                        var callback_function = function() {
+                            brand.brand_name = "";
+                            brand.desc = "";
+                            self.all_with_default_callback();
+                        };
+                        var json = {
+                            sql: "insert into brands (name, desc) values (?, ?)",
+                            params:[brand.brand_name, brand.desc],
+                            callback: callback_function};
+                        DbUtil.executeSql(json);
+                    }, // create_brand_name_w_default_callback
                     delete_brand: function(id) {
               
                         var self = this;
