@@ -1,7 +1,7 @@
 app.controller('productTypeCtrl',
                function($rootScope, $scope, $ionicModal, ProductTypes){
                
-                    $ionicModal.fromTemplateUrl('product-types-popup.html',
+                    $ionicModal.fromTemplateUrl('modules/products/productTypes/templates/product-types-popup.htm',
                                                 function(modal) {
                                                     $scope.productTypeModal = modal;
                                                 }, {

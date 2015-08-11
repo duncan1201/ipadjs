@@ -86,7 +86,7 @@
                 <div class="col">
                     <label class="item item-select">
                         <span class="input-label">Product brand</span>
-                        <select ng-model="product.brand_id" ng-change="brand_change(product)">
+                        <select ng-model="product.brand_id" ng-change="brand_change(product.brand_id)">
                             <option value="0">&nbsp;</option>
                             <option ng-repeat="brand in brands" ng-selected="{{product.brand_id == brand.id}}" value="{{brand.id}}">{{brand.brand_name}}</option>
                         </select>

@@ -3,7 +3,7 @@ app.controller('brandCtrl',
                
                     Brands.all_with_default_callback();
                
-                    $ionicModal.fromTemplateUrl('brands-popup.html',
+                    $ionicModal.fromTemplateUrl('modules/products/brands/templates/brands-popup.htm',
                                                 function(modal) {
                                                     $scope.brandModal = modal;
                                                 }, {

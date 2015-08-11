@@ -21,39 +21,5 @@
             <button class="button button-small button-clear button-positive" ng-click="delete_click({{product_type.id}})">Delete</button>
         </div>
     </div>
-    
-    <script id="product-types-popup.html" type="text/ng-template" >
-        <div class="modal" style="width:60%">
-        
-            <!-- modal header bar -->
-            <ion-header-bar>
-            <h1 class="title">Create product type</h1>
-            <button class="button button-clear button-positive" ng-click="product_type_popup_cancel_click()">Cancel</button>
-            </ion-header-bar>
-        
-            <!-- modal content area -->
-            <ion-content>
-                <form name="brand_name_form" ng-submit="product_type_form_submit_click(product_type)">
-                    <input type="hidden" ng-model="product_type.id"/>
-                    <div class="row">
-                        <div class="col col-20">Product Type name</div>
-                        <div class="col col-80">
-                            <input type="text" placeholder="Enter product type here" ng-model="product_type.name" style="width:90%;outline-width:1px;outline-color:lightgray;outline-style:solid;padding-left:1em;">
-                        </div>
-                    </div>
-        
-                    <div class="row">
-                        <div class="col col-20">Description</div>
-                        <div class="col col-80">
-                            <textarea rows="4" placeholder="Enter description here" ng-model="product_type.desc" style="width:90%;outline-width:1px;outline-color:lightgray;outline-style:solid;padding-left:1em;vertical-align:middle"></textarea>
-                        </div>
-                    </div>
-        
-                    <div class="padding">
-                        <button type="submit" class="button button-block button-positive">Save product type</button>
-                    </div>
-                </form>
-            </ion-content>
-        </div>
-    </script>
+
 </ion-content>
