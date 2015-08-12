@@ -19,6 +19,10 @@ app.controller('productTypeCtrl',
                         $scope.productTypeModal.hide();
                     };
                
+                    $scope.delete_click = function(id) {
+                        ProductTypes.delete_product_type(id);
+                    };
+               
                     $scope.product_type_form_submit_click = function(product_type) {
                         if (!angular.isDefined(product_type.id)){
                             console.log("brand_name_form_submit_click NOT defined");
@@ -73,7 +77,15 @@ productType.factory('ProductTypes',
                                     product_type.desc = "";
                                     self.all_summary_with_default_callback();
                                 };
-                                create_product_type(callback_fun);
-                            } // create_product_type_w_default_callback
+                                self.create_product_type(callback_fun);
+                            }, // create_product_type_w_default_callback
+                            delete_product_type : function(id){
+                                var self = this;
+                                var callback_fun = function (tx, results) {
+                                    self.all_summary_with_default_callback();
+                                };
+                                var json = {sql: "delete from product_types where id = ?", params:[id], callback: callback_fun};
+                                DbUtil.executeSql(json);
+                            } // end of delete_product_type
                         }
                      });

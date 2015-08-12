@@ -7,6 +7,53 @@
         <div class="item item-divider"><button class="button button-small" ng-click="add_new_product_click()">Add Product</button></div>
     </div>
     
+    <div class="card">
+        <div class="item">
+            <div class="row">
+                <div class="col">
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Product type
+                        </div>
+                        <select>
+                            <option value="0">&nbsp;</option>
+                            <option ng-repeat='product_type in product_types | filter:{name:"!+"}' value='{{product_type.id}}'>{{product_type.name}}</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="col">
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Brand
+                        </div>
+                        <select>
+                            <option value="0">&nbsp;</option>
+                            <option ng-repeat='brand in brands | filter:{brand_name:"!+"}' value='{{brand.id}}'>{{brand.brand_name}}</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="col">
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Supplier
+                        </div>
+                        <select>
+                            <option value="0">&nbsp;</option>
+                            <option ng-repeat='supplier in suppliers | filter:{name:"!+"}' value="{{supplier.id}}" ng-selected="{{product.supplier_id == supplier.id}}">{{supplier.name}}</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="item" style='backgroud-color:blue'>
+            <div class="row" style='backgroud-color:red'>
+                <div class="col col-20 col-offset-80" style='backgroud-color:darkgray'>
+                    <button class="button button-small">Apply Filter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="row row_header">
         <div class="col">Product</div>
         <div class="col">Created</div>
@@ -25,8 +72,9 @@
         <div class="col">&nbsp;</div>
         <div class="col">
             <button class="button button-small button-clear button-positive" ng-click="edit_click({{product.id}})">Edit</button>
-            <button class="button button-small button-clear button-positive">Deactivate</button>
+            <button class="button button-small button-clear button-positive" ng-click="deactivate_click({{product.id}})" ng-show="product.active == 1">Deactivate</button>
+            <button class="button button-small button-clear button-positive" ng-click="deactivate_click({{product.id}})" ng-show="product.active == 0">Activate</button>
         </div>
     </div>
-
+    
 </ion-content>

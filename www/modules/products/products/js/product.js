@@ -15,22 +15,19 @@ app.controller('productCtrl',
                         }); // end of apply
                     }; // end of product_types_callback
                
-                    var brands_callback =
-                        function(tx, results){
-                            var brands = Brands.parse_results(results);
-                            $scope.$apply(function(){
-                                          brands.unshift({id:-1, brand_name: "+add brand", desc: ""});
-                                          $scope.brands = brands;
-                                          });
-                        }; // end of brands_callback
+                    var brands_callback = function(tx, results){
+                        var brands = Brands.parse_results(results);
+                        $scope.$apply(function(){
+                            brands.unshift({id:-1, brand_name: "+add brand", desc: ""});
+                            $scope.brands = brands;
+                        });
+                    }; // end of brands_callback
                
-                    var suppliers_callback =
-                        function(tx, results){
-                            var suppliers = Suppliers.parse_suppliers_summary(results);
-                            $scope.$apply(function(){
-                                          
-                                          suppliers.unshift({id:-1, name: "+add supplier", default_markup: 1, desc: ""});
-                                          $scope.suppliers = suppliers;
+                    var suppliers_callback = function(tx, results){
+                        var suppliers = Suppliers.parse_suppliers_summary(results);
+                        $scope.$apply(function(){
+                            suppliers.unshift({id:-1, name: "+add supplier", default_markup: 1, desc: ""});
+                            $scope.suppliers = suppliers;
                         });
                     }; // end of suppliers_callback
                
@@ -38,19 +35,22 @@ app.controller('productCtrl',
                         Products.all_summary_with_default_callback();
                     }
                
-                    $rootScope.$on('$includeContentLoaded',
-                                   function(event, url){
-                                        if(url == App_URLs.product_add_edit){
-                                            console.log("product_add_edit=" + $rootScope.product_id_for_edit);
-                                            Brands.all(brands_callback);
-                                            Suppliers.all_summary(suppliers_callback);
-                                            ProductTypes.all_summary(product_types_callback);
+                    $rootScope.$on('$includeContentLoaded', function(event, url){
+                        if(url == App_URLs.product_add_edit){
+                            //console.log("product_add_edit=" + $rootScope.product_id_for_edit);
+                            Brands.all(brands_callback);
+                            Suppliers.all_summary(suppliers_callback);
+                            ProductTypes.all_summary(product_types_callback);
                                    
-                                            if (angular.isDefined($rootScope.product_id_for_edit)){
-                                                Products.get_product($rootScope.product_id_for_edit);
-                                            }
-                                        }
-                                   });
+                            if (angular.isDefined($rootScope.product_id_for_edit)){
+                                Products.get_product($rootScope.product_id_for_edit);
+                            }
+                        } else if (url == App_URLs.product_main_content) {
+                            Brands.all(brands_callback);
+                            Suppliers.all_summary(suppliers_callback);
+                            ProductTypes.all_summary(product_types_callback);
+                        }
+                    }); // end of on
                
                     $scope.brand_change = function(brand_id){
                         console.log("brand_change=" + angular.toJson(brand_id));
@@ -73,24 +73,29 @@ app.controller('productCtrl',
                             }
                         };
                
-                    $scope.supply_price_change =
-                        function() {
-                            calcuate_retail_price();
+                    $scope.deactivate_click = function(id) {
+                        var callback_fun = function (tx, results) {
                         };
+                        var updateSql = "update products set active = 0 where id = ?";
+                        var json = {sql: updateSql, params:[id], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    };
                
-                    $scope.markup_change =
-                        function() {
-                            calcuate_retail_price();
-                        };
+                    $scope.supply_price_change = function() {
+                        calcuate_retail_price();
+                    };
                
-                    var calcuate_retail_price =
-                        function(){
-                            var markup = $scope.product.markup;
-                            var supply_price = $scope.product.supply_price;
-                            if (angular.isDefined(markup) && angular.isDefined(supply_price)){
-                                console.log("calculating retail price...");
-                                $scope.product.retail_price = (1 + markup / 100.0) * supply_price;
-                            }
+                    $scope.markup_change = function() {
+                        calcuate_retail_price();
+                    };
+               
+                    var calcuate_retail_price = function(){
+                        var markup = $scope.product.markup;
+                        var supply_price = $scope.product.supply_price;
+                        if (angular.isDefined(markup) && angular.isDefined(supply_price)){
+                            console.log("calculating retail price...");
+                            $scope.product.retail_price = (1 + markup / 100.0) * supply_price;
+                        }
                     };
                
                     $scope.add_new_product_click = function() {
@@ -182,7 +187,7 @@ product.factory('Products',
                     return {
                         all_summary: function(callback_function){
                 
-                            var selectSql = "select p.id, p.product_name, p.product_handle, p.desc, date(p.creation_date) as creation_date, s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id";
+                            var selectSql = "select p.id, p.product_name, p.product_handle, p.desc, date(p.creation_date) as creation_date, p.active, s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id";
                             var json = {
                                 sql: selectSql,
                                 params:[],
@@ -197,12 +202,14 @@ product.factory('Products',
                                     var rows = results.rows;
                                     var ret = [];
                                     for(i = 0; i < rows.length; i++) {
+                                        var item = rows.item(i);
                                         ret.push({
-                                            id: rows.item(i).id,
-                                            product_name: rows.item(i).product_name,
-                                            creation_date: rows.item(i).creation_date,
-                                            brand_name: rows.item(i).brand_name,
-                                            supplier_name: rows.item(i).supplier_name
+                                            id: item.id,
+                                            product_name: item.product_name,
+                                            creation_date: item.creation_date,
+                                            active: item.active,
+                                            brand_name: item.brand_name,
+                                            supplier_name: item.supplier_name
                                         });
                                     }
                 
@@ -222,7 +229,7 @@ product.factory('Products',
                                 function(){
                                     self.all_summary_with_default_callback();
                                 };
-                            var insertSql = "insert into products (product_name, product_handle, desc, creation_date, product_type_id, brand_id, supplier_id, supply_price, markup, stock_keeping_unit, current_stock, reorder_point, reorder_amount) values (?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?)";
+                            var insertSql = "insert into products (product_name, product_handle, desc, creation_date, product_type_id, brand_id, supplier_id, supply_price, markup, stock_keeping_unit, current_stock, reorder_point, reorder_amount) values (?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                             var json = {
                                 sql: insertSql,
                                 params: [product.product_name, product.product_handle, product.desc, product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount],
@@ -241,6 +248,7 @@ product.factory('Products',
                                         product_name: item.product_name,
                                         product_handle: item.product_handle,
                                         desc: item.desc,
+                                        active: item.active,
                                         product_type_id: item.product_type_id,
                                         brand_id: item.brand_id,
                                         supplier_id: item.supplier_id,
