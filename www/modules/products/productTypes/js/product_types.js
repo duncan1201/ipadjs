@@ -25,12 +25,11 @@ app.controller('productTypeCtrl',
                
                     $scope.product_type_form_submit_click = function(product_type) {
                         if (!angular.isDefined(product_type.id)){
-                            console.log("brand_name_form_submit_click NOT defined");
+                            console.log("product_type_form_submit_click NOT defined");
                             ProductTypes.create_product_type_w_default_callback(product_type);
                             $scope.productTypeModal.hide();
                         } else {
-                            console.log("brand_name_form_submit_click DEfined");
-                            //Brands.create_brand_name(brand);
+                            console.log("product_type_form_submit_click DEfined");
                         }
                     };
                });
@@ -64,7 +63,6 @@ productType.factory('ProductTypes',
                                 self.all_summary(callback_fun);
                             }, // end of all_summary
                             create_product_type: function(product_type, callback_fun) {
-                                console.log("create_product_type");
                                 var query = "insert into product_types (name, desc) values (?, ?)";
                                 var json = {sql: query, params:[product_type.name, product_type.desc], callback: callback_fun};
                                 DbUtil.executeSql(json);
@@ -77,7 +75,7 @@ productType.factory('ProductTypes',
                                     product_type.desc = "";
                                     self.all_summary_with_default_callback();
                                 };
-                                self.create_product_type(callback_fun);
+                                self.create_product_type(product_type, callback_fun);
                             }, // create_product_type_w_default_callback
                             delete_product_type : function(id){
                                 var self = this;

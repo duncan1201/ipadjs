@@ -33,6 +33,14 @@ app.controller('productCtrl',
                
                     if ($rootScope.ion_content_template == App_URLs.product_main_content){
                         Products.all_summary_with_default_callback();
+                        // initialize the filter
+                        if (!angular.isDefined($scope.filter)){
+                            $scope.filter = {
+                                product_type:"",
+                                brand:"",
+                                supplier:""
+                            };
+                        } // end of if
                     }
                
                     $rootScope.$on('$includeContentLoaded', function(event, url){
@@ -59,19 +67,18 @@ app.controller('productCtrl',
                         }
                     };
                
-                    $scope.supplier_change =
-                        function(){
-                            if (!angular.isDefined($scope.product.markup)){
-                                var callback_fun = function(tx, results){
-                                    var rows = results.rows;
+                    $scope.supplier_change = function(){
+                        if (!angular.isDefined($scope.product.markup)){
+                            var callback_fun = function(tx, results){
+                                var rows = results.rows;
                                     if(rows.length > 0){
                                         var scope = angular.element(document.querySelector('#product_add_edit')).scope();
                                         scope.product.markup = rows.item(0).default_markup;
                                     }
-                                };
-                                Suppliers.get_supplier(1, callback_fun);
-                            }
-                        };
+                            };
+                            Suppliers.get_supplier(1, callback_fun);
+                        }
+                    };
                
                     $scope.deactivate_click = function(id) {
                         var callback_fun = function (tx, results) {
@@ -127,6 +134,10 @@ app.controller('productCtrl',
                         return angular.isDefined(x);
                     };
                
+                    $scope.apply_filter_click = function () {
+                        console.log("apply_filter_click="+$scope.filter.supplier);
+                    };
+               
                     // start of brands dialog
                     $ionicModal.fromTemplateUrl('modules/products/brands/templates/brands-popup.htm',
                                                 function(modal) {
@@ -179,6 +190,42 @@ app.controller('productCtrl',
                
                }); // end of controller
 
+app.filter('productFilter', function(){
+    
+    return function(products, conditions) {
+           console.log("filter.brand="+conditions.brand);
+           console.log("filter.supplier="+conditions.supplier);
+           console.log("filter.type="+conditions.product_type);
+           var filtered = [];
+           angular.forEach(products,
+                           function(product){
+                                var pass = true;
+                           
+                                if (pass && conditions.product_type != ""){
+                                    if (product.product_type != conditions.product_type){
+                                        pass = false;
+                                    }
+                                }
+                           
+                                if (pass && conditions.brand != ""){
+                                    if (product.brand_name != conditions.brand){
+                                        pass = false
+                                    }
+                                }
+                           
+                                if (pass && conditions.supplier != ""){
+                                    if (product.supplier_name != conditions.supplier){
+                                        pass = false;
+                                    }
+                                }
+                           
+                                if(pass){
+                                    filtered.push(product);
+                                }
+                           });
+                    return filtered;
+                };
+           }); // end of productFilter
 
 var product = angular.module('product', ['ionic', 'util']);
 
@@ -187,7 +234,7 @@ product.factory('Products',
                     return {
                         all_summary: function(callback_function){
                 
-                            var selectSql = "select p.id, p.product_name, p.product_handle, p.desc, date(p.creation_date) as creation_date, p.active, s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id";
+                            var selectSql = "select p.id, p.product_name, p.product_handle, p.desc, date(p.creation_date) as creation_date, p.active, p.supplier_id, s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id";
                             var json = {
                                 sql: selectSql,
                                 params:[],
@@ -209,6 +256,7 @@ product.factory('Products',
                                             creation_date: item.creation_date,
                                             active: item.active,
                                             brand_name: item.brand_name,
+                                            supplier_id: item.supplier_id,
                                             supplier_name: item.supplier_name
                                         });
                                     }

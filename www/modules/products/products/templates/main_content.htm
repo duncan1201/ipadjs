@@ -11,13 +11,13 @@
         <div class="item">
             <div class="row">
                 <div class="col">
-                    <label class="item item-input item-select">
+                    <label class="item item-input item-select item-stacked-label">
                         <div class="input-label">
                             Product type
                         </div>
-                        <select>
-                            <option value="0">&nbsp;</option>
-                            <option ng-repeat='product_type in product_types | filter:{name:"!+"}' value='{{product_type.id}}'>{{product_type.name}}</option>
+                        <select ng-model='filter.product_type'>
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat='product_type in product_types | filter:{name:"!+"}' value='{{product_type.name}}'>{{product_type.name}}</option>
                         </select>
                     </label>
                 </div>
@@ -26,29 +26,29 @@
                         <div class="input-label">
                             Brand
                         </div>
-                        <select>
-                            <option value="0">&nbsp;</option>
-                            <option ng-repeat='brand in brands | filter:{brand_name:"!+"}' value='{{brand.id}}'>{{brand.brand_name}}</option>
+                        <select ng-model='filter.brand'>
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat='brand in brands | filter:{brand_name:"!+"}' value='{{brand.brand_name}}'>{{brand.brand_name}}</option>
                         </select>
                     </label>
                 </div>
                 <div class="col">
-                    <label class="item item-input item-select">
+                    <label class="item item-input item-select item-stacked-label">
                         <div class="input-label">
                             Supplier
                         </div>
-                        <select>
-                            <option value="0">&nbsp;</option>
-                            <option ng-repeat='supplier in suppliers | filter:{name:"!+"}' value="{{supplier.id}}" ng-selected="{{product.supplier_id == supplier.id}}">{{supplier.name}}</option>
+                        <select ng-model='filter.supplier'>
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat='supplier in suppliers | filter:{name:"!+"}' value="{{supplier.name}}">{{supplier.name}}</option>
                         </select>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="item" style='backgroud-color:blue'>
-            <div class="row" style='backgroud-color:red'>
-                <div class="col col-20 col-offset-80" style='backgroud-color:darkgray'>
-                    <button class="button button-small">Apply Filter</button>
+        <div class="item">
+            <div class="row">
+                <div class="col col-20 col-offset-80">
+                    <button class="button button-small" ng-click="apply_filter_click()">Apply Filter</button>
                 </div>
             </div>
         </div>
@@ -63,12 +63,12 @@
         <div class="col">Price</div>
         <div class="col">&nbsp;</div>
     </div>
-    <div class="row row_content" ng-repeat="product in products">
+    <div class="row row_content" ng-repeat='product in products | productFilter:{product_type:filter.product_type,brand:filter.brand,supplier:filter.supplier}'>
         <div class="col">{{product.product_name}}&nbsp;</div>
         <div class="col">{{product.creation_date}}</div>
         <div class="col">&nbsp;</div>
         <div class="col">{{product.brand_name}}&nbsp;</div>
-        <div class="col">{{product.supplier_name}}&nbsp;</div>
+        <div class="col">{{product.supplier_name}}&nbsp;{{product.supplier_id}}</div>
         <div class="col">&nbsp;</div>
         <div class="col">
             <button class="button button-small button-clear button-positive" ng-click="edit_click({{product.id}})">Edit</button>
