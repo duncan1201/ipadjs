@@ -38,6 +38,9 @@
 /*
  item-paddingless
  */
+.item-paddingless {
+    padding:0;
+}
 
 /* table */
 .row_header .col{

@@ -1,6 +1,20 @@
 app.controller('productCtrl',
-               function($rootScope, $scope, $ionicModal, Products, ProductTypes, Suppliers, Brands, App_URLs){
+               function($rootScope, $scope, $ionicModal, Products, Tags, ProductTypes, Suppliers, Brands, App_URLs){
                     var self = this;
+               
+                    var tags_callback = function(tx, results){
+                        var rows = results.rows;
+                        var tags = [];
+                        for(var i = 0; i < rows.length; i++) {
+                            var item = rows.item(i);
+                            tags.push({id: item.id, name: item.name});
+                        }
+                        $scope.$apply(function(){
+                            tags.unshift({id:-1, name: "+add tag"});
+                            $scope.tags = tags;
+                        }); // end of apply
+               
+                    }; // end of tags_callback
                     var product_types_callback = function(tx, results){
                         console.log("product_types_callback.length=" + results.rows.length);
                         var rows = results.rows;
@@ -36,6 +50,7 @@ app.controller('productCtrl',
                         // initialize the filter
                         if (!angular.isDefined($scope.filter)){
                             $scope.filter = {
+                                tag:"",
                                 product_type:"",
                                 brand:"",
                                 supplier:""
@@ -45,10 +60,10 @@ app.controller('productCtrl',
                
                     $rootScope.$on('$includeContentLoaded', function(event, url){
                         if(url == App_URLs.product_add_edit){
-                            //console.log("product_add_edit=" + $rootScope.product_id_for_edit);
                             Brands.all(brands_callback);
                             Suppliers.all_summary(suppliers_callback);
                             ProductTypes.all_summary(product_types_callback);
+                            Tags.all(tags_callback);
                                    
                             if (angular.isDefined($rootScope.product_id_for_edit)){
                                 Products.get_product($rootScope.product_id_for_edit);
@@ -57,11 +72,14 @@ app.controller('productCtrl',
                             Brands.all(brands_callback);
                             Suppliers.all_summary(suppliers_callback);
                             ProductTypes.all_summary(product_types_callback);
+                            Tags.all(tags_callback);
+                            if(!angular.isDefined($scope.tag_to_be_add)){
+                                $scope.tag_to_be_add = "";
+                            }
                         }
                     }); // end of on
                
                     $scope.brand_change = function(brand_id){
-                        console.log("brand_change=" + angular.toJson(brand_id));
                         if (brand_id == "-1"){ // + new brand
                             $scope.brandModal.show();
                         }
@@ -79,6 +97,20 @@ app.controller('productCtrl',
                             Suppliers.get_supplier(1, callback_fun);
                         }
                     };
+               
+                    $scope.tag_remove_click = function(tag){
+                        console.log("tag_remove_click...=" + tag);
+                        var index = $scope.product.tags.indexOf(tag);
+                        if(index > -1){
+                            $scope.product.tags.splice(index, 1);
+                        }
+                    };
+               
+                    $scope.add_tag_click = function(tag_to_be_add){
+                        if (tag_to_be_add != "" && tag_to_be_add != "-1" && $scope.product.tags.indexOf(tag_to_be_add) < 0){
+                            $scope.product.tags.push(tag_to_be_add);
+                        }
+                    }; // end of add_tag_click
                
                     $scope.deactivate_click = function(id) {
                         var callback_fun = function (tx, results) {
@@ -134,10 +166,6 @@ app.controller('productCtrl',
                         return angular.isDefined(x);
                     };
                
-                    $scope.apply_filter_click = function () {
-                        console.log("apply_filter_click="+$scope.filter.supplier);
-                    };
-               
                     // start of brands dialog
                     $ionicModal.fromTemplateUrl('modules/products/brands/templates/brands-popup.htm',
                                                 function(modal) {
@@ -159,6 +187,8 @@ app.controller('productCtrl',
                         $scope.brandModal.hide();
                     };
                     // end of brands dialog
+               
+                    $scope.product_tag_change = function(){};
                
                     // start of product type dialog
                     $scope.product_type_change = function(product_type_id) {
@@ -193,13 +223,17 @@ app.controller('productCtrl',
 app.filter('productFilter', function(){
     
     return function(products, conditions) {
-           console.log("filter.brand="+conditions.brand);
-           console.log("filter.supplier="+conditions.supplier);
-           console.log("filter.type="+conditions.product_type);
            var filtered = [];
            angular.forEach(products,
                            function(product){
                                 var pass = true;
+                           console.log("conditions.tag=" + conditions.tag);
+                           console.log("conditions.product_type=" + conditions.product_type);
+                                if (pass && conditions.tag != ""){
+                           if (product.tags.indexOf(conditions.tag) < 0){
+                           pass = false;
+                           }
+                                }
                            
                                 if (pass && conditions.product_type != ""){
                                     if (product.product_type != conditions.product_type){
@@ -234,7 +268,7 @@ product.factory('Products',
                     return {
                         all_summary: function(callback_function){
                 
-                            var selectSql = "select p.id, p.product_name, p.product_handle, p.desc, date(p.creation_date) as creation_date, p.active, p.supplier_id, s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id";
+                            var selectSql = "select p.id, p.product_name, p.product_handle, p.desc, p.tags_string, date(p.creation_date) as creation_date, p.active, pt.name as product_type_name , p.supplier_id, s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id left join product_types pt on pt.id = p.product_type_id";
                             var json = {
                                 sql: selectSql,
                                 params:[],
@@ -255,6 +289,8 @@ product.factory('Products',
                                             product_name: item.product_name,
                                             creation_date: item.creation_date,
                                             active: item.active,
+                                            tags:item.tags_string.split(",").sort(),
+                                            product_type: item.product_type_name,
                                             brand_name: item.brand_name,
                                             supplier_id: item.supplier_id,
                                             supplier_name: item.supplier_name
@@ -265,7 +301,6 @@ product.factory('Products',
                                     scope.$apply(function(){
                                         scope.products = ret;
                                     });
-
                                 };
                             self.all_summary(callback_function);
                         }, // end of all_summary_with_default_callback
@@ -291,12 +326,14 @@ product.factory('Products',
                                 if(rows.length > 0){
                                     console.log("get_product.json="+angular.toJson(rows.item(0)));
                                     var item = rows.item(0);
+                                    //item.tags_string;
                                     var ret = {
                                         id: item.id,
                                         product_name: item.product_name,
                                         product_handle: item.product_handle,
                                         desc: item.desc,
                                         active: item.active,
+                                        tags:item.tags_string.split(","),
                                         product_type_id: item.product_type_id,
                                         brand_id: item.brand_id,
                                         supplier_id: item.supplier_id,
@@ -307,6 +344,7 @@ product.factory('Products',
                                         reorder_point: item.reorder_point,
                                         reorder_amount: item.reorder_amount
                                     };
+                                    console.log("ret.json="+angular.toJson(ret));
                                     var scope = angular.element(document.querySelector('#product_add_edit')).scope();
                                     scope.$apply(function(){
                                         scope.product = ret;
@@ -323,10 +361,10 @@ product.factory('Products',
                             var callback_fun = function() {
                 
                             };
-                            var update_sql = "update products set product_name = ?, product_handle = ?, desc = ?, product_type_id = ?, brand_id = ?, supplier_id = ?, supply_price = ?, markup = ?, stock_keeping_unit = ?, current_stock = ?, reorder_point = ?, reorder_amount = ? where id = ?";
+                            var update_sql = "update products set product_name = ?, product_handle = ?, desc = ?, tags_string = ?, product_type_id = ?, brand_id = ?, supplier_id = ?, supply_price = ?, markup = ?, stock_keeping_unit = ?, current_stock = ?, reorder_point = ?, reorder_amount = ? where id = ?";
                             var json = {
                                     sql: update_sql,
-                                    params:[product.product_name, product.product_handle, product.desc, product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount,product.id],
+                                    params:[product.product_name, product.product_handle, product.desc,product.tags.join(","), product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount,product.id],
                                     callback: callback_fun
                             };
                             DbUtil.executeSql(json);

@@ -45,18 +45,11 @@
                 <div class="col">
                     <label class="item item-input">
                         <span class="input-label">Product tags</span>
-                        <input type="text" class="lightgray-outline" id="product_tag">
+                        <select id="product_tag" ng-model="tag_to_be_add" ng-change="product_tag_change(tag_to_be_add)">
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat="tag in tags" value="{{tag.name}}">{{tag.name}}</option>
+                        </select>
                         <sub>&nbsp;</sub>
-                        <datalist id="taglist">
-                            <option value="For sales" />
-                            <option value="For general" />
-                            <option value="Dark Green" />
-                            <option value="Grey" />
-                            <option value="Green" />
-                            <option value="Red" />
-                            <option value="White" />
-                            <option value="Yellow" />
-                        </datalist>
                     </label>
                 </div>
             </div>
@@ -64,15 +57,19 @@
                 <div class="col col-offset-30" style="margin-top:auto;margin-bottom:auto">
                     <label class="item item-input">
                         <span class="input-label">&nbsp;</span>
-                        <button type="button" class="button button-small">Add</button>
+                        <button type="button" class="button button-small" ng-click="add_tag_click(tag_to_be_add)">Add</button>
                         <sub>&nbsp;</sub>
                     </label>
-                    
                 </div>
             </div>
-            <div class="row" style='border-top:1px dotted gray;'>
-                
+            <div class="padding" style='float:left;width:90%;border:0px solid red' >
+                <button type="button" class="button button-small icon-right ion-close-round" style="margin-right:1em" ng-repeat="tag in product.tags" ng-click="tag_remove_click(tag)"> {{tag}}
+                </button>
             </div>
+            
+            <div class="row" style='border-top:1px dotted gray;'>
+            </div>
+            
             <div class="row">
                 <div class="col">
                     <label class="item item-select">
@@ -182,10 +179,10 @@
 
 <script>
     $(document).ready(function () {
-                      
+                      /*
                       var availableTags = $('#taglist').find('option').map(function () {
                                                                              return this.value;
                                                                              }).get();
-                      $('#product_tag').autocomplete({ source: availableTags });
+                      $('#product_tag').autocomplete({ source: availableTags });*/
                       });
 </script>

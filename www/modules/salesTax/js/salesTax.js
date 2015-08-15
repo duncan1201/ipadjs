@@ -53,40 +53,29 @@ var salesTax = angular.module('salesTax', ['ionic', 'util']);
 salesTax.factory('SalesTaxes', function(DbUtil){
                  return {
                     all: function() {
-                        var ret = "";
-                        var db = DbUtil.openDb();
-                 
-                        db.transaction(function(tx){
-                                tx.executeSql('SELECT * FROM sales_taxes ORDER BY name COLLATE NOCASE',
-                                              [],
-                                              function(tx, results){
-                                                ret += "[";
-                                                for (i = 0; i < results.rows.length; i++){
-                                                    ret += "{\"name\":\""
-                                                    ret += results.rows.item(i).name;
-                                                    ret += "\",\"rate\":"
-                                                    ret += results.rows.item(i).rate;
-                                                    ret += ",\"id\":";
-                                                    ret += results.rows.item(i).id;
-                                                    ret += ",\"system_generated\":";
-                                                    ret += results.rows.item(i).system_generated;
-                                                    ret += "}";
-                                              
-                                                    if (i < results.rows.length - 1){
-                                                        ret += ",";
-                                                    }
-                                                }
-                                                ret += "]";
-                                                console.log(ret);
-                                          
-                                                var scope = angular.element(document.querySelector('#sales_taxes_main_content')).scope();
-                                                
-                                                scope.$apply(function(){
-                                                                scope.sales_taxes = angular.fromJson(ret);
-                                                              });
-                                              });
+                        var query = 'SELECT * FROM sales_taxes ORDER BY name COLLATE NOCASE';
+                        var callback_fun = function(tx, results){
+                            var rows = results.rows;
+                            var ret = [];
+                            for (i = 0; i < rows.length; i++){
+                                var item = rows.item(i);
+                                ret.push({
+                                        name: item.name,
+                                        rate: item.rate,
+                                        id: item.id,
+                                        system_generated:item.system_generated
                                 });
-                    },
+                            }
+                 
+                            var scope = angular.element(document.querySelector('#sales_taxes_main_content')).scope();
+                 
+                            scope.$apply(function(){
+                              scope.sales_taxes = ret;
+                            });
+                        }; // end of callback_fun
+                        var json = {sql: query, params:[], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    }, // end of all
                  
                     delete_sales_tax: function (id) {
                         var self = this;

@@ -4,23 +4,86 @@
     </div>
     <form ng-submit="layout_form_submit_click(layout)">
     <input type="hidden" ng-model="layout.id">
+     
+    <div class='card'>
+        <div class='item item-divider'>
+            Add product
+        </div>
+        <div class='item item-paddingless'>
+            <div class="row" style='padding-left:0;padding-right:0'>
+                <div class="col">
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Tags
+                        </div>
+                        <select ng-model='filter.tag'>
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat='tag in tags | filter:{name:"!+"}' value='{{tag.name}}'>{{tag.name}}</option>
+                        </select>
+                    </label>
+                </div> <!-- end of col -->
+                <div class="col">
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Types
+                        </div>
+                        <select ng-model='filter.product_type'>
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat='product_type in product_types | filter:{name:"!+"}' value='{{product_type.name}}'>{{product_type.name}}</option>
+                        </select>
+                    </label>
+                </div> <!-- end of col -->
+                <div class="col">
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Brand
+                        </div>
+                        <select ng-model='filter.brand'>
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat='brand in brands | filter:{brand_name:"!+"}' value='{{brand.brand_name}}'>{{brand.brand_name}}</option>
+                        </select>
+                    </label>
+                </div> <!-- end of col -->
+                <div class="col">
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Supplier
+                        </div>
+                        <select ng-model='filter.supplier'>
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat='supplier in suppliers | filter:{name:"!+"}' value="{{supplier.name}}">{{supplier.name}}</option>
+                        </select>
+                    </label>
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of item item-paddingless -->
+        <div class='item item-paddingless'>
+            <div class='row'>
+                <div class='col col-90'>
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Product:
+                        </div>
+                        <select ng-model="product_to_be_add">
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat='product in products' value="{{product}}">Name:{{product.name}} Type: {{product.type}}</option>
+                        </select>
+                    </label>
+                </div> <!-- end of col -->
+                <div class="col">
+                    <button type="button" class="button button-small button-positive" ng-click="add_product_click(product_to_be_add)">Add</button>
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of item -->
+    </div> <!-- end of card -->
+    
     <div class="row">
         <div class="col">
-            <input id="productCandidate" type="text" placeholder="Search Products" class="lightgray-outline" list="productList">
-            <datalist id="productlist">
-                <option value="Black" />
-                <option value="Blue" />
-                <option value="Dark Green" />
-                <option value="Grey" />
-                <option value="Green" />
-                <option value="Red" />
-                <option value="White" />
-                <option value="Yellow" />
-            </datalist>
-        </div>
-        <div class="col"><button type="button" ng-click="add_product_click()">Add Product</button></div>
-        <div class="col">
-            <input type="text" placeholder="New Quick Key Layout" class="lightgray-outline" ng-model="layout.name">
+            <label class="item item-input">
+                <span class="input-label">Name:</span>
+                <input type="text" placeholder="New Quick Key Layout" class="lightgray-outline" ng-model="layout.name">
+                <sub>&nbsp;</sub>
+            </label>
         </div>
     </div>
 
@@ -74,13 +137,3 @@
     </div>
     </form>
 </ion-content>
-
-<script>
-    $(document).ready(function () {
-        
-                      var availableTags = $('#productlist').find('option').map(function () {
-                                                                             return this.value;
-                                                                             }).get();
-                      $('#productCandidate').autocomplete({ source: availableTags });
-                      });
-    </script>
