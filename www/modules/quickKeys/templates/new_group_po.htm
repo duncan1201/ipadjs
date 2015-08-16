@@ -1,20 +1,22 @@
 <style>.popover { height:160px; width: 260px; }</style>
-<ion-popover-view>
+<ion-popover-view ng-controller='addGroupCtrl'>
     <ion-header-bar>
      <h1 class="title">Add a group</h1>
      </ion-header-bar>
     <ion-content>
         <div class='row'>
             <div class='col'>
-                <input type="text" class="lightgray-outline" placeholder="Group name">
+                <input type="text" class="lightgray-outline" placeholder="Group name" ng-model="group.name">
             </div>
         </div>
         <div class='row'>
             <div class='col col-33'>
-                <button class="button button-block button-small">Cancel</button>
+                <button class="button button-block button-small" ng-click='cancel_click()'>
+                    Cancel
+                </button>
             </div>
             <div class='col col-33 col-offset-33'>
-                <button class="button button-block button-small">Add</button>
+                <button class="button button-block button-small" ng-click='add_click(group)'>Add</button>
             </div>
         </div>
     </ion-content>

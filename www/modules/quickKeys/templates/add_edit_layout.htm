@@ -93,8 +93,8 @@
                 <div class="item item-divider">
                     <div class="row">
                         <div class="col">
-                            <button ng-repeat="group in layout.groups" type="button" class="button icon-right ion-gear-b" ng-click="group_click($event, {{group}})">{{group.name}}</button>
-                            <button type="button" class="button button-icon" style='float:right' ng-click="new_group_click($event)">
+                            <button ng-repeat="group in layout.groups" type="button" class="button button-small icon-right ion-gear-b" style='margin-right:3px'ng-click="group_click($event, {{group}})">{{group.name}}</button>
+                            <button type="button" class="button button-small button-icon" style='float:right' ng-click="new_group_click($event)">
                                 <i class="icon ion-plus-round"></i>
                             </button>
                         </div>

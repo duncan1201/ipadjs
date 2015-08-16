@@ -90,17 +90,22 @@ app.controller('layoutCtrl',
                     };
                
                     $scope.group_click = function($event, group){
-                        console.log("group click=" + group.name);
-                        $scope.selected_group = group;
+                        console.log("group click=" + angular.toJson(group));
+                        $scope.group_popover.scope.group = group;
                         $scope.group_popover.show($event);
                     };
                
-                    $scope.delete_group_click = function(){
-                        console.log("delete group click");
+                    $scope.hide_group_popover = function(){
+                        $scope.group_popover.hide();
+                    };
+               
+                    $scope.hide_new_group_popover = function() {
+                        $scope.new_group_popover.hide();
                     };
                
                     $scope.new_group_click = function($event){
                         console.log("new group click");
+                        $scope.new_group_popover.scope.group = {name: "", layout_id: $scope.layout.id};
                         $scope.new_group_popover.show($event);
                     };
                
@@ -119,4 +124,41 @@ app.controller('layoutCtrl',
                     });
                
                }); // end of layoutCtrl
+
+app.controller('editGroupCtrl', function($scope, Layouts){
+               
+                    $scope.done_click = function(group){
+                        console.log("done click - group.name=" + group.name);
+                        var callback_fun = function (tx, results) {
+               
+                        }; // callback_fun
+                        Layouts.update_group(group, callback_fun);
+                        $scope.$parent.hide_group_popover();
+                    };
+               
+                    $scope.delete_group_click = function(group){
+                        console.log("delete group click - editGroupCtrl=" + group.layout_id);
+                        var callback_fun = function(tx, results) {
+                            Layouts.get_layout_for_edit(group.layout_id);
+                        };
+                        Layouts.delete_group(group.id, callback_fun);
+                        $scope.$parent.hide_group_popover();
+                    };
+               
+               }); // end of editGroupCtrl
+
+app.controller('addGroupCtrl', function($scope, Layouts){
+                    $scope.add_click = function(group){
+                        console.log("group.name=" + group.name);
+                        var callback_fun = function() {
+                            Layouts.get_layout_for_edit(group.layout_id);
+                        };
+                        Layouts.create_layout_group(group, callback_fun);
+                        $scope.$parent.hide_new_group_popover();
+                    }; // end of add_click
+               
+                    $scope.cancel_click = function(){
+                        $scope.$parent.hide_new_group_popover();
+                    }; // end of cancel_click
+               });
 
