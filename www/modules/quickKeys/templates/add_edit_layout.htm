@@ -1,3 +1,18 @@
+<style>
+    .layout-item {
+        display: inline-block;
+        vertical-align:middle;
+        text-align:center;
+        float:left;
+        width:90px;
+        height:45px;
+        line-height: 45px;
+        margin-left:1px;
+        margin-top:auto;
+        margin-bottom:auto;
+        border:1px solid black;
+    }
+</style>
 <ion-content scroll="true" ng-controller="layoutCtrl" id="add_edit_layout">
     <div class="row">
         <div class="col">Setup &gt; Quick Keys > New Quick Key Layout</div>
@@ -100,11 +115,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="item" style='height:200px;background-color:red;margin:0'>
-                    <div class="row">
-                        <div class="col">item 1</div>
-                        <div class="col" ng-repeat="key in layout.groups[0].keys">
+                <div class="item" style='height:200px;background-color:#999999;margin:0'>
+                    <div style='float:left'>
+                        <div ng-repeat="key in layout.groups[0].keys" class='layout-item'>
                             {{key.display_name}}
+                        </div>
+                        <div ng-repeat='n in [1,2,3,4,5,6,7,8, 9, 10]' class='layout-item'>
+                            {{n}}
                         </div>
                     </div>
                 </div>
