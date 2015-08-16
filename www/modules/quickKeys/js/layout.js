@@ -1,11 +1,27 @@
 app.controller('layoutCtrl',
-               function($rootScope, $scope, App_URLs, Layouts, Products, Tags) {
+               function($rootScope, $scope, $ionicPopover, App_URLs, Layouts, Products, Tags) {
                
                     var self = this;
                
-               if (!angular.isDefined($rootScope.layout_id_for_edit)){
-               $rootScope.layout_id_for_edit = null;
-               }
+                    if (!angular.isDefined($rootScope.layout_id_for_edit)){
+                        $rootScope.layout_id_for_edit = null;
+                    }
+               
+                    // prepare the group_popover
+                    $ionicPopover.fromTemplateUrl('modules/quickKeys/templates/group-po.htm',
+                                                  {
+                                                    scope: $scope
+                                                }).then(function(popover) {
+                                                     $scope.group_popover = popover;
+                                                });
+               
+                    // prepare the new group popover
+                    $ionicPopover.fromTemplateUrl('modules/quickKeys/templates/new_group_po.htm',
+                                                  {
+                                                    scope: $scope
+                                                }).then(function(popover){
+                                                    $scope.new_group_popover = popover;
+                                                });
                
                     var product_callback = function(tx, results) {
                         var rows = results.rows;
@@ -71,6 +87,21 @@ app.controller('layoutCtrl',
                
                     $scope.layout_form_cancel_click = function(){
                         $rootScope.ion_content_template = App_URLs.layout_main_content;
+                    };
+               
+                    $scope.group_click = function($event, group){
+                        console.log("group click=" + group.name);
+                        $scope.selected_group = group;
+                        $scope.group_popover.show($event);
+                    };
+               
+                    $scope.delete_group_click = function(){
+                        console.log("delete group click");
+                    };
+               
+                    $scope.new_group_click = function($event){
+                        console.log("new group click");
+                        $scope.new_group_popover.show($event);
                     };
                
                     $rootScope.$on('$includeContentLoaded', function(event, url){

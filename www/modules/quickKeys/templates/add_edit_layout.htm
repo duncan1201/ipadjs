@@ -92,18 +92,10 @@
             <div class="card card-paddingless card-marginless" style='background-color:blue;'>
                 <div class="item item-divider">
                     <div class="row">
-                        <div class="col" ng-repeat="group in layout.groups">
-                            <label class="item item-radio">
-                                <input type="radio" name="group_radio">
-                                    <div class="item-content center" style="">
-                                        {{group.name}}
-                                    </div>
-                                    <i class="radio-icon ion-checkmark"></i>
-                            </label>
-                        </div>
-                        <div class="col col-10">&nbsp;
-                            <button class="button button-icon" ng-click="newTask()">
-                                <i class="icon ion-gear-b"></i>
+                        <div class="col">
+                            <button ng-repeat="group in layout.groups" type="button" class="button icon-right ion-gear-b" ng-click="group_click($event, {{group}})">{{group.name}}</button>
+                            <button type="button" class="button button-icon" style='float:right' ng-click="new_group_click($event)">
+                                <i class="icon ion-plus-round"></i>
                             </button>
                         </div>
                     </div>
