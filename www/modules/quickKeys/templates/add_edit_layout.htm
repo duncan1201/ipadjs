@@ -12,6 +12,36 @@
         margin-bottom:auto;
         border:1px solid black;
     }
+    .layout-item-2 {
+        float:left;
+        display: inline-block;
+        width:95px;
+        height:35px;
+        line-height: 35px;
+        border:1px solid darkgray;
+        padding:0;
+    }
+
+.layout-item-2 .text-button {
+    display: inline-block;
+    vertical-align:middle;
+    height:100%;
+    line-height: 35px;
+    margin:0;
+    padding-left:4px;
+    padding-top:0;
+    padding-bottom:0;
+}
+
+.layout-item-2 .icon-button {
+    background-color:darkblue;
+    vertical-align:middle;
+    height:100%;
+    line-height: 35px;
+    float:right;
+    padding-top:0;
+    padding-bottom:0;
+}
 </style>
 <ion-content scroll="true" ng-controller="layoutCtrl" id="add_edit_layout">
     <div class="row">
@@ -112,6 +142,13 @@
                             <button type="button" class="button button-small button-icon" style='float:right' ng-click="new_group_click($event)">
                                 <i class="icon ion-plus-round"></i>
                             </button>
+                            <div ng-repeat="group in layout.groups">
+                                <div class='layout-item-2' style='vertical-align:top'>
+                                    <div class="text-button" style='margin-top:0;paddint-top:0;font-size:small;border:0px solid black;vertical-align:top' ng-click='group_click($event, {{group}})'>{{group.name}}</div>
+                                    <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" ng-click="group_click($event, {{group}})">
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
