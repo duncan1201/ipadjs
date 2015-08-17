@@ -12,17 +12,19 @@
         margin-bottom:auto;
         border:1px solid black;
     }
-    .layout-item-2 {
+    .group-item {
         float:left;
         display: inline-block;
-        width:95px;
+        width:90px;
         height:35px;
         line-height: 35px;
         border:1px solid darkgray;
         padding:0;
+        vertical-align:top;
+        margin-right:2px
     }
 
-.layout-item-2 .text-button {
+.group-item .text-button {
     display: inline-block;
     vertical-align:middle;
     height:100%;
@@ -31,9 +33,15 @@
     padding-left:4px;
     padding-top:0;
     padding-bottom:0;
+    overflow:hidden;
+    margin-top:0;
+    margin-right:0;
+    padding-top:0;
+    font-size:small;
+    vertical-align:top;
 }
 
-.layout-item-2 .icon-button {
+.group-item .icon-button {
     background-color:darkblue;
     vertical-align:middle;
     height:100%;
@@ -41,6 +49,11 @@
     float:right;
     padding-top:0;
     padding-bottom:0;
+}
+
+div .active_group {
+    background-color:#BBBBBB;
+    border:1px solid #333333;
 }
 </style>
 <ion-content scroll="true" ng-controller="layoutCtrl" id="add_edit_layout">
@@ -134,25 +147,24 @@
 
     <div class="row">
         <div class="col col-80 col-offset-10" style='border:1px solid black;background-color:yellow;padding:0'>
-            <div class="card card-paddingless card-marginless" style='background-color:blue;'>
+            <div class="card card-paddingless card-marginless">
                 <div class="item item-divider">
                     <div class="row">
                         <div class="col">
-                            <button ng-repeat="group in layout.groups" type="button" class="button button-small icon-right ion-gear-b" style='margin-right:3px'ng-click="group_click($event, {{group}})">{{group.name}}</button>
-                            <button type="button" class="button button-small button-icon" style='float:right' ng-click="new_group_click($event)">
-                                <i class="icon ion-plus-round"></i>
-                            </button>
                             <div ng-repeat="group in layout.groups">
-                                <div class='layout-item-2' style='vertical-align:top'>
-                                    <div class="text-button" style='margin-top:0;paddint-top:0;font-size:small;border:0px solid black;vertical-align:top' ng-click='group_click($event, {{group}})'>{{group.name}}</div>
-                                    <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" ng-click="group_click($event, {{group}})">
+                                <div class='group-item' ng-class='{active_group: layout.active_group_id == group.id}' style=''>
+                                    <div class="text-button"  ng-click='group_text_click({{group}})'>{{group.name}}</div>
+                                    <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" style='padding-left:0;border:0px solid black' ng-click="group_icon_click($event, {{group}})">
                                     </button>
                                 </div>
                             </div>
+                            <button type="button" class="button button-small button-icon" style='float:right' ng-click="new_group_click($event)">
+                                <i class="icon ion-plus-round"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="item" style='height:200px;background-color:#999999;margin:0'>
+                <div class="item" style='height:200px;background-color:#eeeeee;margin:0;padding-top:2px'>
                     <div style='float:left'>
                         <div ng-repeat="key in layout.groups[0].keys" class='layout-item'>
                             {{key.display_name}}

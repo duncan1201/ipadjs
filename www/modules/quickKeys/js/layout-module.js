@@ -89,6 +89,9 @@ layout.factory('Layouts',
                                     self.get_layout_group_keys_for_edit(layout, layout["groups"][i]);
                                 }
                             }
+                            if (layout["groups"].length > 0){
+                                layout.active_group_id = layout["groups"][0].id;
+                            }
                         }; // end of callback_function
                         var selectSql = "select * from layout_groups where layout_id = ?";
                         var json = {sql: selectSql, params:[layout.id], callback:callback_function};

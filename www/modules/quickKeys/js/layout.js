@@ -89,8 +89,13 @@ app.controller('layoutCtrl',
                         $rootScope.ion_content_template = App_URLs.layout_main_content;
                     };
                
-                    $scope.group_click = function($event, group){
-                        console.log("group click=" + angular.toJson(group));
+                    $scope.group_text_click = function(group){
+                        console.log("group_text_mousedown");
+                        $scope.layout.active_group_id = group.id;
+                    };
+               
+                    $scope.group_icon_click = function($event, group){
+                        console.log("group_icon_click=" + angular.toJson(group));
                         $scope.group_popover.scope.group = group;
                         $scope.group_popover.show($event);
                     };
