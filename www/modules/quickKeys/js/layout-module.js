@@ -46,6 +46,14 @@ layout.factory('Layouts',
                         var json = {sql: insertSql, params: [group.name, 1, group.layout_id], callback: callback_function};
                         DbUtil.executeSql(json);
                     }, // end of create_layout_group
+                    create_layout_key : function(group, key) {
+                        console.log("key=" + angular.toJson(key));
+                        var callback_fun = function (tx, results) {
+                            //Layouts.get_layout_for_edit(group.layout_id);
+                        };
+                        var json = {sql: "insert into layout_group_keys (layout_group_id, product_id, color, display_name) values (?, ?, ?, ?)", params:[group.id, key.product_id, "red", key.display_name], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    }, // create_layout_key
                     parse_results_summary : function (results) {
                         var ret = [];
                         var rows = results.rows;
@@ -91,6 +99,7 @@ layout.factory('Layouts',
                             }
                             if (layout["groups"].length > 0){
                                 layout.active_group_id = layout["groups"][0].id;
+                                layout.active_group = layout["groups"][0];
                             }
                         }; // end of callback_function
                         var selectSql = "select * from layout_groups where layout_id = ?";
@@ -105,7 +114,10 @@ layout.factory('Layouts',
                             var rows = results.rows;
                             for (var i = 0; i < rows.length; i++){
                                 var item = rows.item(i);
-                                group['keys'].push({id: item.id});
+                                group['keys'].push({
+                                                   id: item.id,
+                                                   display_name: item.display_name
+                                                   });
                             }
                             var scope = angular.element(document.querySelector('#add_edit_layout')).scope();
                

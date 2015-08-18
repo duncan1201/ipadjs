@@ -23,6 +23,14 @@ app.controller('layoutCtrl',
                                                     $scope.new_group_popover = popover;
                                                 });
                
+                    // prepare the edit key popover
+                    $ionicPopover.fromTemplateUrl('modules/quickKeys/templates/key-po.htm',
+                                                  {
+                                                    scope: $scope
+                                                  }).then(function(popover){
+                                                    $scope.key_po = popover;
+                                                });
+               
                     var product_callback = function(tx, results) {
                         var rows = results.rows;
                         var ret = [];
@@ -61,7 +69,6 @@ app.controller('layoutCtrl',
                     $scope.layout_form_submit_click = function (layout) {
                         console.log("layout_form_submit_click");
                         if (angular.isDefined(layout.id)){
-                            console.log("angular.isDefined()...");
                             Layouts.update_layout(layout);
                         }else{
                             Layouts.create_layout(layout);
@@ -77,12 +84,14 @@ app.controller('layoutCtrl',
                         Layouts.delete_layout(id);
                     };
                
-                    $scope.add_product_click = function (productStr) {
+                    $scope.add_product_click = function (group, productStr) {
+                        console.log("add_product_click group=" + group.id);
                         var product = angular.fromJson(productStr);
-                        console.log("add_product_click.name=" + product.name);
                
-                        var key = {id: 1, layout_group_id: 1, product_id: 1, color: 'red', display_name: product.name};
-                        $scope.layout['groups'][0]['keys'].push(key);
+                        var key = {layout_group_id: group.id, product_id: product.id, color: 'red', display_name: product.name};
+                        $scope.layout.active_group['keys'].push(key);
+               
+                        Layouts.create_layout_key(group, key);
                     };
                
                     $scope.layout_form_cancel_click = function(){
@@ -90,8 +99,9 @@ app.controller('layoutCtrl',
                     };
                
                     $scope.group_text_click = function(group){
-                        console.log("group_text_mousedown");
+                        console.log("group_text_mousedown=" + angular.toJson(group));
                         $scope.layout.active_group_id = group.id;
+                        $scope.layout.active_group = group;
                     };
                
                     $scope.group_icon_click = function($event, group){
@@ -109,14 +119,16 @@ app.controller('layoutCtrl',
                     };
                
                     $scope.new_group_click = function($event){
-                        console.log("new group click");
-                        $scope.new_group_popover.scope.group = {name: "", layout_id: $scope.layout.id};
+                        $scope.new_group_popover.scope.group = {name: '', layout_id: $scope.layout.id};
                         $scope.new_group_popover.show($event);
                     };
                
+                    $scope.key_click = function() {
+                        console.log("key_click");
+                    }; // key_click
+               
                     $rootScope.$on('$includeContentLoaded', function(event, url){
                         if(url == App_URLs.layout_add_edit){
-                            console.log("onload layout_add_edit_url");
                             $scope.product_to_be_add = "";
                             Tags.all(tag_callback);
                             Products.all_summary(product_callback);
@@ -167,3 +179,6 @@ app.controller('addGroupCtrl', function($scope, Layouts){
                     }; // end of cancel_click
                });
 
+app.controller('editKeyCtrl', function($scope, Layouts){
+               $scope.test = function() {};
+               });

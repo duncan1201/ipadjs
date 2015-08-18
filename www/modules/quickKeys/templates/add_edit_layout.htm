@@ -7,8 +7,8 @@
         width:90px;
         height:45px;
         line-height: 45px;
-        margin-left:1px;
-        margin-top:auto;
+        margin-left:2px;
+        margin-top:2px;
         margin-bottom:auto;
         border:1px solid black;
     }
@@ -129,7 +129,7 @@ div .active_group {
                     </label>
                 </div> <!-- end of col -->
                 <div class="col">
-                    <button type="button" class="button button-small button-positive" ng-click="add_product_click(product_to_be_add)">Add</button>
+                    <button type="button" class="button button-small button-positive" ng-click="add_product_click(layout.active_group, product_to_be_add)">Add</button>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
         </div> <!-- end of item -->
@@ -146,15 +146,15 @@ div .active_group {
     </div>
 
     <div class="row">
-        <div class="col col-80 col-offset-10" style='border:1px solid black;background-color:yellow;padding:0'>
-            <div class="card card-paddingless card-marginless">
+        <div class="col col-80 col-offset-10" style='border:1px solid #aaaaaa;padding:0'>
+            <div class="card card-paddingless card-marginless" style='border:0px solid red'>
                 <div class="item item-divider">
                     <div class="row">
                         <div class="col">
                             <div ng-repeat="group in layout.groups">
                                 <div class='group-item' ng-class='{active_group: layout.active_group_id == group.id}' style=''>
                                     <div class="text-button"  ng-click='group_text_click({{group}})'>{{group.name}}</div>
-                                    <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" style='padding-left:0;border:0px solid black' ng-click="group_icon_click($event, {{group}})">
+                                    <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" style='padding-left:0;' ng-click="group_icon_click($event, {{group}})">
                                     </button>
                                 </div>
                             </div>
@@ -164,18 +164,19 @@ div .active_group {
                         </div>
                     </div>
                 </div>
-                <div class="item" style='height:200px;background-color:#eeeeee;margin:0;padding-top:2px'>
+                <div class="item" style='height:200px;background-color:#eeeeee;margin:0;padding-top:4px'>
                     <div style='float:left'>
-                        <div ng-repeat="key in layout.groups[0].keys" class='layout-item'>
+                        <div ng-repeat="key in layout.active_group.keys" ng-click='key_click()' class='layout-item'>
                             {{key.display_name}}
                         </div>
-                        <div ng-repeat='n in [1,2,3,4,5,6,7,8, 9, 10]' class='layout-item'>
+                        <div ng-repeat='n in [1,2,3,4]' class='layout-item'>
                             {{n}}
                         </div>
                     </div>
                 </div>
                 <div class="item item-divider">
-                    &lt; &gt;
+                    <div style='float:left;padding-left:2px'>&lt;</div>
+                    <div style='float:right;padding-right:2px'>&gt;</div>
                 </div>
             </div>
         </div>

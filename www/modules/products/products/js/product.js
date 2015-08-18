@@ -113,11 +113,11 @@ app.controller('productCtrl',
                     }; // end of add_tag_click
                
                     $scope.deactivate_click = function(id) {
-                        var callback_fun = function (tx, results) {
-                        };
-                        var updateSql = "update products set active = 0 where id = ?";
-                        var json = {sql: updateSql, params:[id], callback: callback_fun};
-                        DbUtil.executeSql(json);
+                        Products.set_product_active(id, 0);
+                    };
+               
+                    $scope.activate_click = function(id){
+                        Products.set_product_active(id, 1);
                     };
                
                     $scope.supply_price_change = function() {
@@ -227,8 +227,8 @@ app.filter('productFilter', function(){
            angular.forEach(products,
                            function(product){
                                 var pass = true;
-                           console.log("conditions.tag=" + conditions.tag);
-                           console.log("conditions.product_type=" + conditions.product_type);
+                           //console.log("conditions.tag=" + conditions.tag);
+                           //console.log("conditions.product_type=" + conditions.product_type);
                                 if (pass && conditions.tag != ""){
                            if (product.tags.indexOf(conditions.tag) < 0){
                            pass = false;
@@ -289,7 +289,7 @@ product.factory('Products',
                                             product_name: item.product_name,
                                             creation_date: item.creation_date,
                                             active: item.active,
-                                            tags:item.tags_string.split(",").sort(),
+                                            tags: item.tags_string == null? []: item.tags_string.split(",").sort(),
                                             product_type: item.product_type_name,
                                             brand_name: item.brand_name,
                                             supplier_id: item.supplier_id,
@@ -333,7 +333,7 @@ product.factory('Products',
                                         product_handle: item.product_handle,
                                         desc: item.desc,
                                         active: item.active,
-                                        tags:item.tags_string.split(","),
+                                        tags:item.tags_string == null? []: item.tags_string.split(","),
                                         product_type_id: item.product_type_id,
                                         brand_id: item.brand_id,
                                         supplier_id: item.supplier_id,
@@ -368,6 +368,15 @@ product.factory('Products',
                                     callback: callback_fun
                             };
                             DbUtil.executeSql(json);
-                        } // end of update_product
+                        }, // end of update_product,
+                        set_product_active: function(id, active){ // activate: 0 or 1
+                            var self = this;
+                            var callback_fun = function (tx, results) {
+                                self.all_summary_with_default_callback();
+                            };
+                            var updateSql = "update products set active = ? where id = ?";
+                            var json = {sql: updateSql, params:[active, id], callback: callback_fun};
+                            DbUtil.executeSql(json);
+                        } // end of deactivate_product
                     };
                 }); // end of product.factory
