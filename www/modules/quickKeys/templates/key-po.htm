@@ -6,17 +6,17 @@
     <ion-content>
         <div class='row'>
             <div class='col'>
-                <input type="text" class="lightgray-outline" placeholder="group name" ng-model="group.name">
-                    </div>
+                <input type="text" class="lightgray-outline" ng-model="key.display_name">
+            </div>
         </div>
         <div class='row'>
             <div class='col col-33'>
-                <button class="button button-small button-block" ng-click='delete_group_click(group)'>
+                <button class="button button-small button-block" ng-click='delete_click(key)'>
                     Delete
                 </button>
             </div>
             <div class='col col-33 col-offset-33'>
-                <button class="button button-small button-block" ng-click='done_click(group)'>Done</button>
+                <button class="button button-small button-block" ng-click='done_click(key)'>Done</button>
             </div>
         </div>
     </ion-content>

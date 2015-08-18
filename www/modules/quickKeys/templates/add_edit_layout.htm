@@ -4,13 +4,15 @@
         vertical-align:middle;
         text-align:center;
         float:left;
-        width:90px;
-        height:45px;
+        width:100px;
+        height:50px;
         line-height: 45px;
         margin-left:2px;
         margin-top:2px;
         margin-bottom:auto;
         border:1px solid black;
+        cursor: pointer;
+        cursor: hand;
     }
     .group-item {
         float:left;
@@ -21,10 +23,11 @@
         border:1px solid darkgray;
         padding:0;
         vertical-align:top;
-        margin-right:2px
+        margin-right:2px;
+        
     }
 
-.group-item .text-button {
+.group-item .text {
     display: inline-block;
     vertical-align:middle;
     height:100%;
@@ -39,6 +42,8 @@
     padding-top:0;
     font-size:small;
     vertical-align:top;
+    cursor: pointer;
+    cursor: hand;
 }
 
 .group-item .icon-button {
@@ -153,7 +158,7 @@ div .active_group {
                         <div class="col">
                             <div ng-repeat="group in layout.groups">
                                 <div class='group-item' ng-class='{active_group: layout.active_group_id == group.id}' style=''>
-                                    <div class="text-button"  ng-click='group_text_click({{group}})'>{{group.name}}</div>
+                                    <div class="text"  ng-click='group_text_click({{group}})'>{{group.name}}</div>
                                     <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" style='padding-left:0;' ng-click="group_icon_click($event, {{group}})">
                                     </button>
                                 </div>
@@ -166,12 +171,12 @@ div .active_group {
                 </div>
                 <div class="item" style='height:200px;background-color:#eeeeee;margin:0;padding-top:4px'>
                     <div style='float:left'>
-                        <div ng-repeat="key in layout.active_group.keys" ng-click='key_click()' class='layout-item'>
+                        <div ng-repeat="key in layout.active_group.keys" ng-click='key_click($event, key)' class='layout-item'>
                             {{key.display_name}}
                         </div>
-                        <div ng-repeat='n in [1,2,3,4]' class='layout-item'>
+                        <!--div ng-repeat='n in [1,2,3]' class='layout-item'>
                             {{n}}
-                        </div>
+                        </div-->
                     </div>
                 </div>
                 <div class="item item-divider">

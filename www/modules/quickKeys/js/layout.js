@@ -28,7 +28,7 @@ app.controller('layoutCtrl',
                                                   {
                                                     scope: $scope
                                                   }).then(function(popover){
-                                                    $scope.key_po = popover;
+                                                    $scope.key_popover = popover;
                                                 });
                
                     var product_callback = function(tx, results) {
@@ -100,8 +100,13 @@ app.controller('layoutCtrl',
                
                     $scope.group_text_click = function(group){
                         console.log("group_text_mousedown=" + angular.toJson(group));
+               
                         $scope.layout.active_group_id = group.id;
-                        $scope.layout.active_group = group;
+                        for (var i = 0; i < $scope.layout.groups.length; i++){
+                            if ($scope.layout.groups[i].id == group.id){
+                                $scope.layout.active_group = $scope.layout.groups[i];
+                            }
+                        }
                     };
                
                     $scope.group_icon_click = function($event, group){
@@ -123,9 +128,24 @@ app.controller('layoutCtrl',
                         $scope.new_group_popover.show($event);
                     };
                
-                    $scope.key_click = function() {
-                        console.log("key_click");
+                    $scope.key_click = function($event, key) {
+                        console.log("key_click=" + angular.toJson(key));
+                        $scope.key_popover.scope.key = key;
+                        $scope.key_popover.show($event);
                     }; // key_click
+               
+                    $scope.hide_key_popover = function(){
+                        $scope.key_popover.hide();
+                    }; // hide_key_popover
+               
+                    $scope.remove_key_from_the_active_group = function(key) {
+                        var keys = $scope.layout.active_group.keys;
+                        for (var i = 0; i < keys.length; i++){
+                            if (keys[i].id == key.id){
+                                keys.splice(i, 1);
+                            }
+                        }
+                    } // end of remove_key_from_the_active_group
                
                     $rootScope.$on('$includeContentLoaded', function(event, url){
                         if(url == App_URLs.layout_add_edit){
@@ -166,7 +186,6 @@ app.controller('editGroupCtrl', function($scope, Layouts){
 
 app.controller('addGroupCtrl', function($scope, Layouts){
                     $scope.add_click = function(group){
-                        console.log("group.name=" + group.name);
                         var callback_fun = function() {
                             Layouts.get_layout_for_edit(group.layout_id);
                         };
@@ -180,5 +199,12 @@ app.controller('addGroupCtrl', function($scope, Layouts){
                });
 
 app.controller('editKeyCtrl', function($scope, Layouts){
-               $scope.test = function() {};
+                    $scope.delete_click = function(key) {
+                        console.log("delete click..." + angular.toJson(key));
+                        var callback = function(){
+                            $scope.$parent.remove_key_from_the_active_group(key);
+                            $scope.$parent.hide_key_popover();
+                        };
+                        Layouts.delete_key(key.id, callback);
+                    }; // delete_click
                });

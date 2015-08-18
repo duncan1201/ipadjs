@@ -163,6 +163,11 @@ layout.factory('Layouts',
                
                         var deleteKeySql = "delete from layout_group_keys where layout_group_id = ?";
                         DbUtil.executeSql({sql: deleteKeySql, params: [id]});
-                    } // end of delete_group
+                    }, // end of delete_group
+                    delete_key : function(id, callback_fun) {
+                        var deleteSql = "delete from layout_group_keys where id = ?";
+                        var json = {sql: deleteSql, params:[id], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    } // end of delete_key
                } // end of return
             }); // end of Layouts
