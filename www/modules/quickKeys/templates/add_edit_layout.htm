@@ -171,12 +171,9 @@ div .active_group {
                 </div>
                 <div class="item" style='height:200px;background-color:#eeeeee;margin:0;padding-top:4px'>
                     <div style='float:left'>
-                        <div ng-repeat="key in layout.active_group.keys" ng-click='key_click($event, key)' class='layout-item'>
+                        <div ng-repeat="key in layout.active_group.keys" ng-click='key_click($event, key)' class='layout-item' style='background-color:get_display_color(key.color)'>
                             {{key.display_name}}
                         </div>
-                        <!--div ng-repeat='n in [1,2,3]' class='layout-item'>
-                            {{n}}
-                        </div-->
                     </div>
                 </div>
                 <div class="item item-divider">

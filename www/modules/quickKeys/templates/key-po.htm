@@ -1,12 +1,19 @@
-<style>.popover { height:130px; width: 260px; }</style>
+<style>.popover { height:160px; width: 260px; }</style>
 <ion-popover-view ng-controller="editKeyCtrl">
     <!--ion-header-bar>
      <h1 class="title">My Popover Title</h1>
      </ion-header-bar-->
-    <ion-content>
+    <ion-content style='background-color:black'>
         <div class='row'>
             <div class='col'>
                 <input type="text" class="lightgray-outline" ng-model="key.display_name">
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col' ng-repeat="color in colors">
+                <svg width="30" height="30">
+                    <rect ng-show="color.selected == true" width="30" height="30" style="stroke-width:2;stroke:rgb(255,255,255)" fill-opacity="0" stroke-dasharray="5,3"/>
+                    <circle style='cursor:pointer;cursor:hand;' ng-click='color_click(color)' cx="15" cy="15" r="10" stroke="{{color.color}}" stroke-width="1" fill="{{color.color}}" />
             </div>
         </div>
         <div class='row'>
@@ -21,3 +28,6 @@
         </div>
     </ion-content>
 </ion-popover-view>
+
+<script>
+</script>

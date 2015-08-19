@@ -109,6 +109,15 @@ app.controller('layoutCtrl',
                         }
                     };
                
+                    $scope.get_display_color = function (color) {
+               console.log("get_display_color");
+                        if (color.toUpperCase() == 'RED'){
+                            return "#FFA49C";
+                        } else {
+                            return color;
+                        }
+                    }; // end of get_display_color
+               
                     $scope.group_icon_click = function($event, group){
                         console.log("group_icon_click=" + angular.toJson(group));
                         $scope.group_popover.scope.group = group;
@@ -130,6 +139,15 @@ app.controller('layoutCtrl',
                
                     $scope.key_click = function($event, key) {
                         console.log("key_click=" + angular.toJson(key));
+                        $scope.colors = [
+                                            {color: "white", selected: key.color == "white"},
+                                            {color: "cyan", selected: key.color == "cyan"},
+                                            {color: "red", selected: key.color == "red"},
+                                            {color: "orange", selected: key.color == "orange"},
+                                            {color: "green", selected: key.color == "green"},
+                                            {color: "blue", selected: key.color == "blue"},
+                                            {color: "purple", selected: key.color == "purple"}
+                                         ];
                         $scope.key_popover.scope.key = key;
                         $scope.key_popover.show($event);
                     }; // key_click
@@ -207,4 +225,18 @@ app.controller('editKeyCtrl', function($scope, Layouts){
                         };
                         Layouts.delete_key(key.id, callback);
                     }; // delete_click
+               
+               
+                    $scope.color_click = function(color){
+                        var colors = $scope.colors;
+                        for (var i = 0; i < colors.length; i++){
+                            colors[i].selected = false;
+                        }
+                        color.selected = true;
+                        $scope.key.color = color.color;
+                    }; // end of color_click
+               
+                    $scope.done_click = function(key){
+                        
+                    }; // done_click
                });

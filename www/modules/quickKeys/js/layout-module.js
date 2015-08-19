@@ -116,6 +116,7 @@ layout.factory('Layouts',
                                 var item = rows.item(i);
                                 group['keys'].push({
                                                    id: item.id,
+                                                   color: item.color,
                                                    display_name: item.display_name
                                                    });
                             }
