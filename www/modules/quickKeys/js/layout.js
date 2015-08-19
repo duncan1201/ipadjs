@@ -63,7 +63,10 @@ app.controller('layoutCtrl',
                     };// end of tag_callback
                
                     $scope.add_new_layout_click = function () {
-                        $rootScope.ion_content_template = App_URLs.layout_add_edit;
+                        var callback = function(tx, results){
+                            $rootScope.ion_content_template = App_URLs.layout_add_edit;
+                        };
+                        Layouts.create_layout({name: "New Layout"}, callback);
                     };
                
                     $scope.layout_form_submit_click = function (layout) {
@@ -110,9 +113,15 @@ app.controller('layoutCtrl',
                     };
                
                     $scope.get_display_color = function (color) {
-               console.log("get_display_color");
+                        console.log("get_display_color");
                         if (color.toUpperCase() == 'RED'){
                             return "#FFA49C";
+                        } else if (color.toUpperCase() == 'PURPLE') {
+                            return "#B9A8F8";
+                        } else if (color.toUpperCase() == 'BLUE') {
+                            return "#ADC6F3";
+                        } else if (color.toUpperCase() == 'GREEN') {
+                            return "#AAD2A4";
                         } else {
                             return color;
                         }
@@ -141,9 +150,9 @@ app.controller('layoutCtrl',
                         console.log("key_click=" + angular.toJson(key));
                         $scope.colors = [
                                             {color: "white", selected: key.color == "white"},
-                                            {color: "cyan", selected: key.color == "cyan"},
                                             {color: "red", selected: key.color == "red"},
                                             {color: "orange", selected: key.color == "orange"},
+                                            {color: "cyan", selected: key.color == "cyan"},
                                             {color: "green", selected: key.color == "green"},
                                             {color: "blue", selected: key.color == "blue"},
                                             {color: "purple", selected: key.color == "purple"}
@@ -236,7 +245,11 @@ app.controller('editKeyCtrl', function($scope, Layouts){
                         $scope.key.color = color.color;
                     }; // end of color_click
                
-                    $scope.done_click = function(key){
-                        
+                    $scope.done_click = function(key) {
+                        console.log("done click=" + angular.toJson(key));
+                        var callback = function(tx, results){
+                            $scope.$parent.hide_key_popover();
+                        };
+                        Layouts.update_layout_key(key, callback);
                     }; // done_click
                });

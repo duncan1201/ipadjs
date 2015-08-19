@@ -38,6 +38,8 @@
                             <script src="modules/products/brands/js/brand.js"></script>
                             <script src="modules/quickKeys/js/layout.js"></script>
                             <script src="modules/quickKeys/js/layout-module.js"></script>
+                            <script src="modules/sell/js/sell-module.js"></script>
+                            <script src="modules/sell/js/sell.js"></script>
                             
                             </head>
     
@@ -63,7 +65,7 @@
                     <ion-list>
                         <ion-item ng-repeat="menu in menus">
                             <div class="list">
-                                <div class="item item-divider">
+                                <div class="item item-divider" ng-show='menu.title != ""'>
                                     {{menu.title}}
                                 </div>
                                 <a class="item" href="#" ng-class="{active: active_submenu == submenu}" ng-repeat="submenu in menu.submenus" ng-click="submenuClick('{{submenu}}')">

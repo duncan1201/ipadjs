@@ -1,0 +1,27 @@
+<ion-content scroll="true" ng-controller="tagCtrl" id="tags_main_content">
+    
+    <div class="row">
+        <div class="col">Outlets and Registers</div>
+    </div>
+    
+    <div class="card">
+        <div class="item item-divider"><button class="button button-small" ng-click="add_new_tag_click()">Add Outlet</button></div>
+    </div>
+    
+    <div class="row row_header">
+        <div class="col">Outlet Name</div>
+        <div class="col">Default Tax</div>
+        <div class="col">Registers</div>
+    </div>
+    
+    <div class="row row_content" ng-repeat="tag in tags">
+        <div class="col">{{tag.name}}&nbsp;</div>
+        <div class="col">&nbsp;</div>
+        <div class="col">
+            <button class="button button-small button-clear button-positive" ng-click="edit_click({{tag.id}})">View Products</button>
+            <button class="button button-small button-clear button-positive" ng-click="edit_click({{tag.id}})">Edit</button>
+            <button class="button button-small button-clear button-positive" ng-click="delete_click({{tag.id}})">Delete</button>
+        </div>
+    </div>
+
+</ion-content>

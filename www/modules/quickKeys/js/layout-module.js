@@ -30,13 +30,18 @@ layout.factory('Layouts',
                         var json = {sql: update_sql, params:[group.name, group.id], callback: callback_fun};
                         DbUtil.executeSql(json);
                     }, // end of update_group
-                    create_layout : function(layout) {
+                    update_layout_key : function(key, callback_fun) {
+                        var updateSql = "update layout_group_keys set color = ?, display_name = ? where id = ?";
+                        var json = {sql: updateSql, params:[key.color, key.display_name, key.id], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    }, // end of update_layout_key
+                    create_layout : function(layout, callback_fun) {
                         var self = this;
                         var insertSql = "insert into layouts (name, creation_date) values (?, datetime('now'))";
                
                         var callback_function = function(tx, results){
-                            console.log("results.insertId2=" + results.insertId);
-                            self.create_layout_group({name: "group 1", layout_id: results.insertId});
+                            $rootScope.layout_id_for_edit = results.insertId;
+                            self.create_layout_group({name: "group 1", layout_id: results.insertId}, callback_fun);
                         }; // end of callback_function
                         var json = {sql: insertSql, params:[layout.name], callback: callback_function};
                         DbUtil.executeSql(json);

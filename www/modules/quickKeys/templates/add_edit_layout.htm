@@ -143,7 +143,7 @@ div .active_group {
     <div class="row">
         <div class="col">
             <label class="item item-input">
-                <span class="input-label">Name:</span>
+                <span class="input-label">Layout Name:</span>
                 <input type="text" placeholder="New Quick Key Layout" class="lightgray-outline" ng-model="layout.name">
                 <sub>&nbsp;</sub>
             </label>
@@ -151,13 +151,16 @@ div .active_group {
     </div>
 
     <div class="row">
-        <div class="col col-80 col-offset-10" style='border:1px solid #aaaaaa;padding:0'>
-            <div class="card card-paddingless card-marginless" style='border:0px solid red'>
+        <div class="col col-80 col-offset-10" style='padding:0'>
+            <!-- layout -->
+            <div class="card card-paddingless card-marginless" style='border:1px solid gray;border-radius: 10px;'>
+                
+                <!-- layout groups -->
                 <div class="item item-divider">
                     <div class="row">
                         <div class="col">
                             <div ng-repeat="group in layout.groups">
-                                <div class='group-item' ng-class='{active_group: layout.active_group_id == group.id}' style=''>
+                                <div class='group-item' ng-class='{active_group: layout.active_group_id == group.id}'>
                                     <div class="text"  ng-click='group_text_click({{group}})'>{{group.name}}</div>
                                     <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" style='padding-left:0;' ng-click="group_icon_click($event, {{group}})">
                                     </button>
@@ -169,17 +172,18 @@ div .active_group {
                         </div>
                     </div>
                 </div>
+                <!-- layout keys -->
                 <div class="item" style='height:200px;background-color:#eeeeee;margin:0;padding-top:4px'>
                     <div style='float:left'>
-                        <div ng-repeat="key in layout.active_group.keys" ng-click='key_click($event, key)' class='layout-item' style='background-color:get_display_color(key.color)'>
+                        <div ng-repeat="key in layout.active_group.keys" ng-click='key_click($event, key)' class='layout-item' style='background-color:{{get_display_color(key.color)}}'>
                             {{key.display_name}}
                         </div>
                     </div>
                 </div>
-                <div class="item item-divider">
+                <!--div class="item item-divider">
                     <div style='float:left;padding-left:2px'>&lt;</div>
                     <div style='float:right;padding-right:2px'>&gt;</div>
-                </div>
+                </div-->
             </div>
         </div>
     </div>

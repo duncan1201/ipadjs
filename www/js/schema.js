@@ -10,10 +10,11 @@ app.constant('Schema_SQLs',
               //'Drop table if exists layouts',
               //'Drop table if exists layout_groups',
               //'Drop table if exists layout_group_keys',
+              'Drop table if exists outlets',
+              'Drop table if exists registers',
               
               /* sales tax table */
               'Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255) NOT NULL, rate real NOT NULL, system_generated BOOLEAN DEFAULT 0)',
-              'insert into sales_taxes (name, rate, system_generated) values ("No Tax", 0, 1)',
               
               /* suppliers table */
               
@@ -38,6 +39,15 @@ app.constant('Schema_SQLs',
               'Create table if not exists layout_groups(id integer primary key, name varchar(50), is_active boolean default 0, layout_id integer)',
               
               /* Layout -> layout_keys */
-              'Create table if not exists layout_group_keys(id integer primary key, layout_group_id integer, product_id integer, color varchar(50), display_name varchar(50))'
+              'Create table if not exists layout_group_keys(id integer primary key, layout_group_id integer, product_id integer, color varchar(50), display_name varchar(50))',
               
-              ]);
+              /* outlets */
+              'Create table if not exists outlets(id integer primary key, name varchar(50), sales_tax_id integer, street varchar(50), city varchar(50), postcode varchar(20), state varchar(50), country varchar(50))',
+              
+              /* registers */
+              'Create table if not exists registers(id integer primary key, name varchar(50), layout_id integer, outlet_id integer)'
+              ])
+.constant('Initialization_SQLs', [
+            'insert into sales_taxes (id, name, rate, system_generated) values (1, "No Tax", 0, 1)',
+            'insert into outlets(name, sales_tax_id) values ("Main outlet", 1)'
+          ]);

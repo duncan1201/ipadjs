@@ -8,7 +8,7 @@
 
 var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout', 'productType']);
 
-app.run(function($ionicPlatform, DbUtil, App_URLs, Schema_SQLs) {
+app.run(function($ionicPlatform, DbUtil, App_URLs, Schema_SQLs, Initialization_SQLs) {
         var ready_function = function(){
             /*
              Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -20,11 +20,11 @@ app.run(function($ionicPlatform, DbUtil, App_URLs, Schema_SQLs) {
                 }
                 document.addEventListener("deviceready",
                                           function(){
-                                            initApp(DbUtil, Schema_SQLs);
+                                            initApp(DbUtil, Schema_SQLs, Initialization_SQLs);
                                           },
                                           false);
                 }else{
-                    initApp(DbUtil, Schema_SQLs);
+                    initApp(DbUtil, Schema_SQLs, Initialization_SQLs);
                 }
                 if(window.StatusBar) {
                     StatusBar.styleDefault();
@@ -43,19 +43,31 @@ app.constant('App_URLs',
                 layout_main_content: 'modules/quickKeys/templates/main_content.htm',
              });
 
-function initApp(DbUtil, Schema_SQLs){
+function initApp(DbUtil, Schema_SQLs, Initialization_SQLs){
+    /*
+    for(var i = 0; i < Schema_SQLs.length; i++){
+        DbUtil.executeSql(Schema_SQLs[i], params:[]);
+    }*/
+    console.log("Schema_SQLs.length=" + Schema_SQLs.length);
+    console.log("Initialization_SQLs.length=" + Initialization_SQLs.length);
+    var SQLs = Schema_SQLs.concat(Initialization_SQLs);
+    console.log("SQL.length=" + SQLs.length);
+    
     var db = DbUtil.openDb();
     db.transaction(function(tx){
-                        for(i = 0; i < Schema_SQLs.length; i++){
-                            tx.executeSql(Schema_SQLs[i],
+                        for(var i = 0; i < SQLs.length; i++){
+                   console.log("i = " + i + "-"+ SQLs[i]);
+                            tx.executeSql(SQLs[i],
                                           [],
-                                          function(tx, results){},
+                                          function(tx, results){
+                                          },
                                           function(tx, e){
                                             console.log("Error:" + e.message);
                                           });// end of tx.executeSql
                         }
                    
                    });
+    
 
 };
 
@@ -76,6 +88,12 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                
                $scope.submenuClick = function(submenuTitle) {
                     $rootScope.active_submenu = submenuTitle;
+               
+                    // Sell
+                    if (submenuTitle == 'Sell') {
+                        $rootScope.ion_header_bar_template = "modules/sell/templates/header_bar.htm";
+                        $rootScope.ion_content_template = "modules/sell/templates/main_content.htm";
+                    }
                
                     // Products
                     if (submenuTitle == 'Products') {
@@ -102,6 +120,9 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                     } else if (submenuTitle == 'General') {
                         $rootScope.ion_header_bar_template = "modules/general/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/general/templates/main_content.htm";
+                    } else if (submenuTitle == 'Outlets and Registers') {
+                        $rootScope.ion_header_bar_template = "modules/outlets/outlets/templates/header_bar.htm";
+                        $rootScope.ion_content_template = "modules/outlets/outlets/templates/main_content.htm";
                     } else if (submenuTitle == 'Quick Keys'){
                         $rootScope.ion_header_bar_template = "modules/quickKeys/templates/header_bar.htm";
                         $rootScope.ion_content_template = App_URLs.layout_main_content;
@@ -124,20 +145,20 @@ app.factory('Menus', function(){
                 all: function() {
                     return [
                             {
-                                title: "Reporting",
+                                title: "",
                                 submenus: ["Sales Reports", "Inventory Reports"]
                             },
                             {
-                                title: "Sell",
-                                submenus: []
+                                title: "",
+                                submenus: ["Sell"]
                             },
                             {
-                                title: "Products",
+                                title: "",
                                 submenus: ["Products", "Stock Control", "Types", "Supplier", "Brands", "Tags"]
                             },
                             {
-                                title: "Setup",
-                                submenus: ["General", "Quick Keys", "Sales Taxes"]
+                                title: "",
+                                submenus: ["General", "Outlets and Registers", "Quick Keys", "Sales Taxes"]
                             }
                             ];
                 } // end of all
