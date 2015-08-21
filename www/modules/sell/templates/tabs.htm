@@ -1,0 +1,27 @@
+<style>
+    
+    .tab_control .selected {
+        color:green;
+        border-bottom:2px solid green;
+    }
+
+.tab_control .tab{
+    text-align:center;
+    cursor: pointer;
+    cursor: hand;
+}
+</style>
+
+<div class='row tab_control'>
+    
+    <div class='col tab' ng-repeat="pane in panes" ng-click="select(pane)">
+        {{pane.title}}
+    </div>
+
+</div>
+
+<div class='row'>
+    <div class='col'>
+        <div class="tab-content" ng-transclude></div>
+    </div>
+</div>

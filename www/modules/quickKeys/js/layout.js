@@ -180,7 +180,7 @@ app.controller('layoutCtrl',
                             Tags.all(tag_callback);
                             Products.all_summary(product_callback);
                             if (angular.isDefined($rootScope.layout_id_for_edit)){
-                                Layouts.get_layout_for_edit($rootScope.layout_id_for_edit);
+                                Layouts.get_layout_for_edit_with_default_callback($rootScope.layout_id_for_edit);
                             }
                         } else if (url == App_URLs.layout_main_content) {
                             Layouts.all_with_default_callback();
@@ -203,7 +203,7 @@ app.controller('editGroupCtrl', function($scope, Layouts){
                     $scope.delete_group_click = function(group){
                         console.log("delete group click - editGroupCtrl=" + group.layout_id);
                         var callback_fun = function(tx, results) {
-                            Layouts.get_layout_for_edit(group.layout_id);
+                            Layouts.get_layout_for_edit_with_default_callback(group.layout_id);
                         };
                         Layouts.delete_group(group.id, callback_fun);
                         $scope.$parent.hide_group_popover();
@@ -214,7 +214,7 @@ app.controller('editGroupCtrl', function($scope, Layouts){
 app.controller('addGroupCtrl', function($scope, Layouts){
                     $scope.add_click = function(group){
                         var callback_fun = function() {
-                            Layouts.get_layout_for_edit(group.layout_id);
+                            Layouts.get_layout_for_edit_with_default_callback(group.layout_id);
                         };
                         Layouts.create_layout_group(group, callback_fun);
                         $scope.$parent.hide_new_group_popover();

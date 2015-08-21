@@ -1,66 +1,3 @@
-<style>
-    .layout-item {
-        display: inline-block;
-        vertical-align:middle;
-        text-align:center;
-        float:left;
-        width:100px;
-        height:50px;
-        line-height: 45px;
-        margin-left:2px;
-        margin-top:2px;
-        margin-bottom:auto;
-        border:1px solid black;
-        cursor: pointer;
-        cursor: hand;
-    }
-    .group-item {
-        float:left;
-        display: inline-block;
-        width:90px;
-        height:35px;
-        line-height: 35px;
-        border:1px solid darkgray;
-        padding:0;
-        vertical-align:top;
-        margin-right:2px;
-        
-    }
-
-.group-item .text {
-    display: inline-block;
-    vertical-align:middle;
-    height:100%;
-    line-height: 35px;
-    margin:0;
-    padding-left:4px;
-    padding-top:0;
-    padding-bottom:0;
-    overflow:hidden;
-    margin-top:0;
-    margin-right:0;
-    padding-top:0;
-    font-size:small;
-    vertical-align:top;
-    cursor: pointer;
-    cursor: hand;
-}
-
-.group-item .icon-button {
-    background-color:darkblue;
-    vertical-align:middle;
-    height:100%;
-    line-height: 35px;
-    float:right;
-    padding-top:0;
-    padding-bottom:0;
-}
-
-div .active_group {
-    background-color:#BBBBBB;
-    border:1px solid #333333;
-}
-</style>
 <ion-content scroll="true" ng-controller="layoutCtrl" id="add_edit_layout">
     <div class="row">
         <div class="col">Setup &gt; Quick Keys > New Quick Key Layout</div>
@@ -153,7 +90,7 @@ div .active_group {
     <div class="row">
         <div class="col col-80 col-offset-10" style='padding:0'>
             <!-- layout -->
-            <div class="card card-paddingless card-marginless" style='border:1px solid gray;border-radius: 10px;'>
+            <div class="card card-paddingless card-marginless layout">
                 
                 <!-- layout groups -->
                 <div class="item item-divider">
@@ -162,28 +99,24 @@ div .active_group {
                             <div ng-repeat="group in layout.groups">
                                 <div class='group-item' ng-class='{active_group: layout.active_group_id == group.id}'>
                                     <div class="text"  ng-click='group_text_click({{group}})'>{{group.name}}</div>
-                                    <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" style='padding-left:0;' ng-click="group_icon_click($event, {{group}})">
+                                    <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" ng-click="group_icon_click($event, {{group}})">
                                     </button>
                                 </div>
                             </div>
-                            <button type="button" class="button button-small button-icon" style='float:right' ng-click="new_group_click($event)">
+                            <button type="button" class="button button-small button-icon float-right" ng-click="new_group_click($event)">
                                 <i class="icon ion-plus-round"></i>
                             </button>
                         </div>
                     </div>
                 </div>
                 <!-- layout keys -->
-                <div class="item" style='height:200px;background-color:#eeeeee;margin:0;padding-top:4px'>
+                <div class="item" id="layout_keys_container">
                     <div style='float:left'>
                         <div ng-repeat="key in layout.active_group.keys" ng-click='key_click($event, key)' class='layout-item' style='background-color:{{get_display_color(key.color)}}'>
                             {{key.display_name}}
                         </div>
                     </div>
                 </div>
-                <!--div class="item item-divider">
-                    <div style='float:left;padding-left:2px'>&lt;</div>
-                    <div style='float:right;padding-right:2px'>&gt;</div>
-                </div-->
             </div>
         </div>
     </div>

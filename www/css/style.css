@@ -90,7 +90,86 @@ span.center {
     color:darkgray;
 }
 
+.float-right {
+    float:right;
+}
+
 .center {
     text-align:center;
 }
 
+/* Layouts */
+.layout {
+    border:1px solid gray;
+    border-radius: 10px;
+}
+
+.layout-item {
+    display: inline-block;
+    vertical-align:middle;
+    text-align:center;
+    float:left;
+    width:100px;
+    height:50px;
+    line-height: 45px;
+    margin-left:2px;
+    margin-top:2px;
+    margin-bottom:auto;
+    border:1px solid black;
+    cursor: pointer;
+    cursor: hand;
+}
+.group-item {
+    float:left;
+    display: inline-block;
+    width:90px;
+    height:35px;
+    line-height: 35px;
+    border:1px solid darkgray;
+    padding:0;
+    vertical-align:top;
+    margin-right:2px;
+    
+}
+
+.group-item .text {
+    display: inline-block;
+    vertical-align:middle;
+    height:100%;
+    line-height: 35px;
+    margin:0;
+    padding-left:4px;
+    padding-top:0;
+    padding-bottom:0;
+    overflow:hidden;
+    margin-top:0;
+    margin-right:0;
+    padding-top:0;
+    font-size:small;
+    vertical-align:top;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.group-item .icon-button {
+    background-color:darkblue;
+    vertical-align:middle;
+    height:100%;
+    line-height: 35px;
+    float:right;
+    padding-top:0;
+    padding-bottom:0;
+    padding-left:0;
+}
+
+.active_group {
+    background-color:#BBBBBB;
+    border:1px solid #333333;
+}
+
+#layout_keys_container {
+    height:200px;
+    background-color:#eeeeee;
+    margin:0;
+    padding-top:4px;
+}

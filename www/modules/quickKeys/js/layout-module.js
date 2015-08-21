@@ -71,24 +71,38 @@ layout.factory('Layouts',
                         }
                         return ret;
                     }, // end of parse_results_summary
-                    get_layout_for_edit: function (id){
+                    get_layout_for_edit_with_default_callback : function(id){
+                        var self = this;
+                        var last_callback = function () {
+                            var self = this;
+                            var scope = angular.element(document.querySelector('#add_edit_layout')).scope();
+               
+                            scope.$apply(function(){
+                                         console.log("self.layout=" + self.layout_obj.id);
+                                         scope.layout = self.layout_obj;
+                            });
+                        } ;// end of out_callback
+                        self.get_layout_for_edit(id, last_callback);
+                    }, // get_layout_for_edit_with_default_callback
+                    get_layout_for_edit: function (id, last_callback) {
                         var self = this;
                         var selectSql = "select * from layouts where id = ? ";
                         var layout = null;
+
                         var callback_function = function(tx, results) {
                             console.log("get_layout_for_edit length=" + results.rows.length);
                             self.layout = self.parse_results_summary(results)[0];
-                            console.log("get_layout_for_edit .name=" + self.layout.name);
-                            self.get_layout_group_for_edit(self.layout);
+                            self.get_layout_group_for_edit(self.layout, last_callback);
                         };
                         var json = {sql: selectSql, params:[id], callback: callback_function};
                         DbUtil.executeSql(json);
                     }, // end of get_layout_for_edit
-                    get_layout_group_for_edit : function (layout) {
+                    get_layout_group_for_edit : function (layout, last_callback) {
                
                         console.log("layout.id=" + layout.id);
                         var self = this;
-                        var callback_function = function (tx, results) {
+               
+                        var group_callback = function (tx, results) {
                             var rows = results.rows;
                             console.log("get_layout_group_for_edit len=" + rows.length);
                
@@ -99,42 +113,44 @@ layout.factory('Layouts',
                
                                 if (layout["groups"][i].is_active == 1){
                                     console.log("active.item.name="+item.name);
-                                    self.get_layout_group_keys_for_edit(layout, layout["groups"][i]);
+                                    var group = layout["groups"][i];
+               
+                                    self.get_layout_group_keys_for_edit(layout, group, last_callback);
                                 }
                             }
                             if (layout["groups"].length > 0){
                                 layout.active_group_id = layout["groups"][0].id;
                                 layout.active_group = layout["groups"][0];
                             }
-                        }; // end of callback_function
+                        }; // end of group_callback
                         var selectSql = "select * from layout_groups where layout_id = ?";
-                        var json = {sql: selectSql, params:[layout.id], callback:callback_function};
+                        var json = {sql: selectSql, params:[layout.id], callback:group_callback};
                         DbUtil.executeSql(json);
                     }, // end of get_layout_group_for_edit
-                    get_layout_group_keys_for_edit : function(layout, group){
+                    get_layout_group_keys_for_edit : function(layout, group, last_callback){
                         var self = this;
-                        var callback_function = function(tx, results) {
-                            console.log("get_layout_group_keys_for_edit=" + results.rows.length);
+                        var key_callback = function(tx, results) {
+
                             group['keys'] = [];
                             var rows = results.rows;
                             for (var i = 0; i < rows.length; i++){
                                 var item = rows.item(i);
+                                console.log("item=" + angular.toJson(item));
                                 group['keys'].push({
-                                                   id: item.id,
-                                                   color: item.color,
-                                                   display_name: item.display_name
-                                                   });
+                                  id: item.id,
+                                  color: item.color,
+                                  display_name: item.display_name,
+                                  retail_price: item.retail_price
+                                });
                             }
-                            var scope = angular.element(document.querySelector('#add_edit_layout')).scope();
                
-                            scope.$apply(function(){
-                                console.log("self.layout=" + self.layout.id);
-                                scope.layout = self.layout;
-                            });
-                        }; // end of callback_function
-               
-                        var selectSql = "select * from layout_group_keys where layout_group_id = ? ";
-                        var json = {sql: selectSql, params:[group.id], callback: callback_function};
+                            if (last_callback != null){
+                                last_callback.call({layout_obj: layout});
+                            }
+
+                        }; // end of key_callback
+                        var selectSql = "select k.*, p.retail_price as retail_price from layout_group_keys k left join products p on p.id = k.product_id where layout_group_id = ? ";
+                        var json = {sql: selectSql, params:[group.id], callback: key_callback};
                         DbUtil.executeSql(json);
                     }, // end of get_layout_group_keys_for_edit
                     delete_layout : function(id) {
@@ -174,6 +190,12 @@ layout.factory('Layouts',
                         var deleteSql = "delete from layout_group_keys where id = ?";
                         var json = {sql: deleteSql, params:[id], callback: callback_fun};
                         DbUtil.executeSql(json);
-                    } // end of delete_key
+                    }, // end of delete_key
+                    get_current_layout : function (callback_fun) {
+                        var subquery = "select r.layout_id from outlets o left join registers r on r.outlet_id = o.id";
+                        var query = "select * from layouts where id in (" + subquery + ")";
+                        var json = {sql: query, params:[], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    } // end of get_current_layout
                } // end of return
             }); // end of Layouts

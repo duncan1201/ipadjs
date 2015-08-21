@@ -1,6 +1,115 @@
-<ion-content scroll="true" ng-controller="salesTaxCtrl" id="sales_taxes_main_content">
-    <div class="row">
-        <div class="col">Hahaha...</div>
+<style>
+    
+.tab_control .selected {
+        color:green;border-bottom:2px solid green;
+}
+
+.tab_control .tab{
+    text-align:center
+    cursor: pointer;
+    cursor: hand;
+    text-align: center;
+    cursor: pointer;
+}
+</style>
+<ion-content scroll="true" ng-controller="sellCtrl" id="sell_main_content">
+<div class='row'>
+    <div class='col' style='border:1px solid darkgray;border-radius:10px'>
+        
+        <div class='row tab_control'>
+            
+            <div class='col tab selected' ng-click="tab_click('Current sale')">
+                Current Sale
+            </div>
+            
+            <div class='col tab' ng-click="tab_click('Retrieve sale')">
+                Retrieve Sale
+            </div>
+        </div>
+        
+        <!--  current sale   -->
+        <div class='card' style='background-color:blue;padding-left:0;padding-right:0;height:280px;position: relative'>
+            
+            <div class='item' style='height:250px;overflow:scroll;background-color:white;padding-left:0;padding-right:0'>
+                <div ng-repeat="sale_item in sale_items" style='border-top:0px solid yellow;border-bottom:1px solid gray;height:40px;line-height:40px;vertical-align:top;'>
+                    <!-- quantity -->
+                    <button class='button button-small button-clear' style='display:inline-block;border:1px solid gray;width:18px;height:18px;border-radius:50%;vertical-align:middle;color:black;margin-left:0.5em'>{{sale_item.quantity}}</button>
+                    <!-- item name -->
+                    <span style='margin-left:.5em;vertical-align:top'>{{sale_item.name}}</span>
+                    
+                    <!-- unit price -->
+                    <button class='button button-small button-clear' style='vertical-align:middle;border-radius:45%;border:1px solid gray;color:#333333;margin-left:1em'>&#64;&nbsp;{{sale_item.unit_price}}</button>
+                    <!-- close button -->
+                    <i class="icon icon-right ion-close-round" ng-click="sale_item_delete_click()" style='float:right;margin-right:1em;cursor: pointer;'></i>
+                    <span style='margin-left:.5em;margin-right:.5em;float:right;vertical-align:top'>{{sale_item.unit_price * sale_item.quantity}}</span>
+                </div>
+            </div>
+            
+            <!-- bottom buttons -->
+            <div class='item item-divider' style='position: absolute;bottom: 0;background-color:darkgray;padding-left:1px;padding-right:1px;margin-left:1px; margin-right:1px;width:100%'>
+                <div class="row">
+                    <div class='col' style='background-color:gray;padding-left:1px;padding-right:1px'>
+                        <button class='button-block'>Void</button>
+                    </div>
+                    <div class='col'>
+                        <button class='button-block'>Park</button>
+                    </div>
+                    <div class='col'>
+                        <button class='button-block'>Notes</button>
+                    </div>
+                    <div class='col'>
+                        <button class='button-block'>Discount</button>
+                    </div>
+                    <div class='col'>
+                        <button class='button-block'>Pay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end of current sale -->
+
+        <!-- retrieve sale -->
+        <div class='card'>
+            <div class='item-divider item'>Select a Sale to Open</div>
+            <div class='item'>
+                <div class="row row_header">
+                    <div class="col">Date/time</div>
+                    <div class="col">Status</div>
+                    <div class="col">Total</div>
+                    <div class="col">Note</div>
+                    <div class="col">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <!-- end of retrieve sale -->
+
     </div>
     
+    <div class='col'>
+        <!-- layout -->
+        <div class="card card-paddingless card-marginless layout">
+            
+            <!-- layout groups -->
+            <div class="item item-divider">
+                <div class="row">
+                    <div class="col">
+                        <div ng-repeat="group in layout.groups">
+                            <div class='group-item' ng-class='{active_group: layout.active_group_id == group.id}'>
+                                <div class="text"  ng-click='group_text_click({{group}})'>{{group.name}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- layout keys -->
+            <div class="item" id="layout_keys_container">
+                <div style='float:left'>
+                    <div ng-repeat="key in layout.active_group.keys" ng-click='key_click({{key}})' class='layout-item' style='background-color:{{get_display_color(key.color)}}'>
+                        {{key.display_name}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </ion-content>

@@ -1,3 +1,7 @@
-var sell = angular.module('sell', ['ionic', 'util']);
+var sale = angular.module('sale', ['ionic', 'util']);
 
-sell.factory('Sell', function(DbUtil){});
+sale.factory('Sales', function(DbUtil){
+                return {
+                    aaa: function () {} // end of aaa
+                } // end of return
+             });

@@ -6,7 +6,7 @@
 
 
 
-var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout', 'productType']);
+var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout', 'productType', 'outlet', 'sale']);
 
 app.run(function($ionicPlatform, DbUtil, App_URLs, Schema_SQLs, Initialization_SQLs) {
         var ready_function = function(){
@@ -41,6 +41,9 @@ app.constant('App_URLs',
                 supplier_add_edit: 'modules/products/suppliers/templates/add_edit_supplier.htm',
                 layout_add_edit: 'modules/quickKeys/templates/add_edit_layout.htm',
                 layout_main_content: 'modules/quickKeys/templates/main_content.htm',
+                outlet_main_content: 'modules/outlets/outlets/templates/main_content.htm',
+                sell_main_content: 'modules/sell/templates/main_content.htm',
+                landing_main_content: 'modules/landing/templates/main_content.htm'
              });
 
 function initApp(DbUtil, Schema_SQLs, Initialization_SQLs){
@@ -48,15 +51,11 @@ function initApp(DbUtil, Schema_SQLs, Initialization_SQLs){
     for(var i = 0; i < Schema_SQLs.length; i++){
         DbUtil.executeSql(Schema_SQLs[i], params:[]);
     }*/
-    console.log("Schema_SQLs.length=" + Schema_SQLs.length);
-    console.log("Initialization_SQLs.length=" + Initialization_SQLs.length);
     var SQLs = Schema_SQLs.concat(Initialization_SQLs);
-    console.log("SQL.length=" + SQLs.length);
     
     var db = DbUtil.openDb();
     db.transaction(function(tx){
                         for(var i = 0; i < SQLs.length; i++){
-                   console.log("i = " + i + "-"+ SQLs[i]);
                             tx.executeSql(SQLs[i],
                                           [],
                                           function(tx, results){
@@ -65,25 +64,16 @@ function initApp(DbUtil, Schema_SQLs, Initialization_SQLs){
                                             console.log("Error:" + e.message);
                                           });// end of tx.executeSql
                         }
-                   
                    });
-    
-
 };
 
 app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Menus, $ionicSideMenuDelegate, App_URLs){
                
-               $rootScope.ion_header_bar_template = "test.htm";
-               $rootScope.ion_content_template = "test2.htm";
-               //$rootScope.ion_menu_content_template = "blank.htm";
-               
-               // Load or initialize menus
-               $scope.menus = Menus.all();
+               $rootScope.ion_header_bar_template = "modules/landing/templates/header_bar.htm";
+               $rootScope.ion_content_template = App_URLs.landing_main_content;
   
                // Called to select the given project
                $scope.selectProject = function(project, index){
-                    $scope.activeProject = "";
-                    $ionicSideMenuDelegate.toggleLeft(false);
                };
                
                $scope.submenuClick = function(submenuTitle) {
@@ -130,12 +120,18 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                };
 
                
-               $scope.toggleSideMenu = function() {
+               $scope.toggle_side_menu = function() {
                     $ionicSideMenuDelegate.toggleLeft();
                };
                
-               $scope.list1 = {title: 'AngularJS - Drag Me'};
-               $scope.list2 = {};
+               $rootScope.$on('$includeContentLoaded',
+                              function(event, url){
+                                console.log("url=" + url);
+                                if (url == App_URLs.landing_main_content){
+                                    // Load or initialize menus
+                                    $scope.menus = Menus.all();
+                                }
+                              }); // end of on
                
 });
 

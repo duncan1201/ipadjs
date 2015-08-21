@@ -67,6 +67,8 @@ app.controller('productCtrl',
                                    
                             if (angular.isDefined($rootScope.product_id_for_edit)){
                                 Products.get_product($rootScope.product_id_for_edit);
+                            } else {
+                                   $scope.product = {supply_price: 0, markup: 0, retail_price: 0};
                             }
                         } else if (url == App_URLs.product_main_content) {
                             Brands.all(brands_callback);
@@ -268,7 +270,7 @@ product.factory('Products',
                     return {
                         all_summary: function(callback_function){
                 
-                            var selectSql = "select p.id, p.product_name, p.product_handle, p.desc, p.tags_string, date(p.creation_date) as creation_date, p.active, pt.name as product_type_name , p.supplier_id, s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id left join product_types pt on pt.id = p.product_type_id";
+                            var selectSql = "select p.* , date(p.creation_date) as creation_date, pt.name as product_type_name ,  s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id left join product_types pt on pt.id = p.product_type_id";
                             var json = {
                                 sql: selectSql,
                                 params:[],
@@ -293,7 +295,8 @@ product.factory('Products',
                                             product_type: item.product_type_name,
                                             brand_name: item.brand_name,
                                             supplier_id: item.supplier_id,
-                                            supplier_name: item.supplier_name
+                                            supplier_name: item.supplier_name,
+                                            retail_price: item.retail_price
                                         });
                                     }
                 
@@ -312,10 +315,10 @@ product.factory('Products',
                                 function(){
                                     self.all_summary_with_default_callback();
                                 };
-                            var insertSql = "insert into products (product_name, product_handle, desc, creation_date, product_type_id, brand_id, supplier_id, supply_price, markup, stock_keeping_unit, current_stock, reorder_point, reorder_amount) values (?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                            var insertSql = "insert into products (product_name, product_handle, desc, creation_date, product_type_id, brand_id, supplier_id, supply_price, markup, retail_price, stock_keeping_unit, current_stock, reorder_point, reorder_amount) values (?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                             var json = {
                                 sql: insertSql,
-                                params: [product.product_name, product.product_handle, product.desc, product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount],
+                                params: [product.product_name, product.product_handle, product.desc, product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.retail_price, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount],
                                 callback: callback_function};
                             DbUtil.executeSql(json);
                         }, // end of create_product
@@ -339,6 +342,7 @@ product.factory('Products',
                                         supplier_id: item.supplier_id,
                                         supply_price: item.supply_price,
                                         markup: item.markup,
+                                        retail_price: item.retail_price,
                                         stock_keeping_unit: item.stock_keeping_unit,
                                         current_stock: item.current_stock,
                                         reorder_point: item.reorder_point,
