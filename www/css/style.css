@@ -117,7 +117,7 @@ span.center {
     margin-bottom:auto;
     border:1px solid black;
     cursor: pointer;
-    cursor: hand;
+    border-radius:6px;
 }
 .group-item {
     float:left;

@@ -14,24 +14,26 @@
 </style>
 <ion-content scroll="true" ng-controller="sellCtrl" id="sell_main_content">
 <div class='row'>
-    <div class='col' style='border:1px solid darkgray;border-radius:10px'>
-        
-        <div class='row tab_control'>
-            
-            <div class='col tab selected' ng-click="tab_click('Current sale')">
-                Current Sale
-            </div>
-            
-            <div class='col tab' ng-click="tab_click('Retrieve sale')">
-                Retrieve Sale
-            </div>
-        </div>
+    <div class='col' style='border-radius:10px;padding:0;margin:0'>
         
         <!--  current sale   -->
-        <div class='card' style='background-color:blue;padding-left:0;padding-right:0;height:280px;position: relative'>
+        <div class='card' style='background-color:blue;padding:0;margin:0;height:280px;position:relative;border-radius:10px;border:1px solid darkgray'>
             
-            <div class='item' style='height:250px;overflow:scroll;background-color:white;padding-left:0;padding-right:0'>
-                <div ng-repeat="sale_item in sale_items" style='border-top:0px solid yellow;border-bottom:1px solid gray;height:40px;line-height:40px;vertical-align:top;'>
+            <div class='item item-divider' style='padding:0;margin:0'>
+                <div class='row tab_control'>
+                    
+                    <div class='col tab selected' ng-click="tab_click('Current sale')">
+                        Current Sale
+                    </div>
+                    
+                    <div class='col tab' ng-click="tab_click('Retrieve sale')">
+                        Retrieve Sale
+                    </div>
+                </div>
+            </div>
+            
+            <div class='item' style='height:250px;overflow:scroll;background-color:#efefef;padding:0;margin:0'>
+                <div ng-repeat="sale_item in current_sale.items" style='border-top:0px solid yellow;border-bottom:1px solid gray;height:40px;line-height:40px;vertical-align:top;'>
                     <!-- quantity -->
                     <button class='button button-small button-clear' style='display:inline-block;border:1px solid gray;width:18px;height:18px;border-radius:50%;vertical-align:middle;color:black;margin-left:0.5em'>{{sale_item.quantity}}</button>
                     <!-- item name -->
@@ -46,7 +48,7 @@
             </div>
             
             <!-- bottom buttons -->
-            <div class='item item-divider' style='position: absolute;bottom: 0;background-color:darkgray;padding-left:1px;padding-right:1px;margin-left:1px; margin-right:1px;width:100%'>
+            <div class='item item-divider' style='position:absolute; bottom: 0;background-color:darkgray;padding-left:1px;padding-right:1px;margin-left:1px; margin-right:1px;width:100%'>
                 <div class="row">
                     <div class='col' style='background-color:gray;padding-left:1px;padding-right:1px'>
                         <button class='button-block'>Void</button>
@@ -69,7 +71,7 @@
         <!-- end of current sale -->
 
         <!-- retrieve sale -->
-        <div class='card'>
+        <div class='card' ng-show='false' style='margin:0;padding:0'>
             <div class='item-divider item'>Select a Sale to Open</div>
             <div class='item'>
                 <div class="row row_header">

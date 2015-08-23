@@ -17,10 +17,9 @@ util.factory('DbUtil',
                         }
              
                         db.transaction(function(tx){
-                                            var error_callback =
-                                                function(tx, e) {
-                                                    console.log("Error:" + e.message);
-                                                };
+                                            var error_callback = function(tx, e) {
+                                                console.log("Error:" + e.message);
+                                            };
                                             if (angular.isDefined(json.sql) && angular.isDefined(json.params) && angular.isDefined(json.callback)){
                                                 tx.executeSql(json.sql, json.params, json.callback, error_callback);
                                             } else if (angular.isDefined(json.sql) && angular.isDefined(json.params)){
@@ -30,7 +29,34 @@ util.factory('DbUtil',
                                             }
                                        
                                        }); // end of db.transaction
-                    } // end of executeSql
-                    //html5OpenDb: function() {}
+                    }, // end of executeSql
+                    executeSqls : function (jsons, callback) {
+                        var db = this.openDb();
+                        db.transaction(function(tx){
+                            var error_callback = function(tx, e){
+                                console.log("Error:" + e.message);
+                            };// end of error_callback
+                            for(var i = 0; i < jsons.length; i++) {
+                                console.log("jsons[i].sql=" + jsons[i].sql);
+                                tx.executeSql(jsons[i].sql, jsons[i].params, callback, error_callback);
+                                       
+                                       /*
+                                if (angular.isDefined(jsons[i].params)){
+                                    if (i == jsons.length - 1){
+                                       tx.executeSql(jsons[i].sql, jsons[i].params, callback);
+                                    }else{
+                                       tx.executeSql(jsons[i].sql, jsons[i].params);
+                                    }
+                                } else {
+                                    if (i == jsons.length - 1){
+                                       tx.executeSql(jsons[i].sql, [], callback);
+                                    } else {
+                                       tx.executeSql(jsons[i].sql);
+                                    }
+                                }*/
+                            }
+                            
+                        }); // end of db.transaction
+                    } // end of executeSqls
                 }
             }); // end of DbUtil

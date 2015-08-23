@@ -49,8 +49,8 @@ app.constant('Schema_SQLs',
               /* registers */
               'Create table if not exists registers(id integer primary key, name varchar(50), layout_id integer, outlet_id integer)',
               
-              'Create table if not exists sales (id integer primary key, total_tax real, total real, creation_date datetime)',
-              'Create table if not exists sale_items (id integer primary key, quantity integer, unit_price real, sale_id integer)'
+              'Create table if not exists sales (id integer primary key, total_tax real DEFAULT 0, total real DEFAULT 0, creation_date datetime, status varchar(50) DEFAULT "current")',
+              'Create table if not exists sale_items (id integer primary key, quantity integer, unit_price real, name varchar(50), sale_id integer)'
               ])
 .constant('Initialization_SQLs', [
             //'insert into layouts (id, name, creation_date) values (1, "Default Quick Keys", datetime("now"))',

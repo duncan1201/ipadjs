@@ -46,10 +46,10 @@ app.directive('tabs', function(){
                 }; // end of return
             });
 
-app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, App_URLs, Layouts) {
-
-               if (!angular.isDefined($scope.sale_items)) {
-                    $scope.sale_items = [];
+app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, App_URLs, Layouts, Sales) {
+               
+               if (!angular.isDefined($scope.current_sale)) {
+                    $scope.current_sale = {id: "", items: [], total: 0};
                }
                
                $scope.sale_item_delete_click = function () {
@@ -72,12 +72,24 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                
                $scope.key_click = function(key){
                     console.log("key click..." + angular.toJson(key));
-                    console.log("$scope.sale_item.length=" + $scope.sale_items.length);
-                    $scope.sale_items.push({
+               
+                    $scope.current_sale.items.push({
                             name:key.display_name,
                             quantity: 1,
                             unit_price: key.retail_price
                     });
+               
+                    if ($scope.current_sale.id == ''){
+                        var callback_fun = function(tx, results) {
+                            $scope.current_sale.id = results.insertId;
+                            Sales.add_sale_item($scope.current_sale.id, key);
+                        }; // end of callback_fun
+               
+                        Sales.create_sale(callback_fun);
+                    } // end if
+                    else {
+                        Sales.add_sale_item($scope.current_sale.id, key);
+                    } // end of else
                }; // end of key_click
                
                $rootScope.$on('$includeContentLoaded', function(event, url){
