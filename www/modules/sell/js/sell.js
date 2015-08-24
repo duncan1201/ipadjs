@@ -1,52 +1,4 @@
-app.directive('tabs', function(){
-              return {
-              restrict: 'E',
-                transclude: true,
-                scope:{},
-                controller: function($scope){
-                    var panes = $scope.panes = [];
-              
-                    $scope.select = function(pane){
-              console.log("scope...panes.length=" + panes.length);
-                        console.log("scope...select..." + pane.selected + ";title=" + pane.title);
-                        var title = pane.title;
-              
-                        angular.forEach(panes, function(pane){
-                            console.log("each pane = " + (pane.title));
-                                        
-                                        console.log(" title = " + (title));
-                                        //pane.selected = title == pane.title? true: false;
-                                        pane.selected = 'true';
-                        });
-                        //pane.selected = true;
-                    }; // end of select
-              
-                    this.add_pane = function (pane) {
-                        if (panes.length === 0) {
-                            $scope.select(pane);
-                        }
-                        panes.push(pane);
-                    }; // end of add_pane
-                },
-                templateUrl: 'modules/sell/templates/tabs.htm'
-              };
-              }).directive('pane', function(){
-                return {
-                    require: '^tabs',
-                    restrict: 'E',
-                    transclude: true,
-                    scope:{
-                        title: '@'
-                    },
-                    link: function(scope, element, attrs, tabsCtrl){
-                        console.log("link function");
-                        tabsCtrl.add_pane(scope);
-                    },
-                    templateUrl: 'modules/sell/templates/tab_pane.htm'
-                }; // end of return
-            });
-
-app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover,App_URLs, Layouts, Sales) {
+app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover, $ionicPopup,App_URLs, Layouts, Sales) {
                
                if (!angular.isDefined($scope.current_sale)) {
                     $scope.current_sale = {id: "", items: [], total: 0};
@@ -131,10 +83,49 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                         Layouts.get_current_layout(callback_fun);
                     }
                 }); // end of on
+               
+               $scope.hide_quantity_popover = function () {
+                    $scope.quantity_popover.hide();
+               } // end of hide_quantity_popover
+               
+               $scope.isDefined = function(e) {
+                    return angular.isDefined(e);
+               };
+               
+               $scope.park_click = function(sale_id) {
+               } ; // end of park_click
+               
+               $scope.void_click = function(sale_id){
+                    console.log("void click=" + sale_id);
+               
+                    var _title = "Are you sure?";
+                    var _template = "<b>Are you sure you want to void this sale?</b> <br/><br/>All products and payments will be removed from the current sale.";
+                    var confirmPopup = $ionicPopup.confirm({
+                                                      title: _title,
+                                                      template: _template
+                                                      });
+                    confirmPopup.then(function(res) {
+                        if(res) {
+                            console.log('You are sure');
+                            Sales.void_sale(sale_id);
+                        } else {
+                            console.log('You are not sure');
+                        }
+                    }); // end of then
+               
+               }; // end of void_click
+               
 }); // sellCtrl
 
-app.controller('itemQuantiyCtrl', function($scope){
+app.controller('itemQuantiyCtrl', function($scope, Sales){
                $scope.done_click = function(sale_item){
-                    
+                    console.log("done click..." + angular.toJson(sale_item));
+                    var callback = function (tx, rlts) {
+                        console.log("itemQuantityCtrl.callback...");
+                        Sales.get_current_sale();
+                        $scope.$parent.hide_quantity_popover();
+                    } ; // end of callback_fun
+               
+                    Sales.update_item_quantity(sale_item.sale_id, sale_item.id, sale_item.quantity, callback);
                } // end of done_click
 }); // itemQuantiyCtrl

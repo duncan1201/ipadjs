@@ -49,8 +49,15 @@ app.constant('Schema_SQLs',
               /* registers */
               'Create table if not exists registers(id integer primary key, name varchar(50), layout_id integer, outlet_id integer)',
               
-              /* sales */
-              'Create table if not exists sales (id integer primary key, sales_tax_name varchar(50), sales_tax_rate real, total_tax real DEFAULT 0, total real DEFAULT 0, creation_date datetime, status varchar(50) DEFAULT "current")',
+              /* 
+                sales
+                valid status includes:
+                -current
+                -void
+                -parked
+                -paid
+               */
+              'Create table if not exists sales (id integer primary key, sales_tax_name varchar(50), sales_tax_rate real, subtotal real DEFAULT 0, total_tax real DEFAULT 0, total real DEFAULT 0, creation_date datetime, status varchar(50) DEFAULT "current")',
               
               /* sale_items */
               'Create table if not exists sale_items (id integer primary key, quantity integer, unit_price real, name varchar(50), sale_id integer)'

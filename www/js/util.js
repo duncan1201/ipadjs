@@ -42,8 +42,10 @@ util.factory('DbUtil',
                                        
                                 //if (angular.isDefined(jsons[i].params)){
                                     if (i == jsons.length - 1){
+                                       //console.log("last sql...");
                                        tx.executeSql(jsons[i].sql, jsons[i].params, callback, error_callback);
-                                    } else{
+                                    } else {
+                                       //console.log("NOT last sql...");
                                        tx.executeSql(jsons[i].sql, jsons[i].params, null, error_callback);
                                     }
                                 //}
