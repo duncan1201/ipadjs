@@ -37,23 +37,16 @@ util.factory('DbUtil',
                                 console.log("Error:" + e.message);
                             };// end of error_callback
                             for(var i = 0; i < jsons.length; i++) {
-                                console.log("jsons[i].sql=" + jsons[i].sql);
-                                tx.executeSql(jsons[i].sql, jsons[i].params, callback, error_callback);
+                                //console.log("jsons[i].sql=" + jsons[i].sql);
+                                //tx.executeSql(jsons[i].sql, jsons[i].params, callback, error_callback);
                                        
-                                       /*
-                                if (angular.isDefined(jsons[i].params)){
+                                //if (angular.isDefined(jsons[i].params)){
                                     if (i == jsons.length - 1){
-                                       tx.executeSql(jsons[i].sql, jsons[i].params, callback);
-                                    }else{
-                                       tx.executeSql(jsons[i].sql, jsons[i].params);
+                                       tx.executeSql(jsons[i].sql, jsons[i].params, callback, error_callback);
+                                    } else{
+                                       tx.executeSql(jsons[i].sql, jsons[i].params, null, error_callback);
                                     }
-                                } else {
-                                    if (i == jsons.length - 1){
-                                       tx.executeSql(jsons[i].sql, [], callback);
-                                    } else {
-                                       tx.executeSql(jsons[i].sql);
-                                    }
-                                }*/
+                                //}
                             }
                             
                         }); // end of db.transaction

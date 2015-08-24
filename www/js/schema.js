@@ -10,13 +10,13 @@ app.constant('Schema_SQLs',
               //'Drop table if exists layouts',
               //'Drop table if exists layout_groups',
               //'Drop table if exists layout_group_keys',
-              //'Drop table if exists outlets',
-              //'Drop table if exists registers',
+              'Drop table if exists outlets',
+              'Drop table if exists registers',
               'Drop table if exists sales',
               'Drop table if exists sale_items',
               
               /* sales tax table */
-              'Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(255) NOT NULL, rate real NOT NULL, system_generated BOOLEAN DEFAULT 0)',
+              'Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(50) NOT NULL, rate real DEFAULT 0, system_generated BOOLEAN DEFAULT 0)',
               
               /* suppliers table */
               
@@ -49,13 +49,16 @@ app.constant('Schema_SQLs',
               /* registers */
               'Create table if not exists registers(id integer primary key, name varchar(50), layout_id integer, outlet_id integer)',
               
-              'Create table if not exists sales (id integer primary key, total_tax real DEFAULT 0, total real DEFAULT 0, creation_date datetime, status varchar(50) DEFAULT "current")',
+              /* sales */
+              'Create table if not exists sales (id integer primary key, sales_tax_name varchar(50), sales_tax_rate real, total_tax real DEFAULT 0, total real DEFAULT 0, creation_date datetime, status varchar(50) DEFAULT "current")',
+              
+              /* sale_items */
               'Create table if not exists sale_items (id integer primary key, quantity integer, unit_price real, name varchar(50), sale_id integer)'
               ])
 .constant('Initialization_SQLs', [
             //'insert into layouts (id, name, creation_date) values (1, "Default Quick Keys", datetime("now"))',
             //'insert into layout_groups (id, name, is_active, layout_id) values (1, "Group 1", 1, 1)',
-            //'insert into sales_taxes (id, name, rate, system_generated) values (1, "No Tax", 0, 1)',
-            //'insert into outlets(id, name, is_current, sales_tax_id) values (1, "Main outlet", 1, 1)',
-            //'insert into registers (id, name, layout_id, outlet_id) values (1, "Main Register", 1, 1)'
+            'insert into sales_taxes (id, name, rate, system_generated) values (1, "No Tax", 0, 1)',
+            'insert into outlets(id, name, is_current, sales_tax_id) values (1, "Main outlet", 1, 1)',
+            'insert into registers (id, name, layout_id, outlet_id) values (1, "Main Register", 1, 1)'
           ]);

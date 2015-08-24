@@ -52,8 +52,9 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                     $scope.current_sale = {id: "", items: [], total: 0};
                }
                
-               $scope.sale_item_delete_click = function () {
-                    console.log("sale_item_delete_click");
+               $scope.sale_item_delete_click = function (sale_id, sale_item_id) {
+                    console.log("sale_item_delete_click=" + sale_item_id);
+                    Sales.delete_sale_item(sale_id, sale_item_id);
                }; // end of sale_item_delete_click
                
                $scope.toggle_side_menu = function () {
@@ -72,23 +73,28 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                
                $scope.key_click = function(key){
                     console.log("key click..." + angular.toJson(key));
-               
+               /*
                     $scope.current_sale.items.push({
                             name:key.display_name,
                             quantity: 1,
                             unit_price: key.retail_price
-                    });
+                    });*/
                
                     if ($scope.current_sale.id == ''){
                         var callback_fun = function(tx, results) {
+                            console.log("results;insertId=" + results.insertId);
                             $scope.current_sale.id = results.insertId;
-                            Sales.add_sale_item($scope.current_sale.id, key);
+                            Sales.add_sale_item($scope.current_sale.id, key, function(tx, rlts){
+                                Sales.get_current_sale();
+                            });
                         }; // end of callback_fun
                
                         Sales.create_sale(callback_fun);
                     } // end if
                     else {
-                        Sales.add_sale_item($scope.current_sale.id, key);
+                        Sales.add_sale_item($scope.current_sale.id, key, function(tx, rlts){
+                            Sales.get_current_sale();
+                        });
                     } // end of else
                }; // end of key_click
                

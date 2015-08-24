@@ -42,7 +42,7 @@
                     <!-- unit price -->
                     <button class='button button-small button-clear' style='vertical-align:middle;border-radius:45%;border:1px solid gray;color:#333333;margin-left:1em'>&#64;&nbsp;{{sale_item.unit_price}}</button>
                     <!-- close button -->
-                    <i class="icon icon-right ion-close-round" ng-click="sale_item_delete_click()" style='float:right;margin-right:1em;cursor: pointer;'></i>
+                    <i class="icon icon-right ion-close-round" ng-click="sale_item_delete_click({{current_sale.id}}, {{sale_item.id}})" style='float:right;margin-right:1em;cursor: pointer;'></i>
                     <span style='margin-left:.5em;margin-right:.5em;float:right;vertical-align:top'>{{sale_item.unit_price * sale_item.quantity}}</span>
                 </div>
             </div>

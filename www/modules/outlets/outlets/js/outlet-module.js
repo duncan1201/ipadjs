@@ -14,6 +14,7 @@ outlet.factory('Outlets', function(DbUtil){
                         var json = {sql: query, params: [], callback: callback_fun};
                         DbUtil.executeSql(json);
                     } // end of get_current_outlet
+               
                };
                
                });

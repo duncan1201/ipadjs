@@ -94,16 +94,19 @@ salesTax.factory('SalesTaxes', function(DbUtil){
                  
                     create_sales_tax: function(new_sales_tax){
                         var self = this;
-                        var db = DbUtil.openDb();
-                        db.transaction(function(tx){
-                                       tx.executeSql('insert into sales_taxes (name, rate) values (?, ?)',
-                                                     [new_sales_tax.name, new_sales_tax.rate],
-                                                     function(tx, r){
-                                                        self.all();
-                                                        new_sales_tax.name = "";
-                                                        new_sales_tax.rate = "";
-                                                     });
-                                       });
-                    }
+                        var callback_fun =function(tx, r){
+                            self.all();
+                            new_sales_tax.name = "";
+                            new_sales_tax.rate = "";
+                        } ; // end of callback_fun
+                        var json = {sql: 'insert into sales_taxes (name, rate) values (?, ?)', params:[new_sales_tax.name, new_sales_tax.rate], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    }, // end of create_sales_tax
+                    get_current_sales_tax: function(callback_fun){
+                        var stmt = "select s.* from sales_taxes s where s.id in (select sales_tax_id from outlets o where o.is_current = 1)";
+                        var json = {sql: stmt, params:[], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    } // end of get_current_sales_tax
+                 
                  }
             });
