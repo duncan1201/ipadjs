@@ -1,8 +1,15 @@
 app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover, $ionicPopup,App_URLs, Layouts, Sales) {
                
+              
+               // start of init method
                if (!angular.isDefined($scope.current_sale)) {
                     $scope.current_sale = {id: "", items: [], total: 0};
                }
+               
+               if (!angular.isDefined($scope.current_tab)) {
+                    $scope.current_tab = 'current sale';
+               }
+               // end of init method
                
                // prepare the quantity_popover
                $ionicPopover.fromTemplateUrl('modules/sell/templates/quantity_po.htm',
@@ -19,7 +26,6 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                }; // end of sale_item_quantity_click
                
                $scope.sale_item_delete_click = function (sale_id, sale_item_id) {
-               
                     Sales.delete_sale_item(sale_id, sale_item_id);
                }; // end of sale_item_delete_click
                
@@ -79,7 +85,7 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                                 Layouts.get_layout_for_edit(item.id, last_callback);
                             }
                         }; // end of callback_fun
-                              
+                        
                         Layouts.get_current_layout(callback_fun);
                     }
                 }); // end of on
@@ -92,7 +98,20 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                     return angular.isDefined(e);
                };
                
+               $scope.tab_click = function(tab_name){
+                    $scope.current_tab = tab_name;
+               }; // end of tab_click
+               
+               $scope.is_current_sale_tab_shown = function() {
+                    return $scope.current_tab == 'current sale';
+               }
+               
+               $scope.is_retrieve_sale_tab_shown = function() {
+                    return $scope.current_tab == 'retrieve sale';
+               }
+               
                $scope.park_click = function(sale_id) {
+                    Sales.update_sale_status(sale_id, 'parked');
                } ; // end of park_click
                
                $scope.void_click = function(sale_id){
@@ -107,7 +126,7 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                     confirmPopup.then(function(res) {
                         if(res) {
                             console.log('You are sure');
-                            Sales.void_sale(sale_id);
+                            Sales.update_sale_status(sale_id, 'void');
                         } else {
                             console.log('You are not sure');
                         }

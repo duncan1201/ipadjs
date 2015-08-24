@@ -135,14 +135,14 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
              
                         DbUtil.executeSqls([json_quantity, json_subtotal, json_total_tax, json_total], callback);
                     }, // end of update_item_quantity
-                    void_sale : function (sale_id) {
+                    update_sale_status : function (sale_id, status) {
                         var self = this;
-                        var stmt = "update sales set status = 'void' where id = ?";
+                        var stmt = "update sales set status = ? where id = ?";
                         var callback_fun = function (tx, results) {
                             console.log("void_sale callback....");
                             self.get_current_sale();
                         };
-                        var json = {sql: stmt, params:[sale_id], callback: callback_fun};
+                        var json = {sql: stmt, params:[status, sale_id], callback: callback_fun};
                         DbUtil.executeSql(json);
                     } // end of void_sale
                 } // end of return
