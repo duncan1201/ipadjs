@@ -46,14 +46,28 @@ app.directive('tabs', function(){
                 }; // end of return
             });
 
-app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, App_URLs, Layouts, Sales) {
+app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover,App_URLs, Layouts, Sales) {
                
                if (!angular.isDefined($scope.current_sale)) {
                     $scope.current_sale = {id: "", items: [], total: 0};
                }
                
+               // prepare the quantity_popover
+               $ionicPopover.fromTemplateUrl('modules/sell/templates/quantity_po.htm',
+                                            {
+                                                scope: $scope
+                                            }).then(function(popover) {
+                                                     $scope.quantity_popover = popover;
+                                            });
+               
+               $scope.sale_item_quantity_click = function ($event, sale_id, sale_item) {
+                    console.log("sale_item_quantity_click=" + sale_id);
+                    $scope.quantity_popover.scope.sale_item = sale_item;
+                    $scope.quantity_popover.show($event);
+               }; // end of sale_item_quantity_click
+               
                $scope.sale_item_delete_click = function (sale_id, sale_item_id) {
-                    console.log("sale_item_delete_click=" + sale_item_id);
+               
                     Sales.delete_sale_item(sale_id, sale_item_id);
                }; // end of sale_item_delete_click
                
@@ -73,16 +87,9 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                
                $scope.key_click = function(key){
                     console.log("key click..." + angular.toJson(key));
-               /*
-                    $scope.current_sale.items.push({
-                            name:key.display_name,
-                            quantity: 1,
-                            unit_price: key.retail_price
-                    });*/
                
                     if ($scope.current_sale.id == ''){
                         var callback_fun = function(tx, results) {
-                            console.log("results;insertId=" + results.insertId);
                             $scope.current_sale.id = results.insertId;
                             Sales.add_sale_item($scope.current_sale.id, key, function(tx, rlts){
                                 Sales.get_current_sale();
@@ -124,4 +131,10 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                         Layouts.get_current_layout(callback_fun);
                     }
                 }); // end of on
-});
+}); // sellCtrl
+
+app.controller('itemQuantiyCtrl', function($scope){
+               $scope.done_click = function(sale_item){
+                    
+               } // end of done_click
+}); // itemQuantiyCtrl

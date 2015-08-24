@@ -35,7 +35,7 @@
             <div class='item' style='height:250px;overflow:scroll;background-color:#efefef;padding:0;margin:0'>
                 <div ng-repeat="sale_item in current_sale.items" style='border-top:0px solid yellow;border-bottom:1px solid gray;height:40px;line-height:40px;vertical-align:top;'>
                     <!-- quantity -->
-                    <button class='button button-small button-clear' style='display:inline-block;border:1px solid gray;width:18px;height:18px;border-radius:50%;vertical-align:middle;color:black;margin-left:0.5em'>{{sale_item.quantity}}</button>
+                    <button class='button button-small button-clear' style='display:inline-block;border:1px solid gray;width:18px;height:18px;border-radius:50%;vertical-align:middle;color:black;margin-left:0.5em' ng-click="sale_item_quantity_click($event, {{current_sale.id}}, {{sale_item}})">{{sale_item.quantity}}</button>
                     <!-- item name -->
                     <span style='margin-left:.5em;vertical-align:top'>{{sale_item.name}}</span>
                     

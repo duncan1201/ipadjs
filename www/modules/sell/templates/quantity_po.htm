@@ -1,0 +1,23 @@
+<style>.popover { height:130px; width: 260px; }</style>
+<ion-popover-view ng-controller="itemQuantiyCtrl">
+    <!--ion-header-bar>
+        <h1 class="title">{{sale_item.id}}</h1>
+     </ion-header-bar>
+    <ion-content-->
+        <div class='row'>
+            <div class='col'>
+                <input type='number' min='1' step='1' class="lightgray-outline" placeholder="Quantity" ng-model="sale_item.quantity">
+                    </div>
+        </div>
+        <div class='row'>
+            <!--div class='col col-33'>
+                <button class="button button-small button-block" ng-click='delete_group_click(group)'>
+                    Cancel
+                </button>
+            </div-->
+            <div class='col col-33 col-offset-33'>
+                <button class="button button-small button-block" ng-click='done_click(sale_item)'>Done</button>
+            </div>
+        </div>
+    </ion-content>
+</ion-popover-view>
