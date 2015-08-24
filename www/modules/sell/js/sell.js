@@ -99,6 +99,14 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                };
                
                $scope.tab_click = function(tab_name){
+               
+                    if (tab_name == 'current sale'){
+                        angular.element(document.querySelector('#current_sale_tab')).addClass('selected');
+                        angular.element(document.querySelector('#retrieve_sale_tab')).removeClass('selected');
+                    } else {
+                        angular.element(document.querySelector('#current_sale_tab')).removeClass('selected');
+                        angular.element(document.querySelector('#retrieve_sale_tab')).addClass('selected');
+                    }
                     $scope.current_tab = tab_name;
                }; // end of tab_click
                
