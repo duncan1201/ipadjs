@@ -99,17 +99,27 @@
                     <div class="col">Note</div>
                     <div class="col">&nbsp;</div>
                 </div>
+                
+                <div class='row' ng-repeat="parked_sale in parked_sales">
+                    <div class='col col-40'>{{parked_sale.creation_date | date: 'yyyy-MM-dd'}}</div>
+                    <div class='col col-15'>Status</div>
+                    <div class='col col-15'>{{parked_sale.subtotal + parked_sale.total_tax | currency}}</div>
+                    <div class='col col-15'>&nbsp;</div>
+                    <div class='col col-15'>
+                        <button type='button' class='button button-small button-clear button-positive' ng-click='open_sale_click({{parked_sale.id}})'>Open</button>
+                    </div>
+                </div>
             </div>
             
         </div>
 
     </div>
     
-    <div class='col'>
-        <!-- layout -->
+    <div class='col' ng-show='is_current_sale_tab_shown()'>
+        <!-- start of layout -->
         <div class="card card-paddingless card-marginless layout">
             
-            <!-- layout groups -->
+            <!-- start of layout groups -->
             <div class="item item-divider">
                 <div class="row">
                     <div class="col">
@@ -121,7 +131,8 @@
                     </div>
                 </div>
             </div>
-            <!-- layout keys -->
+            <!--end of layout groups-->
+            <!-- start of layout keys -->
             <div class="item" id="layout_keys_container">
                 <div style='float:left'>
                     <div ng-repeat="key in layout.active_group.keys" ng-click='key_click({{key}})' class='layout-item' style='background-color:{{get_display_color(key.color)}}'>
@@ -129,7 +140,9 @@
                     </div>
                 </div>
             </div>
+            <!-- end of layout keys -->
         </div>
+        <!--end of layout-->
     </div>
 </div>
 </ion-content>

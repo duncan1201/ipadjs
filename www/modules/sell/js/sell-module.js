@@ -2,13 +2,18 @@ var sale = angular.module('sale', ['ionic', 'util', 'salesTax']);
 
 sale.factory('Sales', function(DbUtil, SalesTaxes){
                 return {
+                    get_main_content_scope: function() {
+                        var ret = angular.element(document.querySelector('#sell_main_content')).scope();
+                        return ret;
+                    }, // end of get_main_content_scope
                     get_current_sale : function() {
-                        var stmt = "select * from sales where status = 'current'";
+                        var self = this;
+                        var stmt = "select * from sales where upper(status) = 'CURRENT'";
                         var sale_callback = function (tx, results) {
                             var rows = results.rows;
                             console.log("get_current_sale-rows.length=" + rows.length);
     
-                            var scope = angular.element(document.querySelector('#sell_main_content')).scope();
+                            var scope = self.get_main_content_scope();
              
                             if (rows.length > 0){
                                 var sale = rows.item(0);
@@ -51,6 +56,24 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
                         var json = {sql: stmt, params:[], callback: sale_callback};
                         DbUtil.executeSql(json);
                     }, // get_current_sale
+                    get_parked_sales : function () {
+                        var stmt = "select * from sales where upper(status) = 'PARKED'";
+                        var scope = this.get_main_content_scope();
+                        var callback_fun = function(tx, rlts) {
+                            var rows = rlts.rows;
+                            var ret = [];
+                            for (var i = 0; i < rows.length; i++){
+                                var item = rows.item(i);
+                                console.log("get_parked_sales-item=" + angular.toJson(item));
+                                ret.push({id: item.id, subtotal: item.subtotal, total_tax: item.total_tax, creation_date: item.creation_date});
+                            }
+                            scope.$apply(function() {
+                                         scope.parked_sales = ret;
+                            });
+                        } ; // end of callback_fun
+                        var json = {sql: stmt, params:[],  callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    }, // end of get_parked_sales
                     create_sale: function (callback_fun) {
              
                         var subquery = "select s.name as sales_tax_name, s.rate as sales_tax_rate, datetime('now') as creation_date from sales_taxes s where s.id in (select sales_tax_id from outlets o where o.is_current = 1)";
@@ -135,13 +158,20 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
              
                         DbUtil.executeSqls([json_quantity, json_subtotal, json_total_tax, json_total], callback);
                     }, // end of update_item_quantity
-                    update_sale_status : function (sale_id, status) {
+                    update_sale_status : function (sale_id, status, external_callback) {
                         var self = this;
                         var stmt = "update sales set status = ? where id = ?";
-                        var callback_fun = function (tx, results) {
-                            console.log("void_sale callback....");
-                            self.get_current_sale();
-                        };
+                        var callback_fun = null;
+             
+                        if (angular.isDefined(external_callback)){
+                            callback_fun = external_callback;
+                        } else {
+                            callback_fun = function (tx, results) {
+                                console.log("void_sale callback....");
+                                self.get_current_sale();
+                            };
+                        }
+             
                         var json = {sql: stmt, params:[status, sale_id], callback: callback_fun};
                         DbUtil.executeSql(json);
                     } // end of void_sale

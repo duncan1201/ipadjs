@@ -66,8 +66,10 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                $rootScope.$on('$includeContentLoaded', function(event, url){
                     if(url == App_URLs.sell_main_content){
                         
+                        var scope = angular.element(document.querySelector('#sell_main_content')).scope();
+                              
                         // callback for get_current_layout
-                        var callback_fun = function(tx, results) {
+                        var layout_callback = function(tx, results) {
                             var rows = results.rows;
                             
                             if (rows.length > 0) {
@@ -75,8 +77,8 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                                 var last_callback = function() {
                               
                                     var self = this;
-                                    var scope = angular.element(document.querySelector('#sell_main_content')).scope();
-                              console.log("scope == null ?" + (scope == null));
+
+                                    console.log("scope == null ?" + (scope == null));
                                     scope.$apply(function(){
                                            scope.layout = self.layout_obj;
                                     });
@@ -84,9 +86,17 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                                 console.log("before get_layout_group_keys_for_edit...");
                                 Layouts.get_layout_for_edit(item.id, last_callback);
                             }
-                        }; // end of callback_fun
+                        }; // end of layout_callback
                         
-                        Layouts.get_current_layout(callback_fun);
+                        Layouts.get_current_layout(layout_callback);
+                              
+                        //
+                        var parked_sale_callback = function(tx, rlts) {
+                            var rows = rlts.rows();
+                            
+                            console.log("get_parked_sales: rows.length=" + rows.length);
+                        }; // end of parked_sale_callback
+                        Sales.get_parked_sales(parked_sale_callback);
                     }
                 }); // end of on
                
@@ -119,17 +129,21 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                }
                
                $scope.park_click = function(sale_id) {
-                    Sales.update_sale_status(sale_id, 'parked');
+                    var callback = function(tx, rlts) {
+                        Sales.get_current_sale();
+                        Sales.get_parked_sales();
+                    }; // end of callback
+                    Sales.update_sale_status(sale_id, 'parked', callback);
                } ; // end of park_click
                
                $scope.void_click = function(sale_id){
                     console.log("void click=" + sale_id);
                
                     var _title = "Are you sure?";
-                    var _template = "<b>Are you sure you want to void this sale?</b> <br/><br/>All products and payments will be removed from the current sale.";
+                    var _templateUrl = "modules/sell/templates/void_sale_confirm.htm";
                     var confirmPopup = $ionicPopup.confirm({
                                                       title: _title,
-                                                      template: _template
+                                                      templateUrl: _templateUrl,
                                                       });
                     confirmPopup.then(function(res) {
                         if(res) {
@@ -141,6 +155,27 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                     }); // end of then
                
                }; // end of void_click
+               
+               $scope.open_sale_click = function (sale_id) {
+                    console.log("open_sale_click=" + sale_id);
+                    var _title = "Loading a Saved Sale";
+                    var _templateUrl = "modules/sell/templates/open_sale_confirm.htm";
+                    var confirmPopup = $ionicPopup.confirm({
+                                                      title: _title,
+                                                      templateUrl: _templateUrl,
+                                                      buttons:[
+                                                               {text: 'Cancel'},
+                                                               {text: 'Void'},
+                                                               {
+                                                                    text: 'Park',
+                                                                    type: 'button-positive'
+                                                               }]
+                                                      });
+               confirmPopup.then(function(res) {
+                                    console.log("res=" + res);
+                                 
+                                 }); // end of then
+               }; // end of open_sale_click
                
 }); // sellCtrl
 
