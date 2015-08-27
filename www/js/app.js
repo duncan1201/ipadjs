@@ -43,7 +43,8 @@ app.constant('App_URLs',
                 layout_main_content: 'modules/quickKeys/templates/main_content.htm',
                 outlet_main_content: 'modules/outlets/outlets/templates/main_content.htm',
                 sell_main_content: 'modules/sell/templates/main_content.htm',
-                landing_main_content: 'modules/landing/templates/main_content.htm'
+                landing_main_content: 'modules/landing/templates/main_content.htm',
+                general_main_content: 'modules/general/templates/main_content.htm'
              });
 
 function initApp(DbUtil, Schema_SQLs, Initialization_SQLs){
@@ -142,19 +143,26 @@ app.factory('Menus', function(){
                     return [
                             {
                                 title: "",
-                                submenus: ["Sales Reports", "Inventory Reports"]
+                                submenus: [
+                                            {title:"Sales Reports", icon: "ion-ios-pie"},{title:"Inventory Reports", icon: "ion-ios-pie-outline"}
+                                           ]
                             },
                             {
                                 title: "",
-                                submenus: ["Sell"]
+                                submenus: [{title: "Sell", icon: "ion-ios-cart"}]
                             },
                             {
                                 title: "",
-                                submenus: ["Products", "Stock Control", "Types", "Supplier", "Brands", "Tags"]
+                                submenus: [
+                                           {title:"Products", icon: "ion-tshirt-outline"},
+                                           {title:"Stock Control", icon: "ion-ios-circle-outline"}, {title:"Types", icon: "ion-ios-circle-outline"}, {title:"Supplier", icon: "ion-ios-circle-outline"}, {title:"Brands", icon: "ion-ios-circle-outline"}, {title:"Tags", icon: "ion-ios-circle-outline"}]
                             },
                             {
                                 title: "",
-                                submenus: ["General", "Outlets and Registers", "Quick Keys", "Sales Taxes"]
+                                submenus: [
+                                           {title:"General", icon: "ion-ios-gear"},
+                                           {title:"Outlets and Registers", icon: "ion-ios-circle-outline"},
+                                           {title:"Quick Keys", icon: "ion-ios-circle-outline"}, {title:"Sales Taxes", icon: "ion-ios-circle-outline"}]
                             }
                             ];
                 } // end of all

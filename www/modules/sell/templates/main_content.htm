@@ -11,6 +11,18 @@
     text-align: center;
     cursor: pointer;
 }
+
+.sellbtn {
+    border-radius:8px;
+    background:linear-gradient(darkgray, gray, darkgray);
+    color:white;
+}
+
+#pay_button {
+    border-radius:8px;
+    background:linear-gradient(darkgreen, green, darkgreen);
+    color:white;
+}
 </style>
 <ion-content scroll="true" ng-controller="sellCtrl" id="sell_main_content">
 <div class='row'>
@@ -71,20 +83,24 @@
             <!-- current sale: bottom buttons -->
             <div class='item item-divider' ng-show='is_current_sale_tab_shown()' style='position:absolute; bottom: 0;background-color:darkgray;padding-left:1px;padding-right:1px;margin-left:1px; margin-right:1px;width:100%'>
                 <div class="row">
-                    <div class='col' style='background-color:gray;padding-left:1px;padding-right:1px'>
-                        <button class='button-block' ng-click='void_click(current_sale.id)'>Void</button>
+                    <div class='col'>
+                        <button class='button-block sellbtn' ng-click='void_click(current_sale.id)'>
+                            Void
+                        </button>
                     </div>
                     <div class='col'>
-                        <button class='button-block' ng-click='park_click(current_sale.id)'>Park</button>
+                        <button class='button-block sellbtn' ng-click='park_click(current_sale.id)'>
+                            Park
+                        </button>
                     </div>
                     <div class='col'>
-                        <button class='button-block'>Notes</button>
+                        <button class='button-block sellbtn'>Notes</button>
                     </div>
                     <div class='col'>
-                        <button class='button-block'>Discount</button>
+                        <button class='button-block sellbtn'>Discount</button>
                     </div>
                     <div class='col'>
-                        <button class='button-block'>Pay</button>
+                        <button class='button-block' id='pay_button'>Pay</button>
                     </div>
                 </div>
             </div>

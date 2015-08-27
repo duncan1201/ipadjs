@@ -157,25 +157,44 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                }; // end of void_click
                
                $scope.open_sale_click = function (sale_id) {
-                    console.log("open_sale_click=" + sale_id);
-                    var _title = "Loading a Saved Sale";
-                    var _templateUrl = "modules/sell/templates/open_sale_confirm.htm";
-                    var confirmPopup = $ionicPopup.confirm({
+                    var self = this;
+                    var callback = function(tx, rlts){
+                        var count = rlts.rows.length;
+                        if(count == 0){
+                            console.log("open sale click.count == 0");
+                            self.tab_click('current sale');
+                            Sales.update_sale_status(sale_id, 'current');
+                        } else {
+                            var park_tap = function(e){
+                                console.log("park tapped=");
+                            }; // end of park_tap
+               
+                            var _title = "Loading a Saved Sale";
+                            var _templateUrl = "modules/sell/templates/open_sale_confirm.htm";
+                            var confirmPopup = $ionicPopup.confirm({
                                                       title: _title,
                                                       templateUrl: _templateUrl,
                                                       buttons:[
                                                                {text: 'Cancel'},
-                                                               {text: 'Void'},
+                                                               {
+                                                                    text: 'Void',
+                                                                    onTap: function(e){}
+                                                               },
                                                                {
                                                                     text: 'Park',
-                                                                    type: 'button-positive'
+                                                                    type: 'button-positive',
+                                                                    onTap: park_tap(e)
                                                                }]
                                                       });
-               confirmPopup.then(function(res) {
-                                    console.log("res=" + res);
-                                 
-                                 }); // end of then
-               }; // end of open_sale_click
+
+                        } // end of else
+                    }; // end of callback
+               
+                    Sales.get_current_sale(callback);
+                    console.log("open_sale_click=" + sale_id);
+                }; // end of open_sale_click
+               
+               
                
 }); // sellCtrl
 

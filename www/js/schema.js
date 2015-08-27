@@ -1,6 +1,7 @@
 app.constant('Schema_SQLs',
              [
               /* development purpose */
+              'Drop table if exists settings',
               'Drop table if exists sales_taxes',
               //'Drop table if exists suppliers',
               //'Drop table if exists product_types',
@@ -12,8 +13,11 @@ app.constant('Schema_SQLs',
               //'Drop table if exists layout_group_keys',
               'Drop table if exists outlets',
               'Drop table if exists registers',
-              'Drop table if exists sales',
-              'Drop table if exists sale_items',
+              //'Drop table if exists sales',
+              //'Drop table if exists sale_items',
+              
+              /* settings table */
+              'Create table if not exists settings(id integer primary key, tag varchar(50), name varchar(50) unique, value varchar(50))',
               
               /* sales tax table */
               'Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(50) NOT NULL, rate real DEFAULT 0, system_generated BOOLEAN DEFAULT 0)',
@@ -67,5 +71,7 @@ app.constant('Schema_SQLs',
             //'insert into layout_groups (id, name, is_active, layout_id) values (1, "Group 1", 1, 1)',
             'insert into sales_taxes (id, name, rate, system_generated) values (1, "No Tax", 0, 1)',
             'insert into outlets(id, name, is_current, sales_tax_id) values (1, "Main outlet", 1, 1)',
-            'insert into registers (id, name, layout_id, outlet_id) values (1, "Main Register", 1, 1)'
+            'insert into registers (id, name, layout_id, outlet_id) values (1, "Main Register", 1, 1)',
+            'insert into settings (tag, name, value) values ("store_settings", "default_currency", upper("SGD"))',
+            'insert into settings (tag, name, value) values ("store_settings", "display_prices", upper("Tax inclusive"))'
           ]);

@@ -6,53 +6,58 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
                         var ret = angular.element(document.querySelector('#sell_main_content')).scope();
                         return ret;
                     }, // end of get_main_content_scope
-                    get_current_sale : function() {
+                    get_current_sale : function(external_callback) {
                         var self = this;
                         var stmt = "select * from sales where upper(status) = 'CURRENT'";
-                        var sale_callback = function (tx, results) {
-                            var rows = results.rows;
-                            console.log("get_current_sale-rows.length=" + rows.length);
+                        var sale_callback = null;
+                        if (angular.isDefined(external_callback)){
+                            sale_callback = external_callback;
+                        }
+                        else
+                        {
+                            sale_callback = function (tx, results) {
+                                var rows = results.rows;
+                                console.log("get_current_sale-rows.length=" + rows.length);
     
-                            var scope = self.get_main_content_scope();
+                                var scope = self.get_main_content_scope();
              
-                            if (rows.length > 0){
-                                var sale = rows.item(0);
-                                var sale_id = sale.id;
+                                if (rows.length > 0){
+                                    var sale = rows.item(0);
+                                    var sale_id = sale.id;
              
-                                var ret = {id: sale.id, sales_tax_name: sale.sales_tax_name, sales_tax_rate: sale.sales_tax_rate, subtotal: sale.subtotal, total_tax: sale.total_tax, total: sale.total};
+                                    var ret = {id: sale.id, sales_tax_name: sale.sales_tax_name, sales_tax_rate: sale.sales_tax_rate, subtotal: sale.subtotal, total_tax: sale.total_tax, total: sale.total};
              
-                                var stmt_items = "select * from sale_items where sale_id = ?";
-                                var items_callback = function(tx, rlts) {
-                                    var rows = rlts.rows;
+                                    var stmt_items = "select * from sale_items where sale_id = ?";
+                                    var items_callback = function(tx, rlts) {
+                                        var rows = rlts.rows;
              
-                                    console.log("items_callback.length=" + rows.length);
-                                    var sale_items = [];
-                                    for ( var i = 0; i < rows.length; i++){
-                                        var sale_item = rows.item(i);
-                                        sale_items.push({
+                                        var sale_items = [];
+                                        for ( var i = 0; i < rows.length; i++){
+                                            var sale_item = rows.item(i);
+                                            sale_items.push({
                                                         id: sale_item.id,
                                                         quantity: sale_item.quantity,
                                                         unit_price: sale_item.unit_price,
                                                         name: sale_item.name,
                                                         sale_id: sale.id
-                                        });
-                                    }
-                                    ret['items'] = sale_items;
+                                            });
+                                        }
+                                        ret['items'] = sale_items;
 
+                                        scope.$apply(function(){
+                                            scope.current_sale = ret;
+                                        });
+                                    }; // end of items_callback
+                                    var json_items = {sql: stmt_items, params:[sale_id], callback: items_callback};
+                                    DbUtil.executeSql(json_items);
+                                } // end if
+                                else {
                                     scope.$apply(function(){
-                                        scope.current_sale = ret;
+                                        scope.current_sale = {id:"", items:[]};
                                     });
-                                }; // end of items_callback
-                                var json_items = {sql: stmt_items, params:[sale_id], callback: items_callback};
-                                DbUtil.executeSql(json_items);
-                            } // end if
-                            else {
-                                scope.$apply(function(){
-                                    scope.current_sale = {id:"", items:[]};
-                                });
-                            } // else
-             
-                        }; // end of sale_callback
+                                } // else
+                            }; // end of sale_callback
+                        }
                         var json = {sql: stmt, params:[], callback: sale_callback};
                         DbUtil.executeSql(json);
                     }, // get_current_sale
