@@ -85,6 +85,11 @@ button.add {
     border-radius:8px;
     font-weight:bold;
 }
+
+button.rounded {
+    border-radius:8px;
+}
+
 /* input outline*/
 input.lightgray-outline{
     outline-color: lightgray;

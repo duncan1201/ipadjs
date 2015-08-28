@@ -44,7 +44,8 @@ app.constant('App_URLs',
                 outlet_main_content: 'modules/outlets/outlets/templates/main_content.htm',
                 sell_main_content: 'modules/sell/templates/main_content.htm',
                 landing_main_content: 'modules/landing/templates/main_content.htm',
-                general_main_content: 'modules/general/templates/main_content.htm'
+                general_main_content: 'modules/general/templates/main_content.htm',
+                tag_main_content: 'modules/products/tags/templates/main_content.htm'
              });
 
 function initApp(DbUtil, Schema_SQLs, Initialization_SQLs){
