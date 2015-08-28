@@ -11,16 +11,14 @@ app.controller('tagCtrl',
                
                     $scope.add_new_tag_click = function(){
                         $scope.popup_title = "Create tag";
+                        $scope.tag = {};
                         $scope.tagModal.show();
                     };
                
                     $scope.tag_form_submit_click = function(tag) {
-               
-                        if(angular.isDefined(tag.id)){
-                            console.log("tag_form_submit_click- isDefined");
+                        if(angular.isDefined(tag.id)) {
                             Tags.update_tag(tag);
                         } else {
-                            console.log("tag_form_submit_click- is NOT Defined");
                             Tags.create_tag(tag);
                         }
                
@@ -32,7 +30,6 @@ app.controller('tagCtrl',
                     };
                
                     $scope.edit_click = function (id) {
-                        //$scope.tagModal.show();
                         var callback = function(tx, rlts) {
                             var rows = rlts.rows;
                             if(rows.length > 0){
@@ -72,7 +69,7 @@ tag.factory('Tags',
                         } else {
                             callback_fun = function(tx, results) {
                                 var tags = self.parse_results(results);
-                                var scope = angular.element(document.querySelector('#tags_main_content')).scope();
+                                var scope = self.get_scope();
             
                                 scope.$apply(function(){
                                     scope.tags = tags;
@@ -87,27 +84,38 @@ tag.factory('Tags',
                         };
                         DbUtil.executeSql(json);
                     }, // end of all
-                    create_tag : function(tag) {
+                    create_tag : function(tag, external_callback) {
                         var self = this;
-                        var callback_function =
-                            function(tx, results){
+                        var callback_fun = null;
+                        if(angular.isDefined(external_callback)){
+            console.log("external_callback IS DEFINED");
+                            callback_fun = external_callback;
+                        } else {
+                            callback_fun = function(tx, results) {
                                 self.all();
                             };
+                        }
+
                         var insertSql = "insert into tags (name) values (?)";
                         var json = {
                                         sql: insertSql,
                                         params: [tag.name],
-                                        callback:callback_function
+                                        callback:callback_fun
                                     };
                         DbUtil.executeSql(json);
                     }, // end of create_tag
-                    update_tag : function (tag) {
+                    update_tag : function (tag, external_callback) {
                         var self = this;
                         var stmt = "update tags set name = ? where id = ?";
-                        var callback_fun = function(tx, rlts) {
-                            self.all();
-                        }; // callback_fun
-            var json = {sql: stmt, params:[tag.name, tag.id], callback: callback_fun};
+                        var callback_fun = null;
+                        if(angular.isDefined(external_callback)){
+                            callback_fun = external_callback;
+                        } else {
+                            callback_fun = function(tx, rlts) {
+                                self.all();
+                            }; // callback_fun
+                        } // end of else
+                        var json = {sql: stmt, params:[tag.name, tag.id], callback: callback_fun};
                         DbUtil.executeSql(json);
                     }, // end of update_tag
                     parse_results : function(results){
@@ -135,6 +143,10 @@ tag.factory('Tags',
                         var stmt = "select * from tags where id = ?";
                         var json = {sql: stmt, params:[id], callback: external_callback};
                         DbUtil.executeSql(json);
-                    } // get_tag
+                    }, // get_tag
+                    get_scope : function () {
+                        var ret = angular.element(document.querySelector('#tags_main_content')).scope();
+                        return ret;
+                    } // get_scope
                 }
             });

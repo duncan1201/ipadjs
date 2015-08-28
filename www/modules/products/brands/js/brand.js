@@ -1,7 +1,7 @@
 app.controller('brandCtrl',
                function($scope, $ionicModal, Brands){
                
-                    Brands.all_with_default_callback();
+                    Brands.all();
                
                     $ionicModal.fromTemplateUrl('modules/products/brands/templates/brands-popup.htm',
                                                 function(modal) {
@@ -10,21 +10,22 @@ app.controller('brandCtrl',
                                                     scope: $scope
                                                 });
                
-                    $scope.add_new_brand_click =
-                        function () {
-                            console.log("add_new_brand_click");
-                            $scope.brandModal.show();
-                        };
+                    $scope.add_new_brand_click = function () {
+                        $scope.brand = {};
+                        $scope.brandModal.show();
+                    };
                
-                    $scope.brand_popup_cancel_click =
-                        function() {
-                            $scope.brandModal.hide();
-                        };
+                    $scope.brand_popup_cancel_click = function() {
+                        $scope.brandModal.hide();
+                    };
                
-                    $scope.delete_click =
-                        function(id) {
-                            Brands.delete_brand(id);
-                        };
+                    $scope.edit_click = function(id) {
+               
+                    };
+               
+                    $scope.delete_click = function(id) {
+                        Brands.delete_brand(id);
+                    };
                
                     $scope.brand_name_form_submit_click =
                         function(brand) {
@@ -44,29 +45,29 @@ var brand = angular.module('brand', ['ionic', 'util']);
 brand.factory('Brands',
               function(DbUtil){
                 return {
-                    all: function(callback_function) {
-              
-                        var json = {
-                            sql: "select * from brands order by name COLLATE NOCASE",
-                            params:[],
-                            callback: callback_function
-                        };
-                        DbUtil.executeSql(json);
-                    }, // end of all_with_default_callback
-                    all_with_default_callback: function() {
+                    all: function(_callback) {
                         var self = this;
-                        var callback_function =
-                            function(tx, results){
+                        var callback_fun = null;
+                        if(angular.isDefined(_callback)){
+                            callback_fun = _callback
+                        } else {
+                            callback_fun = function(tx, results){
                                 var ret = self.parse_results(results);
               
                                 var scope = angular.element(document.querySelector('#brands_main_content')).scope();
               
                                 scope.$apply(function(){
-                                                scope.brands = angular.fromJson(ret);
-                                            });
-                            };
-                        self.all(callback_function);
-                    }, // end of all_with_default_callback
+                                    scope.brands = angular.fromJson(ret);
+                                });
+                            }; // end of callback_fun
+                        } // end of else
+                        var json = {
+                            sql: "select * from brands order by name COLLATE NOCASE",
+                            params:[],
+                            callback: callback_fun
+                        };
+                        DbUtil.executeSql(json);
+                    }, // end of all
                     parse_results : function(results){
                         var ret = [];
                         for(i = 0; i < results.rows.length; i++){
@@ -90,7 +91,7 @@ brand.factory('Brands',
                         var callback_function = function() {
                             brand.brand_name = "";
                             brand.desc = "";
-                            self.all_with_default_callback();
+                            self.all();
                         };
                         var json = {
                             sql: "insert into brands (name, desc) values (?, ?)",
@@ -103,7 +104,7 @@ brand.factory('Brands',
                         var self = this;
                         var callback_function =
                             function(tx, results) {
-                                self.all_with_default_callback();
+                                self.all();
                             };
                         var json = {
                             sql: "delete from brands where id = ?",
@@ -111,6 +112,14 @@ brand.factory('Brands',
                             callback: callback_function
                         };
                         DbUtil.executeSql(json);
-                    }
+                    }, // end of delete_brand
+                    edit_brand: function(brand) {
+                        var stmt = "update brands set name = ?, desc = ? where id = ?";
+                        var callback_fun = function() {
+              
+                        }; // end of callback_fun
+                        var json = {sql: stmt, params:[brand.name, brand.desc, brand.id], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    } // end of edit_brand
                 }
               }); // end of brand.factory
