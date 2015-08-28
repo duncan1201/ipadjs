@@ -73,5 +73,6 @@ app.constant('Schema_SQLs',
             'insert into outlets(id, name, is_current, sales_tax_id) values (1, "Main outlet", 1, 1)',
             'insert into registers (id, name, layout_id, outlet_id) values (1, "Main Register", 1, 1)',
             'insert into settings (tag, name, value) values ("store_settings", "default_currency", upper("SGD"))',
-            'insert into settings (tag, name, value) values ("store_settings", "display_prices", upper("Tax inclusive"))'
+            'insert into settings (tag, name, value) values ("store_settings", "display_prices", upper("Tax exclusive"))',
+            'insert into settings (tag, name, value) values ("address", "physical_city", upper("Singapore"))'
           ]);

@@ -127,7 +127,6 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                
                $rootScope.$on('$includeContentLoaded',
                               function(event, url){
-                                console.log("url=" + url);
                                 if (url == App_URLs.landing_main_content){
                                     // Load or initialize menus
                                     $scope.menus = Menus.all();

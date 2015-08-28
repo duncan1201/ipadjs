@@ -25,12 +25,9 @@ app.controller('GeneralCtrl', function($rootScope, $scope, App_URLs, Generals){
                
                $rootScope.$on('$includeContentLoaded', function(event, url){
                     if(url == App_URLs.general_main_content){
-                        $scope.storename = Generals.getStorename();
-                        $scope.contact_name = Generals.getContactName();
-                        $scope.website = Generals.getWebsite();
                         Generals.get_store_settings();
                         Generals.get_contact_info();
-                        
+                        Generals.get_address();
                     }
                 }); // end of on
                
@@ -41,6 +38,15 @@ app.controller('GeneralCtrl', function($rootScope, $scope, App_URLs, Generals){
                
                $scope.save_contact_info_click = function (contact_info) {
                     Generals.save_contact_info(contact_info);
+               };
+               
+               $scope.save_address_click = function(address) {
+                    console.log("save_address_click=" + address);
+                    Generals.save_address(address);
+               };
+               
+               $scope.same_as_physical_address_click = function() {
+               console.log("same_as_physical_address_click=");
                };
                
         });
@@ -117,7 +123,6 @@ general.factory('Generals', function(DbUtil){
                     DbUtil.executeSql(json);
                 }, // end of get_contact_info
                 save_contact_info: function (contact_info) {
-                console.log("contact_info=" + angular.toJson(contact_info));
                     // contact name
                     var stmt_contact_name = "insert or replace into settings (tag, name, value) values ('contact_info', 'contact_name', ?)";
                 
@@ -140,21 +145,84 @@ general.factory('Generals', function(DbUtil){
                 
                     DbUtil.executeSqls([json_contact_name, json_website, json_email, json_phone]);
                 }, // end of save_contact_info
+                save_address : function(address) {
+                    // physical street1
+                    var stmt_physical_street1 = "insert or replace into settings (tag, name, value) values ('address', 'physical_street1', ?)";
+                
+                    var json_physical_street1 = {sql: stmt_physical_street1, params:[address.physical_street1]};
+                
+                // physical street2
+                var stmt_physical_street2 = "insert or replace into settings (tag, name, value) values ('address', 'physical_street2', ?)";
+                
+                var json_physical_street2 = {sql: stmt_physical_street2, params:[address.physical_street2]};
+                
+                // physical suburb
+                var stmt_physical_suburb = "insert or replace into settings (tag, name, value) values ('address', 'physical_suburb', ?)";
+                
+                var json_physical_suburb = {sql: stmt_physical_suburb, params:[address.physical_suburb]};
+                
+                // physical city
+                var stmt_physical_city = "insert or replace into settings (tag, name, value) values ('address', 'physical_city', ?)";
+                
+                var json_physical_city = {sql: stmt_physical_city, params:[address.physical_city]};
+                
+                // physical postcode
+                var stmt_physical_postcode = "insert or replace into settings (tag, name, value) values ('address', 'physical_postcode', ?)";
+                
+                var json_physical_postcode = {sql: stmt_physical_postcode, params:[address.physical_postcode]};
+                
+                // postal street1
+                var stmt_postal_street1 = "insert or replace into settings (tag, name, value) values ('address', 'postal_street1', ?)";
+                
+                var json_postal_street1 = {sql: stmt_postal_street1, params:[address.postal_street1]};
+                
+                // postal street2
+                var stmt_postal_street2 = "insert or replace into settings (tag, name, value) values ('address', 'postal_street2', ?)";
+                
+                var json_postal_street2 = {sql: stmt_postal_street2, params:[address.postal_street2]};
+                
+                // postal suburb
+                var stmt_postal_suburb = "insert or replace into settings (tag, name, value) values ('address', 'postal_suburb', ?)";
+                
+                var json_postal_suburb = {sql: stmt_postal_suburb, params:[address.postal_suburb]};
+                
+                // postal city
+                var stmt_postal_city = "insert or replace into settings (tag, name, value) values ('address', 'postal_city', ?)";
+                
+                var json_postal_city = {sql: stmt_postal_city, params:[address.postal_city]};
+                
+                // postal postcode
+                var stmt_postal_postcode = "insert or replace into settings (tag, name, value) values ('address', 'postal_postcode', ?)";
+                
+                var json_postal_postcode = {sql: stmt_postal_postcode, params:[address.postal_postcode]};
+                
+                DbUtil.executeSqls([json_physical_street1, json_physical_street2, json_physical_suburb, json_physical_city, json_physical_postcode, json_postal_street1, json_postal_street2, json_postal_suburb, json_postal_city, json_postal_postcode]);
+                
+                }, // end of save_address
+                get_address: function() {
+                    var self = this;
+                    var stmt = "select * from settings where tag = 'address'";
+                    var callback_fun = function(tx, rlts){
+                        var ret = {};
+                        var rows = rlts.rows;
+                
+                        for(var i = 0; i < rows.length; i++){
+                            var item = rows.item(i);
+                            ret[item.name.toLowerCase()] = item.value;
+                        }
+                        console.log("ret=" + angular.toJson(ret));
+                        var scope = self.get_scope();
+                        scope.$apply(function() {
+                            scope.address = ret;
+                        });
+                    }; // end of callback_fun
+                    var json = {sql: stmt,  params:[], callback: callback_fun};
+                    DbUtil.executeSql(json);
+                }, // end of get_address
                 get_scope: function () {
                     var scope = angular.element(document.querySelector('#general_main_content')).scope();
                     return scope;
-                }, // end of get_scope
-                getContactName: function() {
-                    return "Leong";
-                },
-                
-                getWebsite: function() {
-                    return "www.iprocreation.com";
-                },
-                
-                getStorename: function(){
-                    return "iprocreation"
-                }
+                } // end of get_scope
             }
         });
 

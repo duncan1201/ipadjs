@@ -1,9 +1,9 @@
-<ion-content scroll="true" id='general_main_content'>
+<ion-content scroll="true" id='general_main_content' ng-controller="GeneralCtrl">
     <div class="row">
         <div class="col">Setup > General</div>
     </div>
     
-    <div class="card" ng-controller="GeneralCtrl">
+    <div class="card">
         <form ng-submit="save_store_settings_click(store_settings)">
             <div class="item item-divider">
                 Store Settings
@@ -50,143 +50,145 @@
     
     <div class="card" ng-controller="GeneralCtrl">
         <form ng-submit="save_contact_info_click(contact_info)">
-        <div class="item item-divider">
-            Contact information
-        </div>
-        <div class="item">
-            <div class="row">
-                <div class="col">
-                    <label class="item item-input">
-                        <span class="input-label">Contact name</span>
-                        <input type="text" placeholder="Enter contact name here" ng-model="contact_info.contact_name">
-                            </label>
+            <div class="item item-divider">
+                Contact information
+            </div>
+            <div class="item">
+                <div class="row">
+                    <div class="col">
+                        <label class="item item-input">
+                            <span class="input-label">Contact name</span>
+                            <input type="text" placeholder="Enter contact name here" ng-model="contact_info.contact_name">
+                                </label>
+                    </div>
+                    <div class="col">
+                        <label class="item item-input">
+                            <span class="input-label">Website</span>
+                            <input type="url" placeholder="Enter website here" ng-model="contact_info.website">
+                                </label>
+                    </div>
                 </div>
-                <div class="col">
-                    <label class="item item-input">
-                        <span class="input-label">Website</span>
-                        <input type="url" placeholder="Enter website here" ng-model="contact_info.website">
-                            </label>
+                <div class="row">
+                    <div class="col">
+                        <label class="item item-input">
+                            <span class="input-label">Email</span>
+                            <input type="email" placeholder="Enter email here" ng-model="contact_info.email">
+                                </label>
+                    </div>
+                    <div class="col">
+                        <label class="item item-input">
+                            <span class="input-label">Phone</span>
+                            <input type="text" placeholder="Enter phone here" ng-model="contact_info.phone">
+                                </label>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
-                    <label class="item item-input">
-                        <span class="input-label">Email</span>
-                        <input type="email" placeholder="Enter email here" ng-model="contact_info.email">
-                            </label>
-                </div>
-                <div class="col">
-                    <label class="item item-input">
-                        <span class="input-label">Phone</span>
-                        <input type="text" placeholder="Enter phone here" ng-model="contact_info.phone">
-                            </label>
+            <div class="item item-divider item-divider-paddingless">
+                <div class="row">
+                    <!--div class="col col-25 col-offset-50">
+                     <button type='button' class="button button-small button-block button-light">Cancel</button>
+                     </div-->
+                    <div class="col col-25 col-offset-75">
+                        <button type='submit' class="button button-small button-block button-light">Save</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="item item-divider item-divider-paddingless">
-            <div class="row">
-                <div class="col col-25 col-offset-50">
-                    <button type='button' class="button button-small button-block button-light">Cancel</button>
-                </div>
-                <div class="col col-25">
-                    <button type='submit' class="button button-small button-block button-light">Save</button>
-                </div>
-            </div>
-        </div>
         </form>
     </div>
     
-    <div class="card">
-        <div class="item item-divider">
-            Address
-        </div>
-        <div class="item">
-            <div class="row">
-                <div class="col-50">
-                    <div class="card">
-                        <div class="item item-divider">
-                            Physical Address
-                        </div>
-                        <div class="item">
-                            <label class="item item-input">
-                                <span class="input-label">Street</span>
-                                <input type="text" placeholder="Enter street here">
-                                    </label>
-                        </div>
-                        <div class="item">
-                            <label class="item item-input">
-                                <span class="input-label">Street</span>
-                                <input type="text" placeholder="Enter street here">
-                                    </label>
-                        </div>
-                        <div class="item">
-                            <label class="item item-input">
-                                <span class="input-label">Suburb</span>
-                                <input type="text" placeholder="Enter suburb here">
-                                    </label>
-                        </div>
-                        <div class="item">
-                            <label class="item item-input">
-                                <span class="input-label">City</span>
-                                <input type="text" placeholder="Enter city here">
-                                    </label>
-                        </div>
-                        <div class="item">
-                            <label class="item item-input">
-                                <span class="input-label">Postcode</span>
-                                <input type="text" placeholder="Enter city here">
-                                    </label>
+    <div class="card ">
+        <form ng-submit="save_address_click(address)">
+            <div class="item item-divider">
+                Address
+            </div>
+            <div class="item item-paddingless">
+                <div class="row">
+                    <div class="col">
+                        <div class="card card-marginless">
+                            <div class="item item-divider">
+                                Physical Address
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Street</span>
+                                    <input type="text" placeholder="Enter street here" ng-model="address.physical_street1">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Street</span>
+                                    <input type="text" placeholder="Enter street here" ng-model="address.physical_street2">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Suburb</span>
+                                    <input type="text" placeholder="Enter suburb here" ng-model="address.physical_suburb">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">City</span>
+                                    <input type="text" placeholder="Enter city here" ng-model="address.physical_city">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Postcode</span>
+                                    <input type="text" placeholder="Enter postcode here" ng-model="address.physical_postcode">
+                                        </label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-50">
-                    <div class="card">
-                        <div class="item item-divider">
-                            Postal Address
-                        </div>
-                        <div class="item">
-                            <label class="item item-input">
-                                <span class="input-label">Street</span>
-                                <input type="text" placeholder="Enter street here">
-                                    </label>
-                        </div>
-                        <div class="item">
-                            <label class="item item-input">
-                                <span class="input-label">Street</span>
-                                <input type="text" placeholder="Enter street here">
-                                    </label>
-                        </div>
-                        <div class="item">
-                            <label class="item item-input">
-                                <span class="input-label">Suburb</span>
-                                <input type="text" placeholder="Enter suburb here">
-                                    </label>
-                        </div>
-                        <div class="item">
-                            <label class="item item-input">
-                                <span class="input-label">City</span>
-                                <input type="text" placeholder="Enter city here">
-                                    </label>
-                        </div>
-                        <div class="item">
-                            <label class="item item-input">
-                                <span class="input-label">Postcode</span>
-                                <input type="text" placeholder="Enter city here">
-                                    </label>
+                    <div class="col">
+                        <div class="card card-marginless">
+                            <div class="item item-divider">
+                                Postal Address <a href='#' style='font-size:12px;text-decoration: none;' ng-click="same_as_physical_address_click()">Same as Physical Address</a>                        </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Street</span>
+                                    <input type="text" placeholder="Enter street here" ng-model="address.postal_street1">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Street</span>
+                                    <input type="text" placeholder="Enter street here" ng-model="address.postal_street2">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Suburb</span>
+                                    <input type="text" placeholder="Enter suburb here" ng-model="address.postal_suburb">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">City</span>
+                                    <input type="text" placeholder="Enter city here" ng-model="address.postal_city">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Postcode</span>
+                                    <input type="text" placeholder="Enter postcode here" ng-model="address.postal_postcode">
+                                        </label>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="item item-divider item-divider-paddingless">
-            <div class="row">
-                <div class="col col-25 col-offset-50">
-                    <button class="button button-small button-block button-light">Cancel</button>
-                </div>
-                <div class="col col-25">
-                    <button class="button button-small button-block button-light">Save</button>
+            <div class="item item-divider item-divider-paddingless">
+                <div class="row">
+                    <div class="col col-25 col-offset-50">
+                        <button class="button button-small button-block button-light">Cancel2</button>
+                    </div>
+                    <div class="col col-25">
+                        <button type='submit' class="button button-small button-block button-light" ng-click="save_address_click(address)">Save</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
+    <!--end of address -->
 </ion-content>
