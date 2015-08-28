@@ -1,5 +1,5 @@
 app.controller('tagCtrl',
-               function($rootScope, $scope, $ionicModal, Tags, App_URLs) {
+               function($rootScope, $scope, $ionicModal, $ionicPopup, Tags, App_URLs) {
                
                
                     $ionicModal.fromTemplateUrl('modules/products/tags/templates/tags-popup.htm',
@@ -44,8 +44,17 @@ app.controller('tagCtrl',
                     };
                
                     $scope.delete_click = function(id){
-                        Tags.delete_tag(id);
-                    };
+                        var _title = "Are you sure?";
+                        var _templateUrl = "modules/products/tags/templates/delete_confirm.htm";
+                        var confirmPopup = $ionicPopup.confirm({title: _title, templateUrl: _templateUrl});
+               
+                        confirmPopup.then(function(res){
+                            if(res){
+                                Tags.delete_tag(id);
+                            }
+                        }); // end of then
+                        //Tags.delete_tag(id);
+                    }; // end of delete_click
                
                     $rootScope.$on('$includeContentLoaded', function(event, url){
                         if(url == App_URLs.tag_main_content){

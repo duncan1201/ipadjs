@@ -11,6 +11,7 @@ app.controller('brandCtrl',
                                                 });
                
                     $scope.add_new_brand_click = function () {
+                        $scope.popup_title = "Create product brand";
                         $scope.brand = {};
                         $scope.brandModal.show();
                     };
@@ -20,12 +21,21 @@ app.controller('brandCtrl',
                     };
                
                     $scope.edit_click = function(id) {
-               
-                    };
+                        var callback = function(tx, rlts){
+                            var rows = rlts.rows;
+                            if(rows.length > 0) {
+                                var item = rows.item(0);
+                                $scope.popup_title = "Edit product brand";
+                                $scope.brand = {id:item.id, brand_name:item.name, desc: item.desc};
+                                $scope.brandModal.show();
+                            }
+                        };
+                        Brands.get_brand(id, callback);
+                    }; // end of edit_click
                
                     $scope.delete_click = function(id) {
                         Brands.delete_brand(id);
-                    };
+                    }; // end of delete_click
                
                     $scope.brand_name_form_submit_click =
                         function(brand) {
@@ -35,7 +45,8 @@ app.controller('brandCtrl',
                                 $scope.brandModal.hide();
                             } else {
                                 console.log("brand_name_form_submit_click DEfined");
-                                //Brands.create_brand_name(brand);
+                                Brands.update_brand(brand);
+                                $scope.brandModal.hide();
                             }
                         };
                
@@ -113,13 +124,19 @@ brand.factory('Brands',
                         };
                         DbUtil.executeSql(json);
                     }, // end of delete_brand
-                    edit_brand: function(brand) {
+                    update_brand: function(brand) {
+                        var self = this;
                         var stmt = "update brands set name = ?, desc = ? where id = ?";
                         var callback_fun = function() {
-              
+                            self.all();
                         }; // end of callback_fun
-                        var json = {sql: stmt, params:[brand.name, brand.desc, brand.id], callback: callback_fun};
+                        var json = {sql: stmt, params:[brand.brand_name, brand.desc, brand.id], callback: callback_fun};
                         DbUtil.executeSql(json);
-                    } // end of edit_brand
+                    }, // end of edit_brand
+                    get_brand : function(id, callback_fun){
+                        var stmt = "select * from brands where id = ?";
+                        var json = {sql: stmt, params:[id], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    } // end of get_brand
                 }
               }); // end of brand.factory
