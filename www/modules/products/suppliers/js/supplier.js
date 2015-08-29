@@ -126,7 +126,7 @@ supplier.factory('Suppliers', function(DbUtil){
                  var callback_fun = function(tx, results){
                     if (results.rows.length > 0){
                         var item = results.rows.item(0);
-                 var ret = {id: item.id, name: item.name, default_markup: item.default_markup, desc: item.desc, company: item.company, contact_name: item.contact_name, phone: item.phone, mobile: item.mobile, fax: item.fax, email: item.email, website: item.website, physical_street: item.physical_street, physical_street2: item.physical_street2, physical_city: item.physical_city, physical_postcode: item.physical_postcode, physical_state: item.physical_state};
+                 var ret = {id: item.id, name: item.name, default_markup: item.default_markup, desc: item.desc, company: item.company, contact_name: item.contact_name, phone: item.phone, mobile: item.mobile, fax: item.fax, email: item.email, website: item.website, physical_street: item.physical_street, physical_street2: item.physical_street2, physical_city: item.physical_city, physical_postcode: item.physical_postcode, physical_state: item.physical_state, physical_country: item.physical_country, postal_street: item.postal_street, postal_street2: item.postal_street2, postal_city: item.postal_city, postal_postcode: item.postal_postcode, postal_state: item.postal_state, postal_country: item.postal_country};
                         console.log("get supplier:" + angular.toJson(ret));
                         var scope = angular.element(document.querySelector('#add_edit_supplier')).scope();
                         scope.$apply(function(){
@@ -155,8 +155,8 @@ supplier.factory('Suppliers', function(DbUtil){
                  var _callback = function(){
                     self.all_summary_default_callback();
                  };
-                 var stmt = "update suppliers set name = ?, default_markup = ?, desc = ?, company = ?, contact_name = ?, phone = ?, mobile = ?, fax = ?, email = ?, website = ?, physical_street = ?, physical_street2 = ?, physical_city = ?, physical_postcode = ?, physical_state = ? where id = ?";
-                 var json = {sql: stmt, params:[supplier.name, supplier.default_markup, supplier.desc, supplier.company, supplier.contact_name, supplier.phone, supplier.mobile, supplier.fax, supplier.email, supplier.website, supplier.physical_street, supplier.physical_street2, supplier.physical_city, supplier.physical_postcode, supplier.physical_state, supplier.id], callback: _callback};
+                 var stmt = "update suppliers set name = ?, default_markup = ?, desc = ?, company = ?, contact_name = ?, phone = ?, mobile = ?, fax = ?, email = ?, website = ?, physical_street = ?, physical_street2 = ?, physical_city = ?, physical_postcode = ?, physical_state = ?, physical_country = ?, postal_street = ?, postal_street2 = ?, postal_city = ?, postal_postcode = ?, postal_state = ?, postal_country = ?  where id = ?";
+                 var json = {sql: stmt, params:[supplier.name, supplier.default_markup, supplier.desc, supplier.company, supplier.contact_name, supplier.phone, supplier.mobile, supplier.fax, supplier.email, supplier.website, supplier.physical_street, supplier.physical_street2, supplier.physical_city, supplier.physical_postcode, supplier.physical_state, supplier.physical_country, supplier.postal_street, supplier.postal_street2, supplier.postal_city, supplier.postal_postcode, supplier.postal_state, supplier.postal_country, supplier.id], callback: _callback};
                  DbUtil.executeSql(json);
             } // end of update_supplier
         }// end of return
