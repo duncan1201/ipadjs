@@ -24,7 +24,7 @@ app.constant('Schema_SQLs',
               
               /* suppliers table */
               
-              'Create table if not exists suppliers(id integer primary key, name varchar(100) NOT NULL, default_markup integer, desc varchar(255), company varchar(100), contact_name varchar(100), phone varchar(100), mobile varchar(100), fax varchar(50), email varchar(50), website varchar(50), physical_street varchar(50), physical_city varchar(50), physical_postcode varchar(50), physical_state varchar(50), physical_country varchar(50), postal_street varchar(50), postal_city varchar(50), postal_postcode varchar(50), postal_state varchar(50), postal_country varchar(50))',
+              'Create table if not exists suppliers(id integer primary key, name varchar(100) NOT NULL, default_markup integer, desc varchar(255), company varchar(100), contact_name varchar(100), phone varchar(100), mobile varchar(100), fax varchar(50), email varchar(50), website varchar(50), physical_street varchar(50), physical_street2 varchar(50), physical_city varchar(50), physical_postcode varchar(50), physical_state varchar(50), physical_country varchar(50), postal_street varchar(50), postal_street2 varchar(50), postal_city varchar(50), postal_postcode varchar(50), postal_state varchar(50), postal_country varchar(50))',
               
               /* product types */
               'Create table if not exists product_types(id integer primary key, name varchar(50), desc varchar(100))',
