@@ -9,27 +9,33 @@
             <div class="item item-divider">Details</div>
             <div class="item">
                 <div class="row">
-                    <div class="col">
+                    <div class="col col-25">
                         <label class="item item-input">
                             <span class="input-label">Supplier name</span>
-                            <input type="text" placeholder="Enter supplier name here" ng-model="supplier.name">
-                                </label>
+                        </label>
+                    </div>
+                    <div class="col col-75">
+                        <input type="text" class='lightgray-outline' placeholder="Enter supplier name here" ng-model="supplier.name">&nbsp;
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class="col col-25">
                         <label class="item item-input">
                             <span class="input-label">Default markup</span>
-                            <input type="number" placeholder="Enter default markup here" ng-model="supplier.default_markup">
-                                </label>
+                        </label>
+                    </div>
+                    <div class="col col-75">
+                        <input type="number" class='lightgray-outline' placeholder="Enter default markup here" ng-model="supplier.default_markup">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class='col col-25' style='border:0px solid black'>
                         <label class="item item-input">
                             <span class="input-label">Description</span>
-                            <textarea rows="5" placeholder="Enter description here" ng-model="supplier.desc"></textarea>
                         </label>
+                    </div>
+                    <div class='col col-75'>
+                        <textarea rows="5" class='lightgray-outline' style='width:100%' ng-model="supplier.desc"></textarea>&nbsp;&nbsp;
                     </div>
                 </div>
             </div>
@@ -95,19 +101,23 @@
                                     <label class="item item-input item-stacked-label">
                                         <span>Street</span>
                                         <input type="text" placeholder="Enter street here">
-                                            </label>
+                                    </label>
+                                    <label class="item item-input item-stacked-label">
+                                        <span>Street</span>
+                                        <input type="text" placeholder="Enter street here">
+                                    </label>
                                     <label class="item item-input item-stacked-label">
                                         <span>City</span>
                                         <input type="text" placeholder="Enter city here">
-                                            </label>
+                                    </label>
                                     <label class="item item-input item-stacked-label">
                                         <span>Postcode</span>
                                         <input type="text" placeholder="Enter postcode here">
-                                            </label>
+                                    </label>
                                     <label class="item item-input item-stacked-label">
                                         <span>State</span>
                                         <input type="text" placeholder="Enter street here">
-                                            </label>
+                                    </label>
                                     <label class="item item-select item-stacked-label">
                                         <span>Country</span>
                                         <select>
@@ -129,7 +139,11 @@
                                     <label class="item item-input item-stacked-label">
                                         <span>Street</span>
                                         <input type="text" placeholder="Enter street here">
-                                            </label>
+                                    </label>
+                                    <label class="item item-input item-stacked-label">
+                                        <span>Street</span>
+                                        <input type="text" placeholder="Enter street here">
+                                    </label>
                                     <label class="item item-input item-stacked-label">
                                         <span>City</span>
                                         <input type="text" placeholder="Enter city here">

@@ -93,10 +93,18 @@ button.rounded {
 /* input outline*/
 input.lightgray-outline{
     outline-color: lightgray;
-    padding-left:.5em;
+    padding-left:0.5em;
     outline-width: 1px;
     outline-style: solid;
     width:100%;
+}
+
+textarea.lightgray-outline {
+    outline-width:1px;
+    outline-color:lightgray;
+    outline-style:solid;
+    padding-left:0.5em;
+    vertical-align:middle;
 }
 
 /* misc */
