@@ -45,7 +45,7 @@ app.controller('tagCtrl',
                
                     $scope.delete_click = function(id){
                         var _title = "Are you sure?";
-                        var _templateUrl = "modules/products/tags/templates/delete_confirm.htm";
+                        var _templateUrl = "modules/common/templates/delete_confirm.htm";
                         var confirmPopup = $ionicPopup.confirm({title: _title, templateUrl: _templateUrl});
                
                         confirmPopup.then(function(res){

@@ -55,3 +55,18 @@ util.factory('DbUtil',
                     } // end of executeSqls
                 }
             }); // end of DbUtil
+
+util.factory('Util', function($ionicPopup, $timeout) {
+             return {
+                // json = {title: , templateUrl:, timeout:}
+                alert: function(json) {
+                    var alert_popup = $ionicPopup.alert({title: json.title,
+                                                 templateUrl: json.templateUrl});
+                    if(angular.isDefined(json.timeout)){
+                        $timeout(function() {
+                            alert_popup.close();
+                        }, json.timeout);
+                    } // end if
+                } // end alert
+             }
+        }); // end of Util

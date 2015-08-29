@@ -1,5 +1,5 @@
 app.controller('brandCtrl',
-               function($scope, $ionicModal, Brands){
+               function($scope, $ionicModal, $ionicPopup, $timeout, Brands, Products, Util){
                
                     Brands.all();
                
@@ -34,27 +34,44 @@ app.controller('brandCtrl',
                     }; // end of edit_click
                
                     $scope.delete_click = function(id) {
-                        Brands.delete_brand(id);
+                        console.log("delete_click=" + id);
+                        var callback = function(tx, rlts){
+                            var count = rlts.rows.item(0).count ;
+                            console.log("count=" + count);
+                            if (count == 0){ // not in use
+                                var _title = "Are you sure?";
+                                var _templateUrl = "modules/common/templates/delete_confirm.htm";
+                                var confirmPopup = $ionicPopup.confirm({title: _title, templateUrl: _templateUrl});
+               
+                                confirmPopup.then(function(res){
+                                    if(res){
+                                        Brands.delete_brand(id);
+                                    }
+                                }); // end of then
+                            } else { // in use
+                                var _templateUrl = "modules/products/brands/templates/delete_alert.htm";
+                                Util.alert({title: "Can not delete", templateUrl: _templateUrl, timeout: 2500});
+                            }
+                        }; // callback
+                        Products.is_brand_in_use(id, callback);
+                        //Brands.delete_brand(id);
                     }; // end of delete_click
                
-                    $scope.brand_name_form_submit_click =
-                        function(brand) {
-                            if (!angular.isDefined(brand.id)){
-                                console.log("brand_name_form_submit_click NOT defined");
-                                Brands.create_brand_name_w_default_callback(brand);
-                                $scope.brandModal.hide();
-                            } else {
-                                console.log("brand_name_form_submit_click DEfined");
-                                Brands.update_brand(brand);
-                                $scope.brandModal.hide();
-                            }
-                        };
+                    $scope.brand_name_form_submit_click = function(brand) {
+                        if (!angular.isDefined(brand.id)){
+                            Brands.create_brand_name_w_default_callback(brand);
+                            $scope.brandModal.hide();
+                        } else {
+                            Brands.update_brand(brand);
+                            $scope.brandModal.hide();
+                        }
+                    };
                
                }); // end of brandCtrl
 var brand = angular.module('brand', ['ionic', 'util']);
 
 brand.factory('Brands',
-              function(DbUtil){
+              function(DbUtil) {
                 return {
                     all: function(_callback) {
                         var self = this;
