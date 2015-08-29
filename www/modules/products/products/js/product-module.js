@@ -113,19 +113,14 @@ product.factory('Products',
                         DbUtil.executeSql(json);
                     }, // end of deactivate_product
                     is_brand_in_use : function(brand_id, _callback){
-                        var self = this;
                         var stmt = "select count(*) as count from products where brand_id = ?";
-                        var callback_fun = null;
-                        if(angular.isDefined(_callback)){
-                            callback_fun = _callback;
-                        } else {
-                            callback_fun = function(tx, rlts) {
-                                var rows = rlts.rows;
-                                console.log("is_brand_in_use=" + angular.toJson(rows.item(0)));
-                            }; // callback_fun
-                        }
-                        var json = {sql: stmt, params: [brand_id], callback: callback_fun};
+                        var json = {sql: stmt, params: [brand_id], callback: _callback};
                         DbUtil.executeSql(json);
-                    } // end of is_brand_in_use
+                    }, // end of is_brand_in_use
+                    is_supplier_in_use : function(supplier_id, _callback) {
+                        var stmt = "select count(*) as count from products where supplier_id = ?";
+                        var json = {sql: stmt, params:[supplier_id], callback: _callback};
+                        DbUtil.executeSql(json);
+                    } // end of is_supplier_in_use
                 };
             }); // end of product.factory

@@ -1,27 +1,23 @@
 app.controller('supplierCtrl',
-               function($rootScope, $scope, Suppliers, App_URLs){
+               function($rootScope, $scope, $ionicPopup, Suppliers, App_URLs, Products, Util){
                     var main_content_scope = angular.element(document.querySelector('#suppliers_main_content')).scope();
 
                     if (main_content_scope == $scope){
                         Suppliers.all_summary_default_callback();
                     }
                
-                    $rootScope.$on('$includeContentLoaded',
-                          function(event, url){
-                                   
-                            if(url == App_URLs.supplier_add_edit){
-                                   if(angular.isDefined($scope.edit_supplier_id)){
-                                        Suppliers.get_supplier_with_default_callback($scope.edit_supplier_id);
-                                   }
+                    $rootScope.$on('$includeContentLoaded', function(event, url){
+                        if(url == App_URLs.supplier_add_edit){
+                            if(angular.isDefined($scope.edit_supplier_id)){
+                                Suppliers.get_supplier_with_default_callback($scope.edit_supplier_id);
                             }
-                          });
+                        }
+                    });
                
                     $scope.new_supplier_click = function() {
                         console.log("new supplier click");
                         $rootScope.ion_content_template = App_URLs.supplier_add_edit;
                     };
-               
-               
                
                     $scope.edit_supplier_click = function(id){
                         console.log("edit supplier click:" + id);
@@ -44,7 +40,26 @@ app.controller('supplierCtrl',
                     };
                
                     $scope.delete_supplier_click = function(id){
-                        Suppliers.delete_supplier(id);
+                        var callback = function(tx, rlts) {
+                            var count = rlts.rows.item(0).count;
+                            console.log("delete supplier click callback=" + count);
+                            if (count == 0) {
+                                var _title = "Are you sure?";
+                                var _templateUrl = "modules/common/templates/delete_confirm.htm";
+                                var confirmPopup = $ionicPopup.confirm({title: _title, templateUrl: _templateUrl});
+               
+                                confirmPopup.then(function(res){
+                                    if(res){
+                                        Suppliers.delete_supplier(id);
+                                    }
+                                }); // end of then
+                            } else {
+                                var _templateUrl = "modules/products/suppliers/templates/delete_alert.htm";
+                                Util.alert({title: "Cannot delete", templateUrl: _templateUrl, timeout: 2500});
+                            }
+                        }; // callback
+               
+                        Products.is_supplier_in_use(id, callback);
                     };
                
                });
@@ -53,15 +68,10 @@ var supplier = angular.module('supplier', ['ionic', 'util']);
 
 supplier.factory('Suppliers', function(DbUtil){
         return {
-            all_summary: function(success_callback){
-                 var db = DbUtil.openDb();
-                 
-                 db.transaction(function(tx){
-                                tx.executeSql(
-                                              'select id, name, default_markup, desc from suppliers',
-                                              [],
-                                              success_callback); // end of tx.executeSql
-                                }); // end of db.transaction
+            all_summary: function(_callback){
+                 var stmt = 'select id, name, default_markup, desc from suppliers';
+                 var json = {sql: stmt, params:[], callback: _callback};
+                 DbUtil.executeSql(json);
             }, // end of all_summary
             all_summary_default_callback: function(){
                  var self = this;
@@ -141,9 +151,10 @@ supplier.factory('Suppliers', function(DbUtil){
                                 }); // end of db.transcation
             }, // end of delete_supplier
             update_supplier: function(supplier){
+                 var self = this;
                  var call_back = function(){
-                                    this.all_summary_default_callback();
-                                };
+                    self.all_summary_default_callback();
+                 };
                  
                  var db = DbUtil.openDb();
                  db.transaction(function(tx){
