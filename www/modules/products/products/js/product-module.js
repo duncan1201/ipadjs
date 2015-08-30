@@ -121,6 +121,11 @@ product.factory('Products',
                         var stmt = "select count(*) as count from products where supplier_id = ?";
                         var json = {sql: stmt, params:[supplier_id], callback: _callback};
                         DbUtil.executeSql(json);
-                    } // end of is_supplier_in_use
+                    }, // end of is_supplier_in_use
+                    is_type_in_use : function(type_id, _callback) {
+                        var stmt = "select count(*) as count from products where product_type_id = ?";
+                        var json = {sql: stmt, params:[type_id], callback: _callback};
+                        DbUtil.executeSql(json);
+                    } // end of is_type_in_use
                 };
             }); // end of product.factory

@@ -1,5 +1,5 @@
 app.controller('productTypeCtrl',
-               function($rootScope, $scope, $ionicModal, ProductTypes){
+               function($rootScope, $scope, $ionicModal, $ionicPopup, ProductTypes, Products, Util){
                
                     $ionicModal.fromTemplateUrl('modules/products/productTypes/templates/product-types-popup.htm',
                                                 function(modal) {
@@ -33,7 +33,24 @@ app.controller('productTypeCtrl',
                     }; // end edit_click
                
                     $scope.delete_click = function(id) {
-                        ProductTypes.delete_product_type(id);
+                        var callback = function(tx, rlts){
+                            var count = rlts.rows.item(0).count;
+                            if (count == 0){
+                                var _title = "Are you sure?";
+                                var _templateUrl = "modules/common/templates/delete_confirm.htm";
+                                var confirmPopup = $ionicPopup.confirm({title: _title, templateUrl: _templateUrl});
+               
+                                confirmPopup.then(function(res){
+                                    if(res){
+                                        ProductTypes.delete_product_type(id);
+                                    }
+                                }); // end of then
+                            } else {
+                                var _templateUrl = "modules/products/productTypes/templates/delete_alert.htm";
+                                Util.alert({title:"Cannot delete", templateUrl: _templateUrl, timeout:2500});
+                            }
+                        };
+                        Products.is_type_in_use(id, callback);
                     };
                
                     $scope.product_type_form_submit_click = function(product_type) {
