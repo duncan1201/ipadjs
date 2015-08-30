@@ -1,16 +1,13 @@
 app.controller('supplierCtrl',
                function($rootScope, $scope, $ionicPopup, Suppliers, App_URLs, Products, Util){
-                    var main_content_scope = angular.element(document.querySelector('#suppliers_main_content')).scope();
-
-                    if (main_content_scope == $scope){
-                        Suppliers.all_summary_default_callback();
-                    }
                
                     $rootScope.$on('$includeContentLoaded', function(event, url){
                         if(url == App_URLs.supplier_add_edit){
                             if(angular.isDefined($scope.edit_supplier_id)){
                                 Suppliers.get_supplier_with_default_callback($scope.edit_supplier_id);
                             }
+                        } else if (url == App_URLs.supplier_main_content) {
+                            Suppliers.all_summary_default_callback();
                         }
                     });
                
@@ -26,12 +23,19 @@ app.controller('supplierCtrl',
                     };
                
                     $scope.supplier_form_submit_click = function(supplier) {
-                        $scope.edit_supplier_id = null;
-                        $rootScope.ion_content_template = "modules/products/suppliers/templates/main_content.htm";
+                        var callback = function(tx, rlts){
+                            $scope.$apply(function(){
+                                $scope.edit_supplier_id = null;
+                            });
+                            $rootScope.$apply(function(){
+                                $rootScope.ion_content_template = App_URLs.supplier_main_content;
+                            });
+               
+                        }; // end of callback
                         if (angular.isDefined(supplier.id)){
-                            Suppliers.update_supplier(supplier);
+                            Suppliers.update_supplier(supplier, callback);
                         } else {
-                            Suppliers.create_new_supplier(supplier);
+                            Suppliers.create_new_supplier(supplier, callback);
                         }
                     };
                
@@ -61,12 +65,11 @@ app.controller('supplierCtrl',
                
                         Products.is_supplier_in_use(id, callback);
                     };
-               
                });
 
 var supplier = angular.module('supplier', ['ionic', 'util']);
 
-supplier.factory('Suppliers', function(DbUtil){
+supplier.factory('Suppliers', function($rootScope, DbUtil, App_URLs){
         return {
             all_summary: function(_callback){
                  var stmt = 'select id, name, default_markup, desc from suppliers';
@@ -98,24 +101,15 @@ supplier.factory('Suppliers', function(DbUtil){
                  }
                  return ret;
             }, // end of parse_suppliers_summary
-            create_new_supplier: function(new_supplier) {
+            create_new_supplier: function(supplier, external_callback) {
                  var self = this;
                 
-                 console.log(new_supplier.company);
-                 console.log(new_supplier.contact_name);
-                 console.log(new_supplier.phone);
-                var db = DbUtil.openDb();
-                 console.log("before inserting into suppliers table");
-                 var insertSql = 'insert into suppliers (name, default_markup, desc, company, contact_name, phone, mobile, fax, email, website) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-                db.transaction(function(tx){
-                               tx.executeSql(insertSql,
-                                             [new_supplier.name, new_supplier.default_markup, new_supplier.desc, new_supplier.company, new_supplier.contact_name, new_supplier.phone, new_supplier.mobile, new_supplier.fax, new_supplier.email, new_supplier.website],
-                                             function(tx, results){
-                                                self.all_summary_default_callback();
-                                             }, function(tx, e){
-                                             console.log("error=" + e.message);
-                                             });
-                }); // end of db.transction
+                 console.log("create_new_supplier=" + angular.toJson(supplier));
+                 var stmt = 'insert into suppliers (name, default_markup, desc, company, contact_name, phone, mobile, fax, email, website, physical_street, physical_street2, physical_city, physical_postcode, physical_state, physical_country, postal_street, postal_street2, postal_city, postal_postcode, postal_state, postal_country) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+                 var callback_fun = external_callback;
+                 var json = {sql: stmt, params:[supplier.name, supplier.default_markup, supplier.desc, supplier.company, supplier.contact_name, supplier.phone, supplier.mobile, supplier.fax, supplier.email, supplier.website, supplier.physical_street, supplier.physical_street2, supplier.physical_city, supplier.physical_postcode, supplier.physical_state, supplier.physical_country, supplier.postal_street, supplier.postal_street2, supplier.postal_city, supplier.postal_postcode, supplier.postal_state, supplier.postal_country], callback: callback_fun};
+                 DbUtil.executeSql(json);
             }, // end of create_new_supplier
             get_supplier: function(id, callback_fun){
                  var query = 'select * from suppliers where id = ?';
@@ -149,12 +143,10 @@ supplier.factory('Suppliers', function(DbUtil){
                                                   });
                                 }); // end of db.transcation
             }, // end of delete_supplier
-            update_supplier: function(supplier) {
+            update_supplier: function(supplier, external_callback) {
                  console.log("update_supplier=" + angular.toJson(supplier));
                  var self = this;
-                 var _callback = function(){
-                    self.all_summary_default_callback();
-                 };
+                 var _callback = external_callback;
                  var stmt = "update suppliers set name = ?, default_markup = ?, desc = ?, company = ?, contact_name = ?, phone = ?, mobile = ?, fax = ?, email = ?, website = ?, physical_street = ?, physical_street2 = ?, physical_city = ?, physical_postcode = ?, physical_state = ?, physical_country = ?, postal_street = ?, postal_street2 = ?, postal_city = ?, postal_postcode = ?, postal_state = ?, postal_country = ?  where id = ?";
                  var json = {sql: stmt, params:[supplier.name, supplier.default_markup, supplier.desc, supplier.company, supplier.contact_name, supplier.phone, supplier.mobile, supplier.fax, supplier.email, supplier.website, supplier.physical_street, supplier.physical_street2, supplier.physical_city, supplier.physical_postcode, supplier.physical_state, supplier.physical_country, supplier.postal_street, supplier.postal_street2, supplier.postal_city, supplier.postal_postcode, supplier.postal_state, supplier.postal_country, supplier.id], callback: _callback};
                  DbUtil.executeSql(json);
