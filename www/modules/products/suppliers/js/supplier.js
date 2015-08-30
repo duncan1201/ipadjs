@@ -132,15 +132,12 @@ supplier.factory('Suppliers', function($rootScope, DbUtil, App_URLs){
             }, // end of get_supplier_with_default_callback
             delete_supplier: function(id){
                  var self = this;
-                 var db = DbUtil.openDb();
-                 db.transaction(function(tx){
-                                    var deleteSql = "delete from suppliers where id = ?";
-                                    tx.executeSql(deleteSql,
-                                                  [id],
-                                                  function(tx, results){
-                                                    self.all_summary_default_callback();
-                                                  });
-                                }); // end of db.transcation
+                 var stmt = "delete from suppliers where id = ?";
+                 var _callback = function(tx, results){
+                    self.all_summary_default_callback();
+                 });
+                 var json = {sql: stmt, params:[id], callback: _callback};
+                 DbUtil.executeSql(json);
             }, // end of delete_supplier
             update_supplier: function(supplier, external_callback) {
                  console.log("update_supplier=" + angular.toJson(supplier));
