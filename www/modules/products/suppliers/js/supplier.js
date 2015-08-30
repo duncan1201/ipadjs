@@ -103,8 +103,7 @@ supplier.factory('Suppliers', function($rootScope, DbUtil, App_URLs){
             }, // end of parse_suppliers_summary
             create_new_supplier: function(supplier, external_callback) {
                  var self = this;
-                
-                 console.log("create_new_supplier=" + angular.toJson(supplier));
+
                  var stmt = 'insert into suppliers (name, default_markup, desc, company, contact_name, phone, mobile, fax, email, website, physical_street, physical_street2, physical_city, physical_postcode, physical_state, physical_country, postal_street, postal_street2, postal_city, postal_postcode, postal_state, postal_country) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
                  var callback_fun = external_callback;
