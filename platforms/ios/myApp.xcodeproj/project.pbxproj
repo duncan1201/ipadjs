@@ -45,8 +45,8 @@
 		B137C263AA1543A2B1302340 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = AFF58571D0A54D4FB1721250 /* CDVDevice.m */; };
 		374AB032D79B4A078BB18271 /* CDVSplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = C38541D531344B9CB58E3505 /* CDVSplashScreen.m */; };
 		B773A8531BD74C5EA7103C31 /* CDVViewController+SplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 88D9BA4D6F1D4573A8C90D14 /* CDVViewController+SplashScreen.m */; };
-		1739E298D84D46268E9C934E /* SQLitePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 84123EF4C92C46308188C2A5 /* SQLitePlugin.m */; };
-		455D6CE64372445FBE8D652B /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C8C28F62F94CD49DBD4060 /* libsqlite3.dylib */; };
+		83E700A983A04F0FA8AD4828 /* EVOBLE.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D9EF6FBA4B4841A197E12E /* EVOBLE.m */; };
+		73DCD7CB5BCD4501B09D4C47 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A656DC3936EF40D0A62FD5AE /* CoreBluetooth.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,9 +124,9 @@
 		88D9BA4D6F1D4573A8C90D14 /* CDVViewController+SplashScreen.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVViewController+SplashScreen.m"; path = "cordova-plugin-splashscreen/CDVViewController+SplashScreen.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		7B01821814F54A37BBD5F4D7 /* CDVSplashScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVSplashScreen.h"; path = "cordova-plugin-splashscreen/CDVSplashScreen.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		3FE9F8EE9EF04F6BB08F379D /* CDVViewController+SplashScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVViewController+SplashScreen.h"; path = "cordova-plugin-splashscreen/CDVViewController+SplashScreen.h"; sourceTree = "<group>"; fileEncoding = 4; };
-		84123EF4C92C46308188C2A5 /* SQLitePlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "SQLitePlugin.m"; path = "cordova-sqlite-common/SQLitePlugin.m"; sourceTree = "<group>"; fileEncoding = 4; };
-		6E876BE72E504C059278DC00 /* SQLitePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SQLitePlugin.h"; path = "cordova-sqlite-common/SQLitePlugin.h"; sourceTree = "<group>"; fileEncoding = 4; };
-		E4C8C28F62F94CD49DBD4060 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsqlite3.dylib"; path = "usr/lib/libsqlite3.dylib"; sourceTree = SDKROOT; fileEncoding = 4; };
+		00D9EF6FBA4B4841A197E12E /* EVOBLE.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "EVOBLE.m"; path = "com.coworkr.ble/EVOBLE.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		05086C4CF8DA4E0BBA6F9387 /* EVOBLE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EVOBLE.h"; path = "com.coworkr.ble/EVOBLE.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		A656DC3936EF40D0A62FD5AE /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CoreBluetooth.framework"; path = "System/Library/Frameworks/CoreBluetooth.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,7 +138,7 @@
 				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
-				455D6CE64372445FBE8D652B /* libsqlite3.dylib in Frameworks */,
+				73DCD7CB5BCD4501B09D4C47 /* CoreBluetooth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,7 +211,7 @@
 				5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
 				305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */,
-				E4C8C28F62F94CD49DBD4060 /* libsqlite3.dylib */,
+				A656DC3936EF40D0A62FD5AE /* CoreBluetooth.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -239,8 +239,8 @@
 				88D9BA4D6F1D4573A8C90D14 /* CDVViewController+SplashScreen.m */,
 				7B01821814F54A37BBD5F4D7 /* CDVSplashScreen.h */,
 				3FE9F8EE9EF04F6BB08F379D /* CDVViewController+SplashScreen.h */,
-				84123EF4C92C46308188C2A5 /* SQLitePlugin.m */,
-				6E876BE72E504C059278DC00 /* SQLitePlugin.h */,
+				00D9EF6FBA4B4841A197E12E /* EVOBLE.m */,
+				05086C4CF8DA4E0BBA6F9387 /* EVOBLE.h */,
 			);
 			name = Plugins;
 			path = "myApp/Plugins";
@@ -431,7 +431,7 @@
 				B137C263AA1543A2B1302340 /* CDVDevice.m in Sources */,
 				374AB032D79B4A078BB18271 /* CDVSplashScreen.m in Sources */,
 				B773A8531BD74C5EA7103C31 /* CDVViewController+SplashScreen.m in Sources */,
-				1739E298D84D46268E9C934E /* SQLitePlugin.m in Sources */,
+				83E700A983A04F0FA8AD4828 /* EVOBLE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

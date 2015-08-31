@@ -41,6 +41,12 @@ app.controller('supplierCtrl',
                
                     $scope.same_as_physical_address_click = function(){
                         console.log("same_as_physical_address_click");
+                        $scope.supplier.postal_street = $scope.supplier.physical_street;
+                        $scope.supplier.postal_street2 = $scope.supplier.physical_street2;
+                        $scope.supplier.postal_city = $scope.supplier.physical_city;
+                        $scope.supplier.postal_postcode = $scope.supplier.physical_postcode;
+                        $scope.supplier.postal_state = $scope.supplier.physical_state;
+                        $scope.supplier.postal_country = $scope.supplier.physical_country;
                     };
                
                     $scope.delete_supplier_click = function(id){
@@ -135,7 +141,7 @@ supplier.factory('Suppliers', function($rootScope, DbUtil, App_URLs){
                  var stmt = "delete from suppliers where id = ?";
                  var _callback = function(tx, results){
                     self.all_summary_default_callback();
-                 });
+                 };
                  var json = {sql: stmt, params:[id], callback: _callback};
                  DbUtil.executeSql(json);
             }, // end of delete_supplier

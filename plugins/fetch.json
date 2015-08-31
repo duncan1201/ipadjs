@@ -47,11 +47,10 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-sqlite-common": {
+    "com.coworkr.ble": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/litehelpers/cordova-sqlite-common",
-            "subdir": "."
+            "type": "registry",
+            "id": "com.coworkr.ble"
         },
         "is_top_level": true,
         "variables": {}

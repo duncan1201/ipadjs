@@ -194,7 +194,12 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                     console.log("open_sale_click=" + sale_id);
                 }; // end of open_sale_click
                
-               
+               $scope.pay_click = function() {
+                    var callback = function(tx, rlts){
+                        
+                    };//end of callback
+                    Sales.update_sale_status("paid");
+               }; // end of pay_click
                
 }); // sellCtrl
 
