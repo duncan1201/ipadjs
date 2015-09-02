@@ -46,7 +46,7 @@
             </div>
             
             <!--  current sale: sale items   -->
-            <div class='item' ng-show='is_current_sale_tab_shown()' style='height:250px;overflow:scroll;background-color:#efefef;padding:0;margin:0'>
+            <div class='item' ng-show='is_current_sale_tab_shown()' style='height:250px;overflow:scroll;background-color:#f7f7f7;padding:0;margin:0'>
                 <div ng-repeat="sale_item in current_sale.items" style='border-top:0px solid yellow;border-bottom:1px solid gray;height:40px;line-height:40px;vertical-align:top;'>
                     <!-- quantity -->
                     <button class='button button-small button-clear' style='display:inline-block;border:1px solid gray;width:18px;height:18px;border-radius:50%;vertical-align:middle;color:black;margin-left:0.5em' ng-click="sale_item_quantity_click($event, {{current_sale.id}}, {{sale_item}})">{{sale_item.quantity}}</button>
@@ -63,7 +63,7 @@
             </div>
             
             <!--  current sale: subtotal, taxes, total   -->
-            <div class='item' ng-show='is_current_sale_tab_shown()' style='background-color:gray;padding-top:0;padding-bottom:0;padding-right:0'>
+            <div class='item' ng-show='is_current_sale_tab_shown()' style='background-color:#ffffff;padding-top:0;padding-bottom:0;padding-right:0'>
                 <div class='row'>
                     <div class='col'>Subtotal</div>
                     <div class='col'>{{current_sale.subtotal | currency}}</div>
@@ -81,7 +81,7 @@
             </div>
             
             <!-- current sale: bottom buttons -->
-            <div class='item item-divider' ng-show='is_current_sale_tab_shown()' style='position:absolute; bottom: 0;background-color:darkgray;padding-left:1px;padding-right:1px;margin-left:1px; margin-right:1px;width:100%'>
+            <div class='item item-divider' ng-show='is_current_sale_tab_shown()' style='position:absolute; bottom: 0;background-color:#f0f0f0;padding-left:1px;padding-right:1px;margin-left:1px; margin-right:1px;width:100%'>
                 <div class="row">
                     <div class='col'>
                         <button class='button-block sellbtn' ng-click='void_click(current_sale.id)'>

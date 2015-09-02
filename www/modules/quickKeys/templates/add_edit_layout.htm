@@ -112,7 +112,7 @@
                 <!-- layout keys -->
                 <div class="item" id="layout_keys_container">
                     <div style='float:left'>
-                        <div ng-repeat="key in layout.active_group.keys" ng-click='key_click($event, key)' class='layout-item' style='background-color:{{get_display_color(key.color)}}'>
+                        <div ng-repeat="key in layout.active_group.keys" ng-click='key_click($event, key)' class='layout-item {{$index < 5 ? "layout-item-first-row": ""}}' style='background-color:{{get_display_color(key.color)}}'>
                             {{key.display_name}}
                         </div>
                     </div>

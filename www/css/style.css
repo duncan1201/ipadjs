@@ -150,13 +150,31 @@ span.center {
     width:100px;
     height:50px;
     line-height: 45px;
-    margin-left:2px;
-    margin-top:2px;
+    margin-left:0px;
+    margin-top:0px;
     margin-bottom:auto;
-    border:1px solid black;
+    border-bottom:1px solid black;
+    border-right:1px solid black;
     cursor: pointer;
-    border-radius:6px;
+    border-radius:0px;
 }
+
+.layout-item-first-row {
+    display: inline-block;
+    vertical-align:middle;
+    text-align:center;
+    float:left;
+    width:100px;
+    height:50px;
+    line-height: 45px;
+    margin-left:0px;
+    margin-top:0px;
+    margin-bottom:auto;
+    border-top:1px solid black;
+    cursor: pointer;
+    border-radius:0px;
+}
+
 .group-item {
     float:left;
     display: inline-block;
@@ -207,7 +225,8 @@ span.center {
 
 #layout_keys_container {
     height:200px;
-    background-color:#eeeeee;
+    background-color:#fefefe;
     margin:0;
     padding-top:4px;
+    padding-left:0px;
 }
