@@ -6,49 +6,52 @@ product.factory('Products',
                     return {
                         all_summary: function(_callback){
                 
-                        var stmt = "select p.* , date(p.creation_date) as creation_date, pt.name as product_type_name ,  s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id left join product_types pt on pt.id = p.product_type_id";
-                        var json = { sql: stmt, params:[], callback: _callback};
+                            var stmt = "select p.* , date(p.creation_date) as creation_date, pt.name as product_type_name ,  s.name as supplier_name, b.name as brand_name from products p left join suppliers s on p.supplier_id = s.id left join brands b on p.brand_id = b.id left join product_types pt on pt.id = p.product_type_id";
+                
+                            var callback_fun = null;
+                            if (angular.isDefined(_callback)){
+                                callback_fun = _callback;
+                            } else {
+                                callback_fun = function(tx, results) {
+                                    var rows = results.rows;
+                                    var ret = [];
+                                    for(var i = 0; i < rows.length; i++) {
+                                        var item = rows.item(i);
+                                        ret.push({
+                                            id: item.id,
+                                            product_name: item.product_name,
+                                            creation_date: item.creation_date,
+                                            active: item.active,
+                                            tags: item.tags_string == null? []: item.tags_string.split(",").sort(),
+                                            product_type: item.product_type_name,
+                                            brand_name: item.brand_name,
+                                            supplier_id: item.supplier_id,
+                                            supplier_name: item.supplier_name,
+                                            retail_price: item.retail_price,
+                                            current_stock: item.current_stock
+                                        });
+                                    } // end of for
+                
+                                    var scope = angular.element(document.querySelector('#products_main_content')).scope();
+                                    scope.$apply(function(){
+                                        scope.products = ret;
+                                    });
+                                }; // end of callback_function
+                            } // else
+                        var json = { sql: stmt, params:[], callback: callback_fun};
                         DbUtil.executeSql(json);
                     }, // end of all_summary
-                    all_summary_with_default_callback: function(){
-                
-                        var callback_function = function(tx, results) {
-                            var rows = results.rows;
-                            var ret = [];
-                            for(var i = 0; i < rows.length; i++) {
-                                var item = rows.item(i);
-                                ret.push({
-                                         id: item.id,
-                                         product_name: item.product_name,
-                                         creation_date: item.creation_date,
-                                         active: item.active,
-                                         tags: item.tags_string == null? []: item.tags_string.split(",").sort(),
-                                         product_type: item.product_type_name,
-                                         brand_name: item.brand_name,
-                                         supplier_id: item.supplier_id,
-                                         supplier_name: item.supplier_name,
-                                         retail_price: item.retail_price
-                                });
-                            } // end of for
-                
-                            var scope = angular.element(document.querySelector('#products_main_content')).scope();
-                            scope.$apply(function(){
-                                scope.products = ret;
-                            });
-                        }; // end of callback_function
-                        this.all_summary(callback_function);
-                    }, // end of all_summary_with_default_callback
                     create_product : function (product) {
                         console.log("create_product.product_name=" + product.product_name);
                         console.log("create_product.desc=" + product.desc);
                         var self = this;
                         var callback_function = function(){
-                            self.all_summary_with_default_callback();
+                            self.all_summary();
                         };
                         var insertSql = "insert into products (product_name, product_handle, desc, creation_date, product_type_id, brand_id, supplier_id, supply_price, markup, retail_price, stock_keeping_unit, current_stock, reorder_point, reorder_amount) values (?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         var json = {
                             sql: insertSql,
-                            params: [product.product_name, product.product_handle, product.desc, product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.retail_price, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount],
+                params: [product.product_name, product.product_handle, product.desc, product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.retail_price, product.stock_keeping_unit, product.current_stock == null? 0: product.current_stock, product.reorder_point, product.reorder_amount],
                             callback: callback_function};
                         DbUtil.executeSql(json);
                     }, // end of create_product
@@ -106,7 +109,7 @@ product.factory('Products',
                     set_product_active: function(id, active){ // activate: 0 or 1
                         var self = this;
                         var _callback = function (tx, results) {
-                            self.all_summary_with_default_callback();
+                            self.all_summary();
                         };
                         var updateSql = "update products set active = ? where id = ?";
                         var json = {sql: updateSql, params:[active, id], callback: _callback};

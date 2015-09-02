@@ -166,7 +166,7 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                             Sales.update_sale_status(sale_id, 'current');
                         } else {
                             var park_tap = function(e){
-                                console.log("park tapped=");
+                                console.log("park tapped haha=");
                             }; // end of park_tap
                
                             var _title = "Loading a Saved Sale";
@@ -178,12 +178,12 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                                                                {text: 'Cancel'},
                                                                {
                                                                     text: 'Void',
-                                                                    onTap: function(e){}
+                                                                    onTap: function(e){console.log('void tap===')}
                                                                },
                                                                {
                                                                     text: 'Park',
                                                                     type: 'button-positive',
-                                                                    onTap: park_tap(e)
+                                                                    onTap: function(e){}
                                                                }]
                                                       });
 
@@ -196,9 +196,10 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                
                $scope.pay_click = function() {
                     var callback = function(tx, rlts){
-                        
+               
                     };//end of callback
-                    Sales.update_sale_status("paid");
+               
+                    Sales.update_sale_status(sale_id, "paid", callback);
                }; // end of pay_click
                
 }); // sellCtrl

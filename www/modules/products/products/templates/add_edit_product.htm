@@ -8,7 +8,7 @@
         </div>
     </div>
     
-    <form ng-submit="product_form_submit_click(product)">
+    <form ng-submit="product_form_submit_click(product)" name="product_form">
         <input type="hidden" ng-model="product.id"/>
         <div class="card">
             <div class="item item-divider">Details</div>
@@ -135,32 +135,34 @@
                     <div class="col">
                         <label class="item item-input">
                             <span class="input-label">Stock keeping unit</span>
-                            <input type="text" class="lightgray-outline" placeholder="Enter stock keeping unit here" ng-model="product.stock_keeping_unit">
+                            <input type="text" class="lightgray-outline width-95" placeholder="Enter stock keeping unit here" ng-model="product.stock_keeping_unit">
                         </label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label class="item item-input item-stacked-label">
-                            <span class="input-label">Current stock</span>
-                            <input type="number" min="0" class="lightgray-outline" ng-model="product.current_stock">
+                            <span class="input-label required">Current stock</span>
+                            <input type="number" required="true" name="current_stock" class="lightgray-outline" style='width:95%' ng-model="product.current_stock">
                                 </label>
                     </div>
                     <div class="col">
                         <label class="item item-input item-stacked-label">
                             <span class="input-label">Re-order point</span>
-                            <input type="number" min="0" class="lightgray-outline" ng-model="product.reorder_point">
+                            <input type="number" min="0" name="reorder_point" class="lightgray-outline" style='width:95%' ng-model="product.reorder_point">
                                 </label>
                     </div>
                     <div class="col">
                         <label class="item item-input item-stacked-label">
                             <span class="input-label">Re-order amount</span>
-                            <input type="number" min="0" class="lightgray-outline" ng-model="product.reorder_amount">
+                            <input type="number" min="0" class="lightgray-outline" style='width:95%' ng-model="product.reorder_amount">
                                 </label>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <span class="error_alert center" ng-show="product_form.current_stock.$error.required">Current stock is required</span>
         
         <div class="card">
             <div class="item item-divider item-divider-paddingless">
@@ -169,20 +171,10 @@
                         <button class="button button-small button-block button-light" ng-click="product_form_cancel_click()">Cancel</button>
                     </div>
                     <div class="col col-25">
-                        <button class="button button-small button-block button-light" type="submit">Save Product</button>
+                        <button ng-disabled="product_form.$invalid" class="button button-small button-block button-light" type="submit">Save Product</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </ion-content>
-
-<script>
-    $(document).ready(function () {
-                      /*
-                      var availableTags = $('#taglist').find('option').map(function () {
-                                                                             return this.value;
-                                                                             }).get();
-                      $('#product_tag').autocomplete({ source: availableTags });*/
-                      });
-</script>

@@ -126,6 +126,16 @@ span.center {
     text-align:center;
 }
 
+.required:after {
+    content: "*";
+    color: red;
+    font-weight:bold;
+}
+
+.error_alert {
+    color:red;
+}
+
 /* Layouts */
 .layout {
     border:1px solid gray;

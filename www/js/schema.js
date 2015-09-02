@@ -30,7 +30,7 @@ app.constant('Schema_SQLs',
               'Create table if not exists product_types(id integer primary key, name varchar(50), desc varchar(100))',
               
               /* products table */
-              'Create table if not exists products(id integer primary key, product_name varchar(100), product_handle varchar(100), desc varchar(255), creation_date datetime, active boolean default 1, tags_string varchar(200), product_type_id integer, brand_id integer, supplier_id integer, supply_price real, markup real, retail_price real, stock_keeping_unit  varchar(100), current_stock integer, reorder_point integer, reorder_amount integer, foreign key (brand_id) references Brands(id), foreign key (supplier_id) references Suppliers(id))',
+              'Create table if not exists products(id integer primary key, product_name varchar(100), product_handle varchar(100), desc varchar(255), creation_date datetime, active boolean default 1, tags_string varchar(200), product_type_id integer, brand_id integer, supplier_id integer, supply_price real, markup real, retail_price real, stock_keeping_unit  varchar(100), current_stock integer NOT NULL DEFAULT 0, reorder_point integer, reorder_amount integer, foreign key (brand_id) references Brands(id), foreign key (supplier_id) references Suppliers(id))',
               
               /* brands table */
               'Create table if not exists brands(id integer primary key, name varchar(50), desc varchar(100))',

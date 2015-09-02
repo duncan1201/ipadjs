@@ -1,5 +1,5 @@
 app.controller('productCtrl',
-               function($rootScope, $scope, $ionicModal, Products, Tags, ProductTypes, Suppliers, Brands, App_URLs){
+               function($rootScope, $scope, $ionicModal, Products, Tags, ProductTypes, Suppliers, Brands, App_URLs, Util){
                     var self = this;
                
                     var tags_callback = function(tx, results){
@@ -46,7 +46,7 @@ app.controller('productCtrl',
                     }; // end of suppliers_callback
                
                     if ($rootScope.ion_content_template == App_URLs.product_main_content){
-                        Products.all_summary_with_default_callback();
+                        Products.all_summary();
                         // initialize the filter
                         if (!angular.isDefined($scope.filter)){
                             $scope.filter = {
@@ -65,10 +65,10 @@ app.controller('productCtrl',
                             ProductTypes.all_summary(product_types_callback);
                             Tags.all(tags_callback);
                                    
-                            if (angular.isDefined($rootScope.product_id_for_edit)){
-                                Products.get_product($rootScope.product_id_for_edit);
+                            if (Util.is_undefined_or_null($rootScope.product_id_for_edit)){
+                                $scope.product = {supply_price: 0, markup: 0, retail_price: 0, current_stock: 0};
                             } else {
-                                   $scope.product = {supply_price: 0, markup: 0, retail_price: 0};
+                                Products.get_product($rootScope.product_id_for_edit);
                             }
                         } else if (url == App_URLs.product_main_content) {
                             Brands.all(brands_callback);

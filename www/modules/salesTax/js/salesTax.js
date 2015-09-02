@@ -1,4 +1,4 @@
-app.controller('salesTaxCtrl', function($scope, $ionicModal, SalesTaxes){
+app.controller('salesTaxCtrl', function($rootScope, $scope, $ionicModal, SalesTaxes, App_URLs){
                var self = this;
                var main_content_scope = angular.element(document.querySelector('#sales_taxes_main_content')).scope();
                var compose_button_scope = angular.element(document.querySelector('#sales_taxes_compose_button')).scope();
@@ -7,7 +7,7 @@ app.controller('salesTaxCtrl', function($scope, $ionicModal, SalesTaxes){
                     SalesTaxes.all();
                }
 
-               $ionicModal.fromTemplateUrl('sales-tax-popup.html',
+               $ionicModal.fromTemplateUrl('modules/salesTax/templates/sales-tax-popup.htm',
                                            function(modal){
                                                 $scope.salesTaxModal = modal;
                                            }, {
@@ -46,7 +46,13 @@ app.controller('salesTaxCtrl', function($scope, $ionicModal, SalesTaxes){
                     SalesTaxes.delete_sales_tax(id);
                }
                
-               });
+               $rootScope.$on('$includeContentLoaded', function(event, url){
+                    if(url == App_URLs.product_add_edit){
+                        
+                    }
+                }); // end of on
+               
+            });
 
 var salesTax = angular.module('salesTax', ['ionic', 'util']);
 

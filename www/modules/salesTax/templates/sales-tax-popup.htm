@@ -1,0 +1,40 @@
+<div class="modal" style="width:58%;">
+    
+    <!-- modal header bar -->
+    <ion-header-bar class="bar-secondary">
+        <h1 class="title">{{modal_title}}</h1>
+        <button class="button button-clear button-positive" ng-click="cancel_new_sales_tax_click()">Cancel</button>
+    </ion-header-bar>
+    
+    <!-- modal content area -->
+    <ion-content>
+        <form name="sales_tax_form" ng-submit="sales_tax_form_click(new_sales_tax)">
+            
+            <div class="row">
+                <div class="col col-20 required">Tax Name</div>
+                <div class="col col-80">
+                    <input type="text" name="tax_name" required placeholder="Enter name here" ng-model="new_sales_tax.name" style="width:90%">
+                        </div>
+            </div>
+            
+            <div class="row">
+                <div class="col col-20 required">Tax Rate (%)</div>
+                <div class="col col-80">
+                    <input type="number" name="tax_rate" min="0" max="100" required placeholder="Enter rate here" ng-model="new_sales_tax.rate" style="width:90%">
+                        </div>
+            </div>
+            
+            <span class="error center" ng-show="sales_tax_form.tax_name.$error.required">Tax name is required</span>
+            
+            <span class="error center" ng-show="sales_tax_form.tax_rate.$error.required">Tax rate is required</span>
+            <span class="error center" ng-show="sales_tax_form.tax_rate.$error.min">Tax rate cannot be less than 0</span>
+            <span class="error center" ng-show="sales_tax_form.tax_rate.$error.max">Tax rate cannot be more than 100</span>
+            
+            
+            <div class="padding">
+                <button ng-disabled="sales_tax_form.$invalid" type="submit" class="button button-block button-positive">Save Sales Tax</button>
+            </div>
+        </form>
+    </ion-content>
+    
+</div>

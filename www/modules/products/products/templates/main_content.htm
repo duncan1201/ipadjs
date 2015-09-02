@@ -66,6 +66,7 @@
         <div class="col">Brand</div>
         <div class="col">Supplier</div>
         <div class="col">Price</div>
+        <div class="col">Count</div>
         <div class="col">&nbsp;</div>
     </div>
     <div class="row row_content" ng-repeat='product in products | productFilter:{tag:filter.tag,product_type:filter.product_type,brand:filter.brand,supplier:filter.supplier}'>
@@ -80,6 +81,7 @@
         <div class="col">{{product.brand_name}}&nbsp;</div>
         <div class="col">{{product.supplier_name}}&nbsp;</div>
         <div class="col">{{product.retail_price}}&nbsp;</div>
+        <div class="col">{{product.current_stock}}&nbsp;</div>
         <div class="col">
             <button class="button button-small button-clear button-positive" ng-click="edit_click({{product.id}})">Edit</button>
             <button class="button button-small button-clear button-positive" ng-click="deactivate_click({{product.id}})" ng-show="product.active == 1">Deactivate</button>

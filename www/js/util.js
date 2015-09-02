@@ -67,6 +67,9 @@ util.factory('Util', function($ionicPopup, $timeout) {
                             alert_popup.close();
                         }, json.timeout);
                     } // end if
-                } // end alert
-             }
+                }, // end alert
+                is_undefined_or_null : function(val) {
+                    return angular.isUndefined(val) || val === null
+                } // end of is_undefined_or_null
+             } // end
         }); // end of Util
