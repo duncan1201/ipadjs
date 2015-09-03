@@ -98,10 +98,10 @@ product.factory('Products',
                         var callback_fun = function() {
                 
                         }; // end of callback_fun
-                        var update_sql = "update products set product_name = ?, product_handle = ?, desc = ?, tags_string = ?, product_type_id = ?, brand_id = ?, supplier_id = ?, supply_price = ?, markup = ?, stock_keeping_unit = ?, current_stock = ?, reorder_point = ?, reorder_amount = ? where id = ?";
+                        var update_sql = "update products set product_name = ?, product_handle = ?, desc = ?, tags_string = ?, product_type_id = ?, brand_id = ?, supplier_id = ?, supply_price = ?, markup = ?, retail_price = ?, stock_keeping_unit = ?, current_stock = ?, reorder_point = ?, reorder_amount = ? where id = ?";
                         var json = {
                             sql: update_sql,
-                            params:[product.product_name, product.product_handle, product.desc,product.tags.join(","), product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount,product.id],
+                            params:[product.product_name, product.product_handle, product.desc,product.tags.join(","), product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.retail_price, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount,product.id],
                             callback: callback_fun
                         };
                         DbUtil.executeSql(json);

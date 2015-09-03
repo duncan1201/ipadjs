@@ -50,10 +50,7 @@ app.constant('App_URLs',
              });
 
 function initApp(DbUtil, Schema_SQLs, Initialization_SQLs){
-    /*
-    for(var i = 0; i < Schema_SQLs.length; i++){
-        DbUtil.executeSql(Schema_SQLs[i], params:[]);
-    }*/
+
     var SQLs = Schema_SQLs.concat(Initialization_SQLs);
     
     var db = DbUtil.openDb();
@@ -66,18 +63,21 @@ function initApp(DbUtil, Schema_SQLs, Initialization_SQLs){
                                           function(tx, e){
                                             console.log("Error:" + e.message);
                                           });// end of tx.executeSql
-                        }
-                   });
+                        } // end of for
+                   }); // end of transaction
 };
 
 app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Menus, $ionicSideMenuDelegate, App_URLs){
                
-               $rootScope.ion_header_bar_template = "modules/landing/templates/header_bar.htm";
-               $rootScope.ion_content_template = App_URLs.landing_main_content;
-  
-               // Called to select the given project
-               $scope.selectProject = function(project, index){
-               };
+               if(!angular.isDefined($rootScope.ion_header_bar_template)){
+                    console.log("setting ion_header_bar_template");
+                    $rootScope.ion_header_bar_template = "modules/landing/templates/header_bar.htm";
+               }
+               
+               if(!angular.isDefined($rootScope.ion_content_template)){
+                    console.log("setting ion_content_template");
+                    $rootScope.ion_content_template = App_URLs.landing_main_content;
+               }
                
                $scope.submenuClick = function(submenuTitle) {
                     $rootScope.active_submenu = submenuTitle;
@@ -127,13 +127,18 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                     $ionicSideMenuDelegate.toggleLeft();
                };
                
-               $rootScope.$on('$includeContentLoaded',
-                              function(event, url){
-                                if (url == App_URLs.landing_main_content){
-                                    // Load or initialize menus
-                                    $scope.menus = Menus.all();
-                                }
-                              }); // end of on
+               $rootScope.$on('$includeContentLoaded', function(event, url){
+                    if (url == App_URLs.landing_main_content){
+                        // Load or initialize menus
+                        $scope.menus = Menus.all();
+                    }
+                              
+                              if (url == App_URLs.sell_main_content){
+                              $ionicSideMenuDelegate.toggleLeft(false);
+                              }else {
+                              $ionicSideMenuDelegate.toggleLeft(true);
+                              }
+               }); // end of on
                
 });
 

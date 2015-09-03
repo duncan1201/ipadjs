@@ -1,5 +1,5 @@
 app.controller('productCtrl',
-               function($rootScope, $scope, $ionicModal, Products, Tags, ProductTypes, Suppliers, Brands, App_URLs, Util){
+               function($rootScope, $scope, $ionicModal, $ionicSideMenuDelegate, Products, Tags, ProductTypes, Suppliers, Brands, App_URLs, Util){
                     var self = this;
                
                     var tags_callback = function(tx, results){
@@ -220,6 +220,9 @@ app.controller('productCtrl',
                     };
                     // end of product type dialog
                
+                    $scope.toggle_side_menu = function() {
+                        $ionicSideMenuDelegate.$getByHandle('main-side-menu').toggleLeft();
+                    };
                }); // end of controller
 
 app.filter('productFilter', function(){

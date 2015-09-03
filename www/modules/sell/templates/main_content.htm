@@ -23,11 +23,48 @@
     background:linear-gradient(darkgreen, green, darkgreen);
     color:white;
 }
+
+button.qty {
+display:inline-block;
+border:1px solid #9f9f9f !important;
+background-image: -webkit-linear-gradient(top, #e0e0e0, #ffffff, #e0e0e0) !important;
+width:18px;
+height:18px;
+border-radius:50%;
+vertical-align:middle;
+color:black !important;
+margin-left:0.5em;
+}
+
+button.unit_price {
+float:right;
+vertical-align:text-top !important;
+border-radius:54% !important;
+border:1px solid #9f9f9f !important;
+background-image: -webkit-linear-gradient(top, #e0e0e0, #ffffff, #e0e0e0) !important;
+color:#333333 !important;
+margin-left:1em;
+margin-top:2px;
+font-size:10px;
+padding-left:6px;
+padding-right:6px;
+padding-top:0px;
+padding-bottom:0px;
+height:32px;
+
+#sale_button_bar {
+    position:absolute;
+    bottom: 0;
+    background-color:#f0f0f0;
+    padding-left:1px;
+    padding-right:1px;
+    margin-left:0px;
+    margin-right:1px;width:100%;
+}
 </style>
 <ion-content scroll="true" ng-controller="sellCtrl" id="sell_main_content">
 <div class='row'>
     <div class='col' style='border-radius:10px;padding:0;margin:0'>
-        
         
         <div class='card' style='background-color:blue;padding:0;margin:0;height:465px;position:relative;border-radius:10px;border:1px solid darkgray'>
             
@@ -46,24 +83,26 @@
             </div>
             
             <!--  current sale: sale items   -->
-            <div class='item' ng-show='is_current_sale_tab_shown()' style='height:250px;overflow:scroll;background-color:#f7f7f7;padding:0;margin:0'>
-                <div ng-repeat="sale_item in current_sale.items" style='border-top:0px solid yellow;border-bottom:1px solid gray;height:40px;line-height:40px;vertical-align:top;'>
+            <div class='item' ng-show='is_current_sale_tab_shown()' style='height:254px;overflow:scroll;background-color:#ffffff;padding:0;margin:0'>
+                <div ng-repeat="sale_item in current_sale.items" style='border-top:0px solid yellow;border-bottom:1px solid #d5d5d5;height:40px;line-height:40px;vertical-align:top;'>
                     <!-- quantity -->
-                    <button class='button button-small button-clear' style='display:inline-block;border:1px solid gray;width:18px;height:18px;border-radius:50%;vertical-align:middle;color:black;margin-left:0.5em' ng-click="sale_item_quantity_click($event, {{current_sale.id}}, {{sale_item}})">{{sale_item.quantity}}</button>
+                    <button class='button button-small button-clear qty' ng-click="sale_item_quantity_click($event, {{current_sale.id}}, {{sale_item}})">{{sale_item.quantity}}</button>
                     <!-- item name -->
                     <span style='margin-left:.5em;vertical-align:top'>{{sale_item.name}}</span>
                     
-                    <!-- unit price -->
-                    <button class='button button-small button-clear' style='vertical-align:middle;border-radius:45%;border:1px solid gray;color:#333333;margin-left:1em'>&#64;&nbsp;{{sale_item.unit_price | currency }}</button>
+
                     <!-- close button -->
                     <i class="icon icon-right ion-close-round" ng-click="sale_item_delete_click({{current_sale.id}}, {{sale_item.id}})" style='float:right;margin-right:1em;cursor: pointer;'></i>
                     <!-- quantity * unit_price -->
                     <span style='margin-left:.5em;margin-right:.5em;float:right;vertical-align:top'>{{sale_item.unit_price * sale_item.quantity | currency}}</span>
+                    
+                    <!-- unit price -->
+                    <button class='unit_price'>&#64;&nbsp;{{sale_item.unit_price | currency }}</button>
                 </div>
             </div>
             
             <!--  current sale: subtotal, taxes, total   -->
-            <div class='item' ng-show='is_current_sale_tab_shown()' style='background-color:#ffffff;padding-top:0;padding-bottom:0;padding-right:0'>
+            <div class='item' ng-show='is_current_sale_tab_shown()' style='background-color:#ffffff;padding-top:0;padding-bottom:0;padding-right:0;height:102px;border-top:1px solid #d5d5d5'>
                 <div class='row'>
                     <div class='col'>Subtotal</div>
                     <div class='col'>{{current_sale.subtotal | currency}}</div>
@@ -81,7 +120,7 @@
             </div>
             
             <!-- current sale: bottom buttons -->
-            <div class='item item-divider' ng-show='is_current_sale_tab_shown()' style='position:absolute; bottom: 0;background-color:#f0f0f0;padding-left:1px;padding-right:1px;margin-left:1px; margin-right:1px;width:100%'>
+            <div id='sale_button_bar' class='item item-divider' ng-show='is_current_sale_tab_shown()'>
                 <div class="row">
                     <div class='col'>
                         <button class='button-block sellbtn' ng-click='void_click(current_sale.id)'>
@@ -100,7 +139,7 @@
                         <button class='button-block sellbtn'>Discount</button>
                     </div>
                     <div class='col'>
-                        <button class='button-block' id='pay_button'>Pay</button>
+                        <button class='button-block' id='pay_button' ng-click='pay_click(current_sale.id)'>Pay</button>
                     </div>
                 </div>
             </div>
@@ -133,7 +172,7 @@
     
     <div class='col' ng-show='is_current_sale_tab_shown()'>
         <!-- start of layout -->
-        <div class="card card-paddingless card-marginless layout">
+        <div id='layout_container' class="card card-paddingless card-marginless layout">
             
             <!-- start of layout groups -->
             <div class="item item-divider">

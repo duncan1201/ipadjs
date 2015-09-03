@@ -47,7 +47,7 @@
                             </head>
     
     <body ng-app="starter" ng-controller="AppCtrl">
-        <ion-side-menus>
+        <ion-side-menus delegate-handle="main-side-menu">
             <!-- center content -->
             <ion-side-menu-content>
                 <ion-header-bar class="bar-dark">
@@ -59,7 +59,8 @@
             </ion-side-menu-content>
             
             <!-- left menu -->
-            <ion-side-menu side="left" expose-aside-when="large">
+            <!--expose-aside-when="large"-->
+            <ion-side-menu side="left">
                 <ion-header-bar class="bar-dark">
                     <h1 class="title">My company name</h1>
                     <!--button class="button button-icon ion-plus"></button-->

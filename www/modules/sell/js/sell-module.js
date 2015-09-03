@@ -90,8 +90,8 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
                     }, // end of create_sale
                     add_sale_item: function (sale_id, key, callback_fun) {
                         // add sale item
-                        var stmt = "insert into sale_items (name, quantity, unit_price, sale_id) values (?, 1, 9.9, ?)";
-                        var json_insert = {sql: stmt, params:[key.display_name, sale_id]};
+                        var stmt = "insert into sale_items (name, quantity, unit_price, sale_id, product_id) values (?, 1, ?, ?, ?)";
+                        var json_insert = {sql: stmt, params:[key.display_name, key.retail_price, sale_id, key.product_id]};
              
                         // update subtotal
                         var json_subtotal = this.create_update_subtotal_json(sale_id);

@@ -1,4 +1,4 @@
-app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover, $ionicPopup,App_URLs, Layouts, Sales) {
+app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover, $ionicPopup, App_URLs, Layouts, Sales) {
                
               
                // start of init method
@@ -30,8 +30,8 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                }; // end of sale_item_delete_click
                
                $scope.toggle_side_menu = function () {
-                    console.log("toggle_side_menu");
-                    $ionicSideMenuDelegate.toggleLeft(false);
+                    console.log("toggle click=" + angular.toJson($ionicSideMenuDelegate));
+                    $ionicSideMenuDelegate.toggleLeft();
                };
                
                $scope.group_text_click = function(group) {
@@ -194,12 +194,13 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                     console.log("open_sale_click=" + sale_id);
                 }; // end of open_sale_click
                
-               $scope.pay_click = function() {
+               $scope.pay_click = function(sale_id) {
+               console.log('pay click');
                     var callback = function(tx, rlts){
                
                     };//end of callback
                
-                    Sales.update_sale_status(sale_id, "paid", callback);
+                    Sales.update_sale_status(sale_id, "current", callback); // paid
                }; // end of pay_click
                
 }); // sellCtrl
