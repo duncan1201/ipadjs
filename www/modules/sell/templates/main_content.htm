@@ -13,44 +13,50 @@
 }
 
 .sellbtn {
-    border-radius:8px;
-    background:linear-gradient(darkgray, gray, darkgray);
-    color:white;
+    display:inline-block;
+    border-radius:8px!important;
+    background-image:linear-gradient(darkgray, gray, darkgray)!important;
+    color:white !important;
+    padding-top:3px;
+    padding-bottom:3px;
 }
 
 #pay_button {
     border-radius:8px;
-    background:linear-gradient(darkgreen, green, darkgreen);
+    background-image:linear-gradient(darkgreen, green, darkgreen);
     color:white;
+    padding-top:3px;
+    padding-bottom:3px;
 }
 
 button.qty {
-display:inline-block;
-border:1px solid #9f9f9f !important;
-background-image: -webkit-linear-gradient(top, #e0e0e0, #ffffff, #e0e0e0) !important;
-width:18px;
-height:18px;
-border-radius:50%;
-vertical-align:middle;
-color:black !important;
-margin-left:0.5em;
+    display:inline-block;
+    border:1px solid #9f9f9f !important;
+    background-image: -webkit-linear-gradient(top, #e0e0e0, #ffffff, #e0e0e0) !important;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    vertical-align:middle;
+    color:black !important;
+    margin-left:0.5em;
 }
 
 button.unit_price {
-float:right;
-vertical-align:text-top !important;
-border-radius:54% !important;
-border:1px solid #9f9f9f !important;
-background-image: -webkit-linear-gradient(top, #e0e0e0, #ffffff, #e0e0e0) !important;
-color:#333333 !important;
-margin-left:1em;
-margin-top:2px;
-font-size:10px;
-padding-left:6px;
-padding-right:6px;
-padding-top:0px;
-padding-bottom:0px;
-height:32px;
+    float:right;
+    vertical-align:text-top !important;
+    border-radius:54% !important;
+    border:1px solid #9f9f9f !important;
+    background-image: -webkit-linear-gradient(top, #e0e0e0, #ffffff, #e0e0e0) !important;
+    color:#333333 !important;
+    margin-left:1em;
+    margin-top:2px;
+    font-size:10px;
+    padding-left:6px;
+    padding-right:6px;
+    padding-top:0px;
+    padding-bottom:0px;
+    height:32px;
+}
 
 #sale_button_bar {
     position:absolute;
@@ -94,7 +100,7 @@ height:32px;
                     <!-- close button -->
                     <i class="icon icon-right ion-close-round" ng-click="sale_item_delete_click({{current_sale.id}}, {{sale_item.id}})" style='float:right;margin-right:1em;cursor: pointer;'></i>
                     <!-- quantity * unit_price -->
-                    <span style='margin-left:.5em;margin-right:.5em;float:right;vertical-align:top'>{{sale_item.unit_price * sale_item.quantity | currency}}</span>
+                    <span style='margin-left:.5em;margin-right:.5em;float:right;vertical-align:top;width:60px'>{{sale_item.unit_price * sale_item.quantity | currency}}</span>
                     
                     <!-- unit price -->
                     <button class='unit_price'>&#64;&nbsp;{{sale_item.unit_price | currency }}</button>
@@ -123,23 +129,23 @@ height:32px;
             <div id='sale_button_bar' class='item item-divider' ng-show='is_current_sale_tab_shown()'>
                 <div class="row">
                     <div class='col'>
-                        <button class='button-block sellbtn' ng-click='void_click(current_sale.id)'>
+                        <button class='button-block button-clear sellbtn' ng-click='void_click(current_sale.id)'>
                             Void
                         </button>
                     </div>
                     <div class='col'>
-                        <button class='button-block sellbtn' ng-click='park_click(current_sale.id)'>
+                        <button class='button-block button-clear sellbtn' ng-click='park_click(current_sale.id)'>
                             Park
                         </button>
                     </div>
                     <div class='col'>
-                        <button class='button-block sellbtn'>Notes</button>
+                        <button class='button-block button-clear sellbtn'>Notes</button>
                     </div>
                     <div class='col'>
-                        <button class='button-block sellbtn'>Discount</button>
+                        <button class='button-block button-clear sellbtn'>Discount</button>
                     </div>
                     <div class='col'>
-                        <button class='button-block' id='pay_button' ng-click='pay_click(current_sale.id)'>Pay</button>
+                        <button class='button-block button-clear' id='pay_button' ng-click='pay_click(current_sale.id)'>Pay</button>
                     </div>
                 </div>
             </div>
