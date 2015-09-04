@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-            BuildableName = "myApp.app"
-            BlueprintName = "myApp"
-            ReferencedContainer = "container:myApp.xcodeproj">
+            BuildableName = "iPRO POS.app"
+            BlueprintName = "iPRO POS"
+            ReferencedContainer = "container:iPRO POS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -53,9 +53,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-            BuildableName = "myApp.app"
-            BlueprintName = "myApp"
-            ReferencedContainer = "container:myApp.xcodeproj">
+            BuildableName = "iPRO POS.app"
+            BlueprintName = "iPRO POS"
+            ReferencedContainer = "container:iPRO POS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
