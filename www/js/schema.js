@@ -2,7 +2,7 @@ app.constant('Schema_SQLs',
              [
               /* development purpose */
               'Drop table if exists settings',
-              'Drop table if exists sales_taxes',
+              //'Drop table if exists sales_taxes',
               //'Drop table if exists suppliers',
               //'Drop table if exists product_types',
               //'Drop table if exists products',
@@ -11,7 +11,7 @@ app.constant('Schema_SQLs',
               //'Drop table if exists layouts',
               //'Drop table if exists layout_groups',
               //'Drop table if exists layout_group_keys',
-              'Drop table if exists outlets',
+              //'Drop table if exists outlets',
               'Drop table if exists registers',
               //'Drop table if exists sales',
               //'Drop table if exists sale_items',
@@ -23,7 +23,6 @@ app.constant('Schema_SQLs',
               'Create table if not exists sales_taxes(id INTEGER PRIMARY KEY, name VARCHAR(50) NOT NULL, rate real DEFAULT 0, system_generated BOOLEAN DEFAULT 0)',
               
               /* suppliers table */
-              
               'Create table if not exists suppliers(id integer primary key, name varchar(100) NOT NULL, default_markup integer, desc varchar(255), company varchar(100), contact_name varchar(100), phone varchar(100), mobile varchar(100), fax varchar(50), email varchar(50), website varchar(50), physical_street varchar(50), physical_street2 varchar(50), physical_city varchar(50), physical_postcode varchar(50), physical_state varchar(50), physical_country varchar(50), postal_street varchar(50), postal_street2 varchar(50), postal_city varchar(50), postal_postcode varchar(50), postal_state varchar(50), postal_country varchar(50))',
               
               /* product types */
@@ -70,7 +69,7 @@ app.constant('Schema_SQLs',
             //'insert into layouts (id, name, creation_date) values (1, "Default Quick Keys", datetime("now"))',
             //'insert into layout_groups (id, name, is_active, layout_id) values (1, "Group 1", 1, 1)',
             'insert into sales_taxes (id, name, rate, system_generated) values (1, "No Tax", 0, 1)',
-            'insert into outlets(id, name, is_current, sales_tax_id) values (1, "Main outlet", 1, 1)',
+            //'insert into outlets(id, name, is_current, sales_tax_id) values (1, "Main outlet", 1, 1)',
             'insert into registers (id, name, layout_id, outlet_id) values (1, "Main Register", 1, 1)',
             'insert into settings (tag, name, value) values ("store_settings", "default_currency", upper("SGD"))',
             'insert into settings (tag, name, value) values ("store_settings", "display_prices", upper("Tax exclusive"))',

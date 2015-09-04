@@ -35,9 +35,10 @@ button.qty {
     width:18px;
     height:18px;
     border-radius:50%;
-    vertical-align:middle;
+    vertical-align:top;
     color:black !important;
     margin-left:0.5em;
+    margin-top:4px;
 }
 
 button.unit_price {
@@ -48,7 +49,7 @@ button.unit_price {
     background-image: -webkit-linear-gradient(top, #e0e0e0, #ffffff, #e0e0e0) !important;
     color:#333333 !important;
     margin-left:1em;
-    margin-top:2px;
+    margin-top:4px;
     font-size:10px;
     padding-left:6px;
     padding-right:6px;
@@ -71,7 +72,7 @@ button.unit_price {
 <div class='row'>
     <div class='col' style='border-radius:10px;padding:0;margin:0'>
         
-        <div class='card' style='background-color:blue;padding:0;margin:0;height:465px;position:relative;border-radius:10px;border:1px solid darkgray'>
+        <div class='card' style='padding:0;margin:0;height:465px;position:relative;border-radius:10px;border:1px solid darkgray'>
             
             <!-- tabs -->
             <div class='item item-divider' style='padding:0;margin:0'>
@@ -99,7 +100,7 @@ button.unit_price {
                     <!-- close button -->
                     <i class="icon icon-right ion-close-round" ng-click="sale_item_delete_click({{current_sale.id}}, {{sale_item.id}})" style='float:right;margin-right:1em;cursor: pointer;'></i>
                     <!-- quantity * unit_price -->
-                    <span style='margin-left:.5em;margin-right:.5em;float:right;vertical-align:top;width:60px'>{{sale_item.unit_price * sale_item.quantity | currency}}</span>
+                    <span style='margin-left:.5em;margin-right:.5em;float:right;vertical-align:top;width:68px'>{{sale_item.unit_price * sale_item.quantity | currency}}</span>
                     
                     <!-- unit price -->
                     <button class='unit_price'>&#64;&nbsp;{{sale_item.unit_price | currency }}</button>
@@ -114,7 +115,7 @@ button.unit_price {
                 </div>
                 <div class='row'>
                     <div class='col'>
-                        Tax <span ng-show="isDefined(current_sale.sales_tax_name)">({{current_sale.sales_tax_name}})</span>
+                        Tax <span ng-show="isDefined(current_sale.sales_tax_name)">({{current_sale.sales_tax_name}}: {{current_sale.sales_tax_rate}} %)</span>
                     </div>
                     <div class='col'>{{current_sale.total_tax | currency}}</div>
                 </div>
@@ -160,7 +161,7 @@ button.unit_price {
                     <div class="col">&nbsp;</div>
                 </div>
                 
-                <div class='row' ng-repeat="parked_sale in parked_sales">
+                <div class='row row_content' ng-repeat="parked_sale in parked_sales">
                     <div class='col col-40'>{{parked_sale.creation_date | date: 'yyyy-MM-dd'}}</div>
                     <div class='col col-15'>Status</div>
                     <div class='col col-15'>{{parked_sale.subtotal + parked_sale.total_tax | currency}}</div>
@@ -195,7 +196,7 @@ button.unit_price {
             <!-- start of layout keys -->
             <div class="item" id="layout_keys_container">
                 <div style='float:left'>
-                    <div ng-repeat="key in layout.active_group.keys" ng-click='key_click({{key}})' class='layout-item' style='background-color:{{get_display_color(key.color)}}'>
+                    <div ng-repeat="key in layout.active_group.keys" ng-click='key_click({{key}})' class='layout-item' style='background:{{get_display_color(key.color)}}'>
                         {{key.display_name}}
                     </div>
                 </div>

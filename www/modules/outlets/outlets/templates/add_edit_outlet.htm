@@ -1,0 +1,52 @@
+<ion-content scroll="true" ng-controller="outletCtrl" id="outlet_add_edit">
+    <div class="row">
+        <div class="col" ng-show="!isDefined(outlet.id)">
+            Setup &gt; Add a new outlet
+        </div>
+        <div class="col" ng-show="isDefined(outlet.id)">
+            Setup &gt; Update an outlet
+        </div>
+    </div>
+    
+    <form ng-submit="outlet_form_submit_click(outlet)" name="outlet_form">
+        <div class='card'>
+            <div class='item item-divider'>
+                Details
+            </div>
+            <div class='item'>
+                <div class='row'>
+                    <div class='col col-20'>
+                        Outlet name
+                    </div>
+                    <div class='col col-80'>
+                        <input type='text' class='lightgray-outline'ng-model='outlet.name'/>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col col-20'>
+                        Default sales tax
+                    </div>
+                    <div class='col col-80'>
+                        <select ng-model='outlet.sales_tax_id'>
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat="sales_tax in sales_taxes" value="{{sales_tax.id}}">{{sales_tax.name}} {{sales_tax.rate}} %</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="item item-divider item-divider-paddingless">
+                <div class="row">
+                    <div class="col col-25 col-offset-50">
+                        <button class="button button-small button-block button-light" ng-click="product_form_cancel_click()">Cancel</button>
+                    </div>
+                    <div class="col col-25">
+                        <button class="button button-small button-block button-light" type="submit">Save Outlet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</ion-content>

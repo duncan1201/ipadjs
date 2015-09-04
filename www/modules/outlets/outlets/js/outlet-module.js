@@ -13,8 +13,21 @@ outlet.factory('Outlets', function(DbUtil){
                         var query = "select * from outlets where is_current = 1";
                         var json = {sql: query, params: [], callback: callback_fun};
                         DbUtil.executeSql(json);
-                    } // end of get_current_outlet
-               
+                    }, // end of get_current_outlet
+                    get_outlet : function (id, callback_fun) {
+                        var stmt = "select * from outlets where id = ?";
+                        var json = {sql: stmt, params:[id], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    }, // get_outlet
+                    update_outlet : function (outlet, callback_fun) {
+                        var stmt = "update outlets set name = ?, sales_tax_id = ? where id = ?";
+                        var json = {sql: stmt, params:[outlet.name, outlet.sales_tax_id, outlet.id], callback: callback_fun};
+                        DbUtil.executeSql(json);
+                    }, // end of update_outlet
+                    get_scope : function() {
+                        var scope = angular.element(document.querySelector('#outlet_add_edit')).scope();
+                        return scope;
+                    } // end of get_scope
                };
                
                });

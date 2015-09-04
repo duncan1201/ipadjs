@@ -1,4 +1,4 @@
-app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover, $ionicPopup, App_URLs, Layouts, Sales) {
+app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover, $ionicPopup, App_URLs, Layouts, Sales, Util) {
                
               
                // start of init method
@@ -108,15 +108,7 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                };
                
                $scope.tab_click = function(tab_name){
-               
-                    if (tab_name == 'current sale'){
-                        angular.element(document.querySelector('#current_sale_tab')).addClass('selected');
-                        angular.element(document.querySelector('#retrieve_sale_tab')).removeClass('selected');
-                    } else {
-                        angular.element(document.querySelector('#current_sale_tab')).removeClass('selected');
-                        angular.element(document.querySelector('#retrieve_sale_tab')).addClass('selected');
-                    }
-                    $scope.current_tab = tab_name;
+                    Sales.switch_tab(tab_name, false);
                }; // end of tab_click
                
                $scope.is_current_sale_tab_shown = function() {
@@ -171,20 +163,24 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                             var _title = "Loading a Saved Sale";
                             var _templateUrl = "modules/sell/templates/open_sale_confirm.htm";
                             var confirmPopup = $ionicPopup.confirm({
-                                                      title: _title,
-                                                      templateUrl: _templateUrl,
-                                                      buttons:[
-                                                               {text: 'Cancel'},
-                                                               {
-                                                                    text: 'Void',
-                                                                    onTap: function(e){console.log('void tap===')}
-                                                               },
-                                                               {
-                                                                    text: 'Park',
-                                                                    type: 'button-positive',
-                                                                    onTap: function(e){}
-                                                               }]
-                                                      });
+                                title: _title,
+                                templateUrl: _templateUrl,
+                                buttons:[
+                                    {text: 'Cancel'},
+                                    {
+                                        text: 'Void',
+                                        onTap: function(e){
+                                            Sales.close_current_sale_and_open_parked_sale(sale_id, 'void');
+                                        }
+                                    },
+                                    {
+                                        text: 'Park',
+                                        type: 'button-positive',
+                                        onTap: function(e){
+                                            Sales.close_current_sale_and_open_parked_sale(sale_id,'parked');
+                                        }
+                                    }]
+                            });
 
                         } // end of else
                     }; // end of callback
@@ -201,6 +197,10 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                
                     Sales.update_sale_status(sale_id, "current", callback); // paid
                }; // end of pay_click
+               
+               $scope.get_display_color = function(color){
+                    return Util.get_display_color(color);
+               };
                
 }); // sellCtrl
 

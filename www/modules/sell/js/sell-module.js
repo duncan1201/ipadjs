@@ -47,6 +47,7 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
                                         scope.$apply(function(){
                                             scope.current_sale = ret;
                                         });
+                                        self.switch_tab('current sale');
                                     }; // end of items_callback
                                     var json_items = {sql: stmt_items, params:[sale_id], callback: items_callback};
                                     DbUtil.executeSql(json_items);
@@ -179,6 +180,43 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
              
                         var json = {sql: stmt, params:[status, sale_id], callback: callback_fun};
                         DbUtil.executeSql(json);
-                    } // end of void_sale
+                    }, // end of void_sale
+                    close_current_sale_and_open_parked_sale: function(sale_id, status) {
+                        var self = this;
+                        var stmt_close = "update sales set status = ? where status = 'current'";
+                        var json_close = {sql: stmt_close, params:[status]};
+             
+                        var stmt_open = "update sales set status = 'current' where id = ?";
+                        var json_open = {sql: stmt_open, params:[sale_id]};
+             
+                        var _callback = function(){
+                            self.get_current_sale();
+                            self.get_parked_sales();
+                        };
+                        DbUtil.executeSqls([json_close, json_open], _callback);
+                    }, // close_current_sale_and_open_parked_sale
+                    switch_tab : function(tab_name, apply) {
+             
+                        if (tab_name == 'current sale'){
+                            angular.element(document.querySelector('#current_sale_tab')).addClass('selected');
+                            angular.element(document.querySelector('#retrieve_sale_tab')).removeClass('selected');
+                        } else {
+                            angular.element(document.querySelector('#current_sale_tab')).removeClass('selected');
+                            angular.element(document.querySelector('#retrieve_sale_tab')).addClass('selected');
+                        }
+             
+                        var scope = this.get_main_content_scope();
+             
+                        var phase = scope.$root.$$phase;
+                        if (phase == '$apply' || phase == '$digest') {
+                            scope.current_tab = tab_name;
+                        } else {
+                            scope.$apply(function() {
+                                scope.current_tab = tab_name;
+                            });
+                        }
+             
+             
+                    } // end of switch_tab
                 } // end of return
              });

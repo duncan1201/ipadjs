@@ -135,7 +135,7 @@ layout.factory('Layouts',
                             var rows = results.rows;
                             for (var i = 0; i < rows.length; i++){
                                 var item = rows.item(i);
-                                console.log("get_layout_group_keys_for_edit item=" + angular.toJson(item));
+                                //console.log("get_layout_group_keys_for_edit item=" + angular.toJson(item));
                                 group['keys'].push({
                                   id: item.id,
                                   color: item.color,

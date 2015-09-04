@@ -113,22 +113,7 @@ app.controller('layoutCtrl',
                     };
                
                     $scope.get_display_color = function (color) {
-                        console.log("get_display_color=" + color);
-                        if (color.toUpperCase() == 'RED'){
-                            return "linear-gradient(#ffbbb5, #FFA49C, #ffbbb5)";
-                        } else if (color.toUpperCase() == 'PURPLE') {
-                            return "linear-gradient(#c9bcf8, #B9A8F8, #c9bcf8)";
-                        } else if (color.toUpperCase() == 'BLUE') {
-                            return "linear-gradient(#bed1f3, #ADC6F3, #bed1f3)";
-                        } else if (color.toUpperCase() == 'GREEN') {
-                            return "linear-gradient(#c2d2bf, #AAD2A4, #c2d2bf)";
-                        } else if (color.toUpperCase() == 'ORANGE') {
-                            return "linear-gradient(#ffb66e, #ff8b17, #ffb66e)";
-                        } else if (color.toUpperCase() == 'CYAN') {
-                            return "linear-gradient(#90e0e0, #00e0e0, #90e0e0)";
-                        }else {
-                            return color;
-                        }
+                        return Util.get_display_color(color);
                     }; // end of get_display_color
                
                     $scope.group_icon_click = function($event, group){

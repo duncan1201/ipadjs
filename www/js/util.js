@@ -35,6 +35,7 @@ util.factory('DbUtil',
                         db.transaction(function(tx){
                             var error_callback = function(tx, e){
                                 console.log("Error:" + e.message);
+                                       console.log("Error:" + angular.toJson(e));
                             };// end of error_callback
                             for(var i = 0; i < jsons.length; i++) {
                                 //console.log("jsons[i].sql=" + jsons[i].sql);
@@ -70,6 +71,24 @@ util.factory('Util', function($ionicPopup, $timeout) {
                 }, // end alert
                 is_undefined_or_null : function(val) {
                     return angular.isUndefined(val) || val === null
-                } // end of is_undefined_or_null
+                }, // end of is_undefined_or_null
+                get_display_color : function (color) {
+                    //console.log("get_display_color=" + color);
+                    if (color.toUpperCase() == 'RED'){
+                        return "linear-gradient(#ffbbb5, #FFA49C, #ffbbb5)";
+                    } else if (color.toUpperCase() == 'PURPLE') {
+                        return "linear-gradient(#c9bcf8, #B9A8F8, #c9bcf8)";
+                    } else if (color.toUpperCase() == 'BLUE') {
+                        return "linear-gradient(#bed1f3, #ADC6F3, #bed1f3)";
+                    } else if (color.toUpperCase() == 'GREEN') {
+                        return "linear-gradient(#c2d2bf, #AAD2A4, #c2d2bf)";
+                    } else if (color.toUpperCase() == 'ORANGE') {
+                        return "linear-gradient(#ffb66e, #ff8b17, #ffb66e)";
+                    } else if (color.toUpperCase() == 'CYAN') {
+                        return "linear-gradient(#90e0e0, #00e0e0, #90e0e0)";
+                    } else {
+                        return color;
+                    }
+                } // end of get_display_color
              } // end
         }); // end of Util
