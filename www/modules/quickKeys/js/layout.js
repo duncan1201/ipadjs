@@ -1,5 +1,5 @@
 app.controller('layoutCtrl',
-               function($rootScope, $scope, $ionicPopover, App_URLs, Layouts, Products, Tags) {
+               function($rootScope, $scope, $ionicPopover, App_URLs, Layouts, Products, Tags, Util) {
                
                     var self = this;
                
@@ -113,16 +113,20 @@ app.controller('layoutCtrl',
                     };
                
                     $scope.get_display_color = function (color) {
-                        console.log("get_display_color");
+                        console.log("get_display_color=" + color);
                         if (color.toUpperCase() == 'RED'){
-                            return "#FFA49C";
+                            return "linear-gradient(#ffbbb5, #FFA49C, #ffbbb5)";
                         } else if (color.toUpperCase() == 'PURPLE') {
-                            return "#B9A8F8";
+                            return "linear-gradient(#c9bcf8, #B9A8F8, #c9bcf8)";
                         } else if (color.toUpperCase() == 'BLUE') {
-                            return "#ADC6F3";
+                            return "linear-gradient(#bed1f3, #ADC6F3, #bed1f3)";
                         } else if (color.toUpperCase() == 'GREEN') {
-                            return "#AAD2A4";
-                        } else {
+                            return "linear-gradient(#c2d2bf, #AAD2A4, #c2d2bf)";
+                        } else if (color.toUpperCase() == 'ORANGE') {
+                            return "linear-gradient(#ffb66e, #ff8b17, #ffb66e)";
+                        } else if (color.toUpperCase() == 'CYAN') {
+                            return "linear-gradient(#90e0e0, #00e0e0, #90e0e0)";
+                        }else {
                             return color;
                         }
                     }; // end of get_display_color
