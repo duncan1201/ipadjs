@@ -2,10 +2,6 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                
               
                // start of init method
-               if (!angular.isDefined($scope.current_sale)) {
-                    $scope.current_sale = {id: "", items: [], total: 0};
-               }
-               
                if (!angular.isDefined($scope.current_tab)) {
                     $scope.current_tab = 'current sale';
                }
@@ -90,7 +86,10 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                         
                         Layouts.get_current_layout(layout_callback);
                               
-                        //
+                        // get current sale
+                        Sales.get_current_sale();
+                              
+                        // parked sale callback
                         var parked_sale_callback = function(tx, rlts) {
                             var rows = rlts.rows();
                             

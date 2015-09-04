@@ -53,7 +53,7 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
                                 } // end if
                                 else {
                                     scope.$apply(function(){
-                                        scope.current_sale = {id:"", items:[]};
+                                        scope.current_sale = {id: "", items: [], total: 0};
                                     });
                                 } // else
                             }; // end of sale_callback

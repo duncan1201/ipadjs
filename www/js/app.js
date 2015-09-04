@@ -44,6 +44,7 @@ app.constant('App_URLs',
                 layout_main_content: 'modules/quickKeys/templates/main_content.htm',
                 outlet_main_content: 'modules/outlets/outlets/templates/main_content.htm',
                 sell_main_content: 'modules/sell/templates/main_content.htm',
+                landing_header_bar: 'modules/landing/templates/header_bar.htm',
                 landing_main_content: 'modules/landing/templates/main_content.htm',
                 general_main_content: 'modules/general/templates/main_content.htm',
                 tag_main_content: 'modules/products/tags/templates/main_content.htm'
@@ -71,7 +72,7 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                
                if(!angular.isDefined($rootScope.ion_header_bar_template)){
                     console.log("setting ion_header_bar_template");
-                    $rootScope.ion_header_bar_template = "modules/landing/templates/header_bar.htm";
+                    $rootScope.ion_header_bar_template = App_URLs.landing_header_bar;
                }
                
                if(!angular.isDefined($rootScope.ion_content_template)){
@@ -133,11 +134,12 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                         $scope.menus = Menus.all();
                     }
                               
-                              if (url == App_URLs.sell_main_content){
-                              $ionicSideMenuDelegate.toggleLeft(false);
-                              }else {
-                              $ionicSideMenuDelegate.toggleLeft(true);
-                              }
+                    if (url == App_URLs.landing_header_bar ||
+                        url == App_URLs.landing_main_content ){
+                        $ionicSideMenuDelegate.toggleLeft(true);
+                    }else {
+                        $ionicSideMenuDelegate.toggleLeft(false);
+                    }
                }); // end of on
                
 });
