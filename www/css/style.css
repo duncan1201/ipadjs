@@ -21,15 +21,15 @@
  item-divider-paddingless
  */
 .item-divider-paddingless {
-    padding:0;
+    padding:0 !important;
 }
 
 .item-divider-paddingless .row {
-    padding:0 1px 0 1px;
+    padding:0 0 0 0;
 }
 
 .item-divider-paddingless .col {
-    padding:0 1px 0 1px;
+    padding:0 0px 0 0px;
 }
 
 .item-divider-paddingless .button {

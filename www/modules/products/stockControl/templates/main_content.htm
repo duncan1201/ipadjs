@@ -1,0 +1,30 @@
+<ion-content scroll="true" ng-controller="stockControlCtrl" id="stock_control_main_content">
+    <div class="row">
+        <div class="col">Products &gt; Stock Control</div>
+    </div>
+    
+    <div class="card">
+        <div class="item item-divider">
+            <button class="button button-small add" ng-click="order_stock_click()">
+                Order Stock
+            </button>
+            <button class="button button-small add" ng-click="return_stock_click()">
+                Return Stock
+            </button>
+            <button class="button button-small add" ng-click="inventory_count_click()">
+                Inventory Count
+            </button>
+        </div>
+    </div>
+    
+    <div class='row row_header'>
+        <div class='col'>Name</div>
+        <div class='col'>Type</div>
+        <div class='col'>Date</div>
+        <div class='col'>Due at</div>
+        <div class='col'>Source</div>
+        <div class='col'>Items</div>
+        <div class='col'>Status</div>
+    </div>
+
+</ion-content>

@@ -217,6 +217,11 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
                         }
              
              
-                    } // end of switch_tab
+                    }, // end of switch_tab
+                    get_sale_items_product_id_n_qty : function(sale_id, _callback){
+                        var stmt = "select * from sale_items where sale_id = ?";
+                        var json = {sql: stmt, params:[sale_id], callback: _callback};
+                        DbUtil.executeSql(json);
+                    } // get_sale_items_product_id_n_qty
                 } // end of return
              });

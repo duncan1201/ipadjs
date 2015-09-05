@@ -15,6 +15,7 @@ app.constant('Schema_SQLs',
               'Drop table if exists registers',
               //'Drop table if exists sales',
               //'Drop table if exists sale_items',
+              'Drop table if exists order',
               
               /* settings table */
               'Create table if not exists settings(id integer primary key, tag varchar(50), name varchar(50) unique, value varchar(50))',
@@ -63,7 +64,10 @@ app.constant('Schema_SQLs',
               'Create table if not exists sales (id integer primary key, sales_tax_name varchar(50), sales_tax_rate real, subtotal real DEFAULT 0, total_tax real DEFAULT 0, total real DEFAULT 0, creation_date datetime, status varchar(50) DEFAULT "current")',
               
               /* sale_items */
-              'Create table if not exists sale_items (id integer primary key, quantity integer, unit_price real, name varchar(50), sale_id integer, product_id integer)'
+              'Create table if not exists sale_items (id integer primary key, quantity integer, unit_price real, name varchar(50), sale_id integer, product_id integer)',
+              
+              /* order */
+              'Create table if not exists order (id integer primary key, name varchar(50), supplier_id integer, due_at datetime)'
               ])
 .constant('Initialization_SQLs', [
             //'insert into layouts (id, name, creation_date) values (1, "Default Quick Keys", datetime("now"))',

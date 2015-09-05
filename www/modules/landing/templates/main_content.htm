@@ -1,34 +1,3 @@
 <ion-content>
-    <br/>
-    <form>
-    <input type="text" name="color" id="color" value="" list="colorlist" style="outline-style:solid;outline-width:1px"/>
-    <datalist id="colorlist">
-        <option value="Black" />
-        <option value="Blue" />
-        <option value="Dark Green" />
-        <option value="Grey" />
-        <option value="Green" />
-        <option value="Red" />
-        <option value="White" />
-        <option value="Yellow" />
-    </datalist>
-    </form>
 
-<script id='home.html' type='text/ng-template'>
-    <ion-view title="Our Awesome Header">
-    <ion-content>
-    Here's the content for this page
-    </ion-content>
-    </ion-view>
-</script>
-
-    <script>
-        $(document).ready(function () {
-                          
-                            var availableTags = $('#colorlist').find('option').map(function () {
-                                                                                 return this.value;
-                                                                                 }).get();
-                          $('#color').autocomplete({ source: availableTags });
-                          });
-        </script>
 </ion-content>

@@ -1,4 +1,4 @@
-app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover, $ionicPopup, App_URLs, Layouts, Sales, Util) {
+app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover, $ionicPopup, App_URLs, Layouts, Products, Sales, Util) {
                
               
                // start of init method
@@ -154,7 +154,12 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                         if(count == 0){
                             console.log("open sale click.count == 0");
                             self.tab_click('current sale');
-                            Sales.update_sale_status(sale_id, 'current');
+               var c = function(){
+               Sales.get_current_sale();
+               Sales.get_parked_sales();
+               };
+                            Sales.update_sale_status(sale_id, 'current', c);
+                            //Sales.get_parked_sales();
                         } else {
                             var park_tap = function(e){
                                 console.log("park tapped haha=");
@@ -191,11 +196,23 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                
                $scope.pay_click = function(sale_id) {
                console.log('pay click');
-                    var callback = function(tx, rlts){
+
+                    var callback = function() {
+               Sales.get_current_sale();
+               Sales.get_parked_sales();
+                    };
+                    Sales.update_sale_status(sale_id, "paid", callback); // paid
                
-                    };//end of callback
-               
-                    Sales.update_sale_status(sale_id, "current", callback); // paid
+                    var get_sale_items_callback = function(tx, rlts){
+               var rows = rlts.rows;
+               var ret = [];
+               for(var i = 0; i < rows.length; i++){
+               var item = rows.item(i);
+               ret.push({product_id: item.product_id, quantity: item.quantity});
+               }
+               Products.update_products_quantity(ret);
+                    };//end of get_sale_items_callback
+                    Sales.get_sale_items_product_id_n_qty(sale_id, get_sale_items_callback);
                }; // end of pay_click
                
                $scope.get_display_color = function(color){

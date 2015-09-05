@@ -129,6 +129,18 @@ product.factory('Products',
                         var stmt = "select count(*) as count from products where product_type_id = ?";
                         var json = {sql: stmt, params:[type_id], callback: _callback};
                         DbUtil.executeSql(json);
-                    } // end of is_type_in_use
+                    }, // end of is_type_in_use
+                    // [{product_id:, quantity}]
+                    update_products_quantity : function(p_qtys) {
+                        var jsons = [];
+                        for(var i = 0; i < p_qtys.length; i++){
+                            var p_qty = p_qtys[i];
+                            var stmt = "update products set current_stock = current_stock - ? where id = ?";
+                
+                            var json = {sql: stmt, params:[p_qty.quantity, p_qty.product_id]};
+                            jsons.push(json);
+                        }
+                        DbUtil.executeSqls(jsons);
+                    } // update_products_quantity
                 };
             }); // end of product.factory

@@ -163,7 +163,7 @@ button.unit_price {
                 
                 <div class='row row_content' ng-repeat="parked_sale in parked_sales">
                     <div class='col col-40'>{{parked_sale.creation_date | date: 'yyyy-MM-dd'}}</div>
-                    <div class='col col-15'>Status</div>
+                    <div class='col col-15'>{{parked_sale.status}}</div>
                     <div class='col col-15'>{{parked_sale.subtotal + parked_sale.total_tax | currency}}</div>
                     <div class='col col-15'>&nbsp;</div>
                     <div class='col col-15'>
@@ -181,7 +181,7 @@ button.unit_price {
         <div id='layout_container' class="card card-paddingless card-marginless layout">
             
             <!-- start of layout groups -->
-            <div class="item item-divider">
+            <div class="item item-divider item-divider-paddingless">
                 <div class="row">
                     <div class="col">
                         <div ng-repeat="group in layout.groups">

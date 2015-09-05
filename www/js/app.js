@@ -48,7 +48,8 @@ app.constant('App_URLs',
                 landing_header_bar: 'modules/landing/templates/header_bar.htm',
                 landing_main_content: 'modules/landing/templates/main_content.htm',
                 general_main_content: 'modules/general/templates/main_content.htm',
-                tag_main_content: 'modules/products/tags/templates/main_content.htm'
+                tag_main_content: 'modules/products/tags/templates/main_content.htm',
+                stock_ctrl_main_content: 'modules/products/stockControl/templates/main_content.htm'
              });
 
 function initApp(DbUtil, Schema_SQLs, Initialization_SQLs){
@@ -94,6 +95,9 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                     if (submenuTitle == 'Products') {
                         $rootScope.ion_header_bar_template = "modules/products/products/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/products/products/templates/main_content.htm";
+                    } else if (submenuTitle == 'Stock Control'){
+                        $rootScope.ion_header_bar_template = "modules/products/stockControl/templates/header_bar.htm";
+                        $rootScope.ion_content_template = App_URLs.stock_ctrl_main_content;
                     } else if (submenuTitle == 'Types'){
                         $rootScope.ion_header_bar_template = "modules/products/productTypes/templates/header_bar.htm";
                         $rootScope.ion_content_template = "modules/products/productTypes/templates/main_content.htm";

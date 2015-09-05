@@ -1,0 +1,49 @@
+<ion-content scroll="true" ng-controller="stockControlCtrl" id="add_order">
+    
+    <div class="row">
+        <div class="col">Products &gt; New Stock Order</div>
+    </div>
+    
+    <form ng-submit="new_order_form_submit_click(order)">
+    <input type='hidden' ng-model='order.id'/>
+    <div class='card'>
+        <div class='item item-divider'>
+            Details
+        </div>
+        <div class='item'>
+            <div class='row'>
+                <div class='col'>Name / references</div>
+                <div class='col'>
+                    <input type='text' class='lightgray-outline' ng-model='order.name'/>
+                </div>
+                <div class='col'>Due at</div>
+                <div class='col'>
+                    <input type='date' class='lightgray-outline'/>
+                </div>
+            </div>
+            
+            <div class='row'>
+                <div class='col'>Order from</div>
+                <div class='col'>
+                    <select>
+                        <option value=''>supplier A</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="item item-divider item-divider-paddingless">
+            <div class="row">
+                <div class="col col-25 col-offset-50">
+                    <button class="button button-small button-block button-light" type='button' ng-click="product_form_cancel_click()">Cancel</button>
+                </div>
+                <div class="col col-25">
+                    <button class="button button-small button-block button-light" type="submit">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</ion-content>
