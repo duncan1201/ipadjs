@@ -6,7 +6,7 @@
 
 
 
-var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout', 'productType', 'outlet', 'sale']);
+var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout', 'productType', 'outlet', 'sale', 'register']);
 
 app.run(function($ionicPlatform, DbUtil, App_URLs, Schema_SQLs, Initialization_SQLs) {
         var ready_function = function(){
@@ -44,6 +44,7 @@ app.constant('App_URLs',
                 layout_main_content: 'modules/quickKeys/templates/main_content.htm',
                 outlet_add_edit: 'modules/outlets/outlets/templates/add_edit_outlet.htm',
                 outlet_main_content: 'modules/outlets/outlets/templates/main_content.htm',
+                register_add_edit: 'modules/outlets/registers/templates/add_edit_register.htm',
                 sell_main_content: 'modules/sell/templates/main_content.htm',
                 landing_header_bar: 'modules/landing/templates/header_bar.htm',
                 landing_main_content: 'modules/landing/templates/main_content.htm',

@@ -3,19 +3,25 @@ var layout = angular.module('layout', ['ionic', 'util']);
 layout.factory('Layouts',
                function(DbUtil, $rootScope, App_URLs) {
                     return {
-                        all_with_default_callback : function () {
+                        all : function (callback_function) {
                         var self = this;
                         var selectSql = "select id, name, date(creation_date) as creation_date from layouts";
-                        var callback_function = function(tx, results) {
-                            var ret = self.parse_results_summary(results);
-                            var scope = angular.element(document.querySelector('#layouts_main_content')).scope();
-                            scope.$apply(function(){
-                                scope.layouts = ret;
-                            });
-                        }; // end pf callback_function
-                        var json = {sql: selectSql, params:[], callback: callback_function};
+                        var _callback = null;
+                        if (angular.isDefined(callback_function)){
+                            _callback = callback_function;
+                        } else {
+                            _callback = function(tx, results) {
+                                var ret = self.parse_results_summary(results);
+                                var scope = angular.element(document.querySelector('#layouts_main_content')).scope();
+                                scope.$apply(function(){
+                                    scope.layouts = ret;
+                                });
+                            }; // end pf _callback
+                        }
+               
+                        var json = {sql: selectSql, params:[], callback: _callback};
                         DbUtil.executeSql(json);
-                    }, // end of all_with_default_callback
+                    }, // end of all
                     update_layout: function (layout) {
                         console.log(angular.toJson(layout));
                         var callback_fun = function(tx, results) {
@@ -159,7 +165,7 @@ layout.factory('Layouts',
                         var deleteSql = "delete from layouts where id = ? ";
                         var callback_function = function () {
                             self.delete_orphaned_groups();
-                            self.all_with_default_callback();
+                            self.all();
                         }; // end of callback_function
                         var json = {sql: deleteSql, params:[id], callback: callback_function};
                         DbUtil.executeSql(json);

@@ -3,10 +3,16 @@
         <div class="col">Products &gt; Quick Keys</div>
     </div>
     
+    <h2 style='margin-left:10px'>Quick Keys</h2>
+    
     <div class="card">
-        <div class="item item-divider"><button class="button button-small add" ng-click="add_new_layout_click()">Add Layout</button></div>
+        <div class="item item-divider">
+            <button class="button button-small add" ng-click="add_new_layout_click()">Add Layout</button>
+        </div>
     </div>
     
+    
+    <!-- layouts -->
     <div class="row row_header">
         <div class="col">Name</div>
         <div class="col">Date Created</div>
@@ -21,6 +27,28 @@
                 Edit
             </button>
             <button class="button button-small button-clear button-positive" ng-click="delete_click({{layout.id}})">Delete</button>
+        </div>
+    </div>
+    
+    <h2 style='margin-left:10px'>Assign Layouts to Registers</h2>
+    <div class='row row_header'>
+        <div class='col'>Register</div>
+        <div class='col'>Outlet</div>
+        <div class='col'>Quick Key Layout</div>
+        <div class='col'>&nbsp;</div>
+    </div>
+    <div class='row row_content' ng-repeat='register in registers'>
+        <div class='col'>{{register.name}}</div>
+        <div class='col'>
+            {{register.outlet_name}}
+        </div>
+        <div class='col'>
+            <select ng-model='register.layout_id'>
+                <option ng-repeat='layout in layouts' value='{{layout.id}}'>{{layout.name}}</option>
+            </select>
+        </div>
+        <div class='col'>
+            <button type='button' ng-click='edit_register_click({{register.id}})' class='button button-small button-clear button-positive'>Edit</button>
         </div>
     </div>
 </ion-content>

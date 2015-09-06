@@ -1,5 +1,5 @@
 app.controller('layoutCtrl',
-               function($rootScope, $scope, $ionicPopover, App_URLs, Layouts, Products, Tags, Util) {
+               function($rootScope, $scope, $ionicPopover, App_URLs, Layouts, Products, Tags, Registers, Util) {
                
                     var self = this;
                
@@ -161,7 +161,13 @@ app.controller('layoutCtrl',
                                 keys.splice(i, 1);
                             }
                         }
-                    } // end of remove_key_from_the_active_group
+                    }; // end of remove_key_from_the_active_group
+               
+                    $scope.edit_register_click = function(register_id) {
+                        console.log("edit_register_click=" + register_id);
+                        $rootScope.ion_header_bar_template = "modules/outlets/registers/templates/header_bar.htm";
+                        $rootScope.ion_content_template = App_URLs.register_add_edit;
+                    };
                
                     $rootScope.$on('$includeContentLoaded', function(event, url){
                         if(url == App_URLs.layout_add_edit){
@@ -172,7 +178,26 @@ app.controller('layoutCtrl',
                                 Layouts.get_layout_for_edit_with_default_callback($rootScope.layout_id_for_edit);
                             }
                         } else if (url == App_URLs.layout_main_content) {
-                            Layouts.all_with_default_callback();
+                            Layouts.all();
+                            
+                            var registers_callback = function(tx, rlts) {
+                                var rows = rlts.rows;
+                                   
+                                var ret = [];
+                                for ( var i = 0; i < rows.length; i++) {
+                                   var item = rows.item(i);
+                                   console.log("registers_callback.item=" + angular.toJson(item));
+                                   ret.push({id: item.id,
+                                            name: item.name,
+                                            outlet_name: item.outlet_name,
+                                            layout_id: item.layout_id
+                                            });
+                                }
+                                $scope.$apply(function(){
+                                    $scope.registers = ret;
+                                });
+                            };
+                            Registers.all(registers_callback);
                         }
                     });
                

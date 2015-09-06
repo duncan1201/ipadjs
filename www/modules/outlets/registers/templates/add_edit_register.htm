@@ -1,0 +1,49 @@
+<ion-content scroll="true" ng-controller="registerCtrl" id="register_add_edit">
+    <div class="row">
+        <div class="col">
+            Setup &gt; Update a register
+        </div>
+    </div>
+    
+    <form ng-submit="register_form_submit_click(register)" name="register_form">
+        <div class='card'>
+            <div class='item item-divider'>
+                Details
+            </div>
+            <div class='item'>
+                <div class='row'>
+                    <div class='col col-20'>
+                        Register name
+                    </div>
+                    <div class='col col-80'>
+                        <input type='text' class='lightgray-outline'ng-model='register.name'/>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col col-20'>
+                        Quick Key template
+                    </div>
+                    <div class='col col-80'>
+                        <select ng-model='register.layout_id'>
+                            <option value="">&nbsp;</option>
+                            <option ng-repeat="layout in layouts" value="{{layout.id}}">{{layout.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="item item-divider item-divider-paddingless">
+                <div class="row">
+                    <div class="col col-25 col-offset-50">
+                        <button class="button button-small button-block button-light" ng-click="product_form_cancel_click()">Cancel</button>
+                    </div>
+                    <div class="col col-25">
+                        <button class="button button-small button-block button-light" type="submit">Save Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</ion-content>
