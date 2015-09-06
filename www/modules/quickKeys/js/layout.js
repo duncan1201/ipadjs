@@ -165,6 +165,7 @@ app.controller('layoutCtrl',
                
                     $scope.edit_register_click = function(register_id) {
                         console.log("edit_register_click=" + register_id);
+                        $rootScope.register_id_for_edit = register_id;
                         $rootScope.ion_header_bar_template = "modules/outlets/registers/templates/header_bar.htm";
                         $rootScope.ion_content_template = App_URLs.register_add_edit;
                     };
@@ -186,7 +187,6 @@ app.controller('layoutCtrl',
                                 var ret = [];
                                 for ( var i = 0; i < rows.length; i++) {
                                    var item = rows.item(i);
-                                   console.log("registers_callback.item=" + angular.toJson(item));
                                    ret.push({id: item.id,
                                             name: item.name,
                                             outlet_name: item.outlet_name,

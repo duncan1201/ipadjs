@@ -67,10 +67,11 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
                         var scope = this.get_main_content_scope();
                         var callback_fun = function(tx, rlts) {
                             var rows = rlts.rows;
+             console.log("get_parked_sales.length=" + rows.length);
                             var ret = [];
                             for (var i = 0; i < rows.length; i++){
                                 var item = rows.item(i);
-                                console.log("get_parked_sales-item=" + angular.toJson(item));
+                                //console.log("get_parked_sales-item=" + angular.toJson(item));
                                 ret.push({id: item.id, subtotal: item.subtotal, total_tax: item.total_tax, creation_date: item.creation_date});
                             }
                             scope.$apply(function() {

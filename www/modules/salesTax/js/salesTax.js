@@ -59,35 +59,38 @@ var salesTax = angular.module('salesTax', ['ionic', 'util']);
 salesTax.factory('SalesTaxes', function(DbUtil){
                  return {
                     all: function(_callback) {
+                        var self = this;
                         var query = 'SELECT * FROM sales_taxes ORDER BY name COLLATE NOCASE';
                         var callback_fun = null;
                         if (angular.isDefined(_callback)) {
                             callback_fun = _callback;
                         } else {
                             callback_fun = function(tx, results){
-                                var rows = results.rows;
-                                var ret = [];
-                                for (i = 0; i < rows.length; i++){
-                                    var item = rows.item(i);
-                                    ret.push({
-                                        name: item.name,
-                                        rate: item.rate,
-                                        id: item.id,
-                                        system_generated:item.system_generated
-                                    });
-                                }
                  
                                 var scope = angular.element(document.querySelector('#sales_taxes_main_content')).scope();
                  
                                 scope.$apply(function(){
-                                    scope.sales_taxes = ret;
+                                    scope.sales_taxes = self.parse_rlts(results);
                                 });
                             }; // end of callback_fun
                         }
                         var json = {sql: query, params:[], callback: callback_fun};
                         DbUtil.executeSql(json);
                     }, // end of all
-                 
+                    parse_rlts : function(rlts) {
+                        var rows = rlts.rows;
+                        var ret = [];
+                        for (var i = 0; i < rows.length; i++){
+                            var item = rows.item(i);
+                            ret.push({
+                                name: item.name,
+                                rate: item.rate,
+                                id: item.id,
+                                system_generated:item.system_generated
+                            });
+                        }
+                        return ret;
+                    } , // end of parse_rlts
                     delete_sales_tax: function (id) {
                         var self = this;
                         var callback_function =

@@ -195,22 +195,20 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                 }; // end of open_sale_click
                
                $scope.pay_click = function(sale_id) {
-               console.log('pay click');
-
                     var callback = function() {
-               Sales.get_current_sale();
-               Sales.get_parked_sales();
+                        Sales.get_current_sale();
+                        Sales.get_parked_sales();
                     };
                     Sales.update_sale_status(sale_id, "paid", callback); // paid
                
                     var get_sale_items_callback = function(tx, rlts){
-               var rows = rlts.rows;
-               var ret = [];
-               for(var i = 0; i < rows.length; i++){
-               var item = rows.item(i);
-               ret.push({product_id: item.product_id, quantity: item.quantity});
-               }
-               Products.update_products_quantity(ret);
+                        var rows = rlts.rows;
+                        var ret = [];
+                        for(var i = 0; i < rows.length; i++){
+                            var item = rows.item(i);
+                            ret.push({product_id: item.product_id, quantity: item.quantity});
+                        }
+                        Products.update_products_quantity(ret);
                     };//end of get_sale_items_callback
                     Sales.get_sale_items_product_id_n_qty(sale_id, get_sale_items_callback);
                }; // end of pay_click

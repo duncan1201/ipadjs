@@ -199,7 +199,7 @@ layout.factory('Layouts',
                         DbUtil.executeSql(json);
                     }, // end of delete_key
                     get_current_layout : function (callback_fun) {
-                        var subquery = "select r.layout_id from outlets o left join registers r on r.outlet_id = o.id";
+                        var subquery = "select r.layout_id from outlets o left join registers r on r.id = o.register_id";
                         var query = "select * from layouts where id in (" + subquery + ")";
                         var json = {sql: query, params:[], callback: callback_fun};
                         DbUtil.executeSql(json);
