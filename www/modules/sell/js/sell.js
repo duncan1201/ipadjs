@@ -154,10 +154,10 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                         if(count == 0){
                             console.log("open sale click.count == 0");
                             self.tab_click('current sale');
-               var c = function(){
-               Sales.get_current_sale();
-               Sales.get_parked_sales();
-               };
+                            var c = function(){
+                                Sales.get_current_sale();
+                                Sales.get_parked_sales();
+                            };
                             Sales.update_sale_status(sale_id, 'current', c);
                             //Sales.get_parked_sales();
                         } else {
@@ -195,12 +195,10 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                 }; // end of open_sale_click
                
                $scope.get_text_style = function(group_count){
-               var g_container = angular.element(document.querySelector('#groups_container'));
-               var g_width = g_container.css('width');
-               var total = 499;
-               var ret = Math.floor(total / group_count - 1);
-               console.log("get_text_style=" + ret);
-               return {'width': ret + 'px','box-sizing':'border-box'};
+                    var total = 499;
+                    var ret = Math.floor(total / group_count - 1);
+                    console.log("get_text_style=" + ret);
+                    return {'width': ret + 'px','box-sizing':'border-box'};
                };
                
                $scope.pay_click = function(sale_id) {

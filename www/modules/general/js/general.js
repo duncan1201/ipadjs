@@ -1,4 +1,8 @@
-app.controller('GeneralCtrl', function($rootScope, $scope, App_URLs, SalesTaxes, Generals, Util){
+app.constant('General_CNSTs', {
+             TAX_INCLUSIVE_ID: 'TAX INCLUSIVE'
+             });
+
+app.controller('GeneralCtrl', function($rootScope, $scope, General_CNSTs, App_URLs, SalesTaxes, Generals, Util){
                
                // initialize the store settings
                
@@ -14,7 +18,7 @@ app.controller('GeneralCtrl', function($rootScope, $scope, App_URLs, SalesTaxes,
                
                $scope.display_prices_values = [
                     {
-                        id: "TAX INCLUSIVE",
+                        id: General_CNSTs.TAX_INCLUSIVE_ID,
                         label: "Tax inclusive"
                     }, {
                         id: "Tax exclusive".toUpperCase(),

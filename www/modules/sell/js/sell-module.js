@@ -1,6 +1,6 @@
 var sale = angular.module('sale', ['ionic', 'util', 'salesTax']);
 
-sale.factory('Sales', function(DbUtil, SalesTaxes){
+sale.factory('Sales', function(DbUtil, General_CNSTs, SalesTaxes, Generals){
                 return {
                     get_main_content_scope: function() {
                         var ret = angular.element(document.querySelector('#sell_main_content')).scope();
@@ -67,7 +67,7 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
                         var scope = this.get_main_content_scope();
                         var callback_fun = function(tx, rlts) {
                             var rows = rlts.rows;
-             console.log("get_parked_sales.length=" + rows.length);
+                            console.log("get_parked_sales.length=" + rows.length);
                             var ret = [];
                             for (var i = 0; i < rows.length; i++){
                                 var item = rows.item(i);
@@ -83,12 +83,27 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
                     }, // end of get_parked_sales
                     create_sale: function (callback_fun) {
              
-                        var subquery = "select s.name as sales_tax_name, s.rate as sales_tax_rate, datetime('now') as creation_date from sales_taxes s where s.id in (select sales_tax_id from outlets o where o.is_current = 1)";
+                        //
+                        var sales_tax_exclusive = "select s.name as sales_tax_name, s.rate as sales_tax_rate, datetime('now') as creation_date from sales_taxes s where s.id in (select sales_tax_id from outlets o where o.is_current = 1)";
 
-                        var stmt = "insert into sales (sales_tax_name, sales_tax_rate, creation_date) " + subquery;
+                        var sales_tax_inclusive = "select s.name as sales_tax_name, s.rate as sales_tax_rate, datetime('now') as creation_date from sales_taxes s where s.id in (select value from settings where name = 'sales_tax_id')";
              
-                        var json_create = {sql: stmt, params:[], callback: callback_fun};
-                        DbUtil.executeSql(json_create);
+                        var stmt_insert = "insert into sales (sales_tax_name, sales_tax_rate, creation_date) ";
+             
+                        var stmt ;
+             
+                        var general_cb = function(tx, rlts) {
+                            var store_settings = Generals.parse_store_settings(rlts);
+    
+                            if (store_settings['display_prices'].id == General_CNSTs.TAX_INCLUSIVE_ID){
+                                stmt = stmt_insert + sales_tax_inclusive;
+                            } else {
+                                stmt = stmt_insert + sales_tax_exclusive;
+                            }
+             
+                            DbUtil.executeSql({sql: stmt, params:[], callback: callback_fun});
+                        };
+                        Generals.get_store_settings(general_cb);
                     }, // end of create_sale
                     add_sale_item: function (sale_id, key, callback_fun) {
                         // add sale item
@@ -144,7 +159,7 @@ sale.factory('Sales', function(DbUtil, SalesTaxes){
                     }, // end create_update_total_json
                     create_update_total_tax_json: function(sale_id) {
                         var tax_rate_query = "(select sales_tax_rate from sales where id = " + sale_id + ")";
-                        var total_tax_query = "select sum(unit_price * quantity) * " +tax_rate_query +" from sale_items where sale_id = " + sale_id;
+                        var total_tax_query = "select sum(unit_price * quantity) * 0.01 * " +tax_rate_query +" from sale_items where sale_id = " + sale_id;
                         var stmt = "update sales set total_tax = (" + total_tax_query + ") where id = ?";
                         var ret = {sql: stmt, params:[sale_id]};
                         return ret;

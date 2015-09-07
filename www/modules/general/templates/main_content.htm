@@ -41,7 +41,7 @@
                             <span class="input-label">Default sales tax</span>
                             <select ng-model="store_settings.sales_tax_id">
                                 <option value=''>Please select...</option>
-                                <option ng-repeat="sales_tax in sales_taxes" value="{{sales_tax.id}}">{{sales_tax.name}} {{sales_tax.name}} %</option>
+                                <option ng-repeat="sales_tax in sales_taxes" value="{{sales_tax.id}}">{{sales_tax.name}} {{sales_tax.rate}} %</option>
                             </select>
                         </label>
                     </div>
