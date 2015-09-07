@@ -83,6 +83,7 @@ app.controller('productCtrl',
                
                     $scope.brand_change = function(brand_id){
                         if (brand_id == "-1"){ // + new brand
+                            $scope.popup_title = "Create product brand";
                             $scope.brandModal.show();
                         }
                     };
@@ -195,6 +196,7 @@ app.controller('productCtrl',
                     // start of product type dialog
                     $scope.product_type_change = function(product_type_id) {
                         if (product_type_id == "-1"){
+                            $scope.popup_title = "Create product type";
                             $scope.productTypeModal.show();
                         }
                     };
