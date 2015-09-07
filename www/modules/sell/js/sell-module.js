@@ -108,7 +108,7 @@ sale.factory('Sales', function(DbUtil, General_CNSTs, SalesTaxes, Generals){
                     add_sale_item: function (sale_id, key, callback_fun) {
                         // add sale item
                         var stmt = "insert into sale_items (name, quantity, unit_price, sale_id, product_id) values (?, 1, ?, ?, ?)";
-                        var json_insert = {sql: stmt, params:[key.display_name, key.retail_price, sale_id, key.product_id]};
+                        var json_insert = {sql: stmt, params:[key.display_name, key.retail_price_excluding_tax, sale_id, key.product_id]};
              
                         // update subtotal
                         var json_subtotal = this.create_update_subtotal_json(sale_id);

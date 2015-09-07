@@ -27,7 +27,8 @@ product.factory('Products',
                                             brand_name: item.brand_name,
                                             supplier_id: item.supplier_id,
                                             supplier_name: item.supplier_name,
-                                            retail_price: item.retail_price,
+                                            retail_price_excluding_tax: item.retail_price_excluding_tax,
+                                            retail_price_including_tax: item.retail_price_including_tax,
                                             current_stock: item.current_stock
                                         });
                                     } // end of for
@@ -48,14 +49,14 @@ product.factory('Products',
                         var callback_function = function(){
                             self.all_summary();
                         };
-                        var insertSql = "insert into products (product_name, product_handle, desc, creation_date, product_type_id, brand_id, supplier_id, supply_price, markup, retail_price, stock_keeping_unit, current_stock, reorder_point, reorder_amount) values (?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        var insertSql = "insert into products (product_name, product_handle, desc, creation_date, product_type_id, brand_id, supplier_id, supply_price, markup, retail_price_excluding_tax, retail_price_including_tax, stock_keeping_unit, current_stock, reorder_point, reorder_amount) values (?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         var json = {
                             sql: insertSql,
-                params: [product.product_name, product.product_handle, product.desc, product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.retail_price, product.stock_keeping_unit, product.current_stock == null? 0: product.current_stock, product.reorder_point, product.reorder_amount],
+                            params: [product.product_name, product.product_handle, product.desc, product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.retail_price_excluding_tax, product.retail_price_including_tax, product.stock_keeping_unit, product.current_stock == null? 0: product.current_stock, product.reorder_point, product.reorder_amount],
                             callback: callback_function};
                         DbUtil.executeSql(json);
                     }, // end of create_product
-                    get_product : function(id){
+                    get_product : function(id) {
                         var self = this;
                         var callback_fun = function(tx, results){
                             var rows = results.rows;
@@ -75,7 +76,8 @@ product.factory('Products',
                                     supplier_id: item.supplier_id,
                                     supply_price: item.supply_price,
                                     markup: item.markup,
-                                    retail_price: item.retail_price,
+                                    retail_price_excluding_tax: item.retail_price_excluding_tax,
+                                    retail_price_including_tax: item.retail_price_including_tax,
                                     stock_keeping_unit: item.stock_keeping_unit,
                                     current_stock: item.current_stock,
                                     reorder_point: item.reorder_point,
@@ -98,10 +100,10 @@ product.factory('Products',
                         var callback_fun = function() {
                 
                         }; // end of callback_fun
-                        var update_sql = "update products set product_name = ?, product_handle = ?, desc = ?, tags_string = ?, product_type_id = ?, brand_id = ?, supplier_id = ?, supply_price = ?, markup = ?, retail_price = ?, stock_keeping_unit = ?, current_stock = ?, reorder_point = ?, reorder_amount = ? where id = ?";
+                        var update_sql = "update products set product_name = ?, product_handle = ?, desc = ?, tags_string = ?, product_type_id = ?, brand_id = ?, supplier_id = ?, supply_price = ?, markup = ?, retail_price_excluding_tax = ?, retail_price_including_tax = ?, stock_keeping_unit = ?, current_stock = ?, reorder_point = ?, reorder_amount = ? where id = ?";
                         var json = {
                             sql: update_sql,
-                            params:[product.product_name, product.product_handle, product.desc,product.tags.join(","), product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.retail_price, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount,product.id],
+                            params:[product.product_name, product.product_handle, product.desc,product.tags.join(","), product.product_type_id, product.brand_id, product.supplier_id, product.supply_price, product.markup, product.retail_price_excluding_tax, product.retail_price_including_tax, product.stock_keeping_unit, product.current_stock, product.reorder_point, product.reorder_amount,product.id],
                             callback: callback_fun
                         };
                         DbUtil.executeSql(json);

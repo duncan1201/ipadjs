@@ -1,6 +1,14 @@
 app.controller('productCtrl',
-               function($rootScope, $scope, $ionicModal, $ionicSideMenuDelegate, Products, Tags, ProductTypes, Suppliers, Brands, App_URLs, Util){
+               function($rootScope, $scope, $ionicModal, $ionicSideMenuDelegate, Products, Tags, ProductTypes, Suppliers, Brands, Generals, App_URLs, Util){
                     var self = this;
+               
+                    var store_settings_callback = function(tx, rlts) {
+                        var store_settings = parse_store_settings.parse_store_settings(rlts);
+                        $scope.$apply(function(){
+                            $scope.store_settings = store_settings;
+                        });
+                        Products.all_summary();
+                    };
                
                     var tags_callback = function(tx, results){
                         var rows = results.rows;
@@ -46,7 +54,6 @@ app.controller('productCtrl',
                     }; // end of suppliers_callback
                
                     if ($rootScope.ion_content_template == App_URLs.product_main_content){
-                        Products.all_summary();
                         // initialize the filter
                         if (!angular.isDefined($scope.filter)){
                             $scope.filter = {
@@ -66,7 +73,7 @@ app.controller('productCtrl',
                             Tags.all(tags_callback);
                                    
                             if (Util.is_undefined_or_null($rootScope.product_id_for_edit)){
-                                $scope.product = {supply_price: 0, markup: 0, retail_price: 0, current_stock: 0};
+                                   $scope.product = {supply_price: 0, markup: 0, retail_price_excluding_tax: 0, retail_price_including_tax: 0, current_stock: 0};
                             } else {
                                 Products.get_product($rootScope.product_id_for_edit);
                             }
@@ -75,6 +82,9 @@ app.controller('productCtrl',
                             Suppliers.all_summary(suppliers_callback);
                             ProductTypes.all_summary(product_types_callback);
                             Tags.all(tags_callback);
+                                   
+                            Generals.get_store_settings(store_settings_callback);
+                                   
                             if(!angular.isDefined($scope.tag_to_be_add)){
                                 $scope.tag_to_be_add = "";
                             }
@@ -136,7 +146,7 @@ app.controller('productCtrl',
                         var supply_price = $scope.product.supply_price;
                         if (angular.isDefined(markup) && angular.isDefined(supply_price)){
                             console.log("calculating retail price...");
-                            $scope.product.retail_price = (1 + markup / 100.0) * supply_price;
+                            $scope.product.retail_price_excluding_tax = (1 + markup / 100.0) * supply_price;
                         }
                     };
                

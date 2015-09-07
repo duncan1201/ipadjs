@@ -110,6 +110,8 @@
                     <div class="col">Supply price</div>
                     <div class="col">X Markup (%)</div>
                     <div class="col">= Retail price</div>
+                    <div class="col">+ Sales tax</div>
+                    <div class="col">= Retail price</div>
                 </div>
                 <div class="row">
                     <div class="col"><input type="number" min="0" step="0.01" class="lightgray-outline" ng-model="product.supply_price" ng-change="supply_price_change()"></div>
@@ -117,13 +119,19 @@
                         <input type="number" min="0" step="0.05" class="lightgray-outline" ng-model="product.markup" ng-change="markup_change()">
                     </div>
                     <div class="col">
-                        <input type="number" min="0" step="0.01" class="lightgray-outline" ng-model="product.retail_price">
+                        <input type="number" min="0" step="0.01" class="lightgray-outline" ng-model="product.retail_price_excluding_tax">
+                    </div>
+                    <div class='col'>test</div>
+                    <div class='col'>
+                        <input type="number" min="0" step="0.01" class="lightgray-outline" ng-model="product.retail_price_including_tax">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col gray-color">Excluding tax</div>
-                    <div class="col gray-color">&nbsp;</div>
-                    <div class="col gray-color">Excluding tax</div>
+                    <div class="col gray-color" style='font-size:small'>Excluding tax</div>
+                    <div class="col gray-color" style='font-size:small'>&nbsp;</div>
+                    <div class="col gray-color" style='font-size:small'>Excluding tax</div>
+                    <div class="col gray-color" style='font-size:small'>Currently, No Tax (0%)</div>
+                    <div class="col gray-color" style='font-size:small'>Including tax</div>
                 </div>
             </div>
         </div>
