@@ -8,7 +8,7 @@
 
 var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout', 'productType', 'outlet', 'sale', 'register']);
 
-app.run(function($ionicPlatform, DbUtil, App_URLs, Schema_SQLs, Initialization_SQLs) {
+app.run(function($ionicPlatform, DbUtil, App_URLs, Drop_SQLs, Schema_SQLs, Initialization_SQLs) {
         var ready_function = function(){
             /*
              Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -20,11 +20,11 @@ app.run(function($ionicPlatform, DbUtil, App_URLs, Schema_SQLs, Initialization_S
                 }
                 document.addEventListener("deviceready",
                                           function(){
-                                            initApp(DbUtil, Schema_SQLs, Initialization_SQLs);
+                                            initApp(DbUtil, Drop_SQLs, Schema_SQLs, Initialization_SQLs);
                                           },
                                           false);
                 }else{
-                    initApp(DbUtil, Schema_SQLs, Initialization_SQLs);
+                    initApp(DbUtil, Drop_SQLs, Schema_SQLs, Initialization_SQLs);
                 }
                 if(window.StatusBar) {
                     StatusBar.styleDefault();
@@ -53,9 +53,20 @@ app.constant('App_URLs',
                 stock_ctrl_main_content: 'modules/products/stockControl/templates/main_content.htm'
              });
 
-function initApp(DbUtil, Schema_SQLs, Initialization_SQLs){
-
-    var SQLs = Schema_SQLs.concat(Initialization_SQLs);
+function initApp(DbUtil, Drop_SQLs, Schema_SQLs, Initialization_SQLs){
+    var is_development = true;
+    var reinit_db = true;
+    
+    var SQLs ;
+    
+    if (reinit_db) {
+        SQLs = Drop_SQLs.concat(Schema_SQLs).concat(Initialization_SQLs);
+        //SQLs = Schema_SQLs;
+    } else {
+        //SQLs = Drop_SQLs.concat(Schema_SQLs).concat(Initialization_SQLs);
+        SQLs = Schema_SQLs;
+    }
+    console.log("SQLs.lenght=" + SQLs.length);
     
     var db = DbUtil.openDb();
     db.transaction(function(tx){

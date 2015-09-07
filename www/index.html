@@ -6,7 +6,7 @@
                 <title></title>
                 
                 <!-- start of JQuery -->
-                <link rel="stylesheet" href="lib/jqueryui/1.8/themes/base/jquery-ui.css" type="text/css" />
+                <link rel="stylesheet" href="lib/jqueryui/1.8/themes/base/jquery-ui.css" type="text/css">
                 <script src="lib/jquery/1.7/jquery.min.js"></script>
                 <script src="lib/jqueryui/1.8/jquery-ui.min.js"></script>
                 <!-- end of JQuery -->
@@ -73,10 +73,7 @@
                     <ion-list>
                         <ion-item ng-repeat="menu in menus">
                             <div class="list">
-                                <div class="item item-divider" ng-show='menu.title != ""'>
-                                    {{menu.title}}
-                                </div>
-                                <a class="item icon-left {{submenu.icon}}" href="#" ng-class="{active: active_submenu == submenu.title}" ng-repeat="submenu in menu.submenus" ng-click="submenuClick('{{submenu.title}}')">
+                                <a class="item icon-left {{submenu.icon}}" href="#" ng-class="{active: active_submenu == submenu.title}" ng-repeat="submenu in menu.submenus" ng-click="submenuClick(&apos;{{submenu.title}}&apos;)">
                                     {{submenu.title}}
                                 </a>
                             </div>
