@@ -27,10 +27,21 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-50">
+                    <div class="col col-50">
                         <label class="item item-select">
-                            <span class="input-label">Display prices</span>
-                            <select ng-options="display_price.label for display_price in display_prices_values track by display_price.id" ng-model="store_settings.display_prices">
+                            <span class="input-label">
+                                Display prices
+                            </span>
+                            <select ng-change='display_prices_change()' ng-options="display_price.label for display_price in display_prices_values track by display_price.id" ng-model="store_settings.display_prices">
+                            </select>
+                        </label>
+                    </div>
+                    <div class="col col-50" ng-show="store_settings.display_prices.id == 'TAX INCLUSIVE'">
+                        <label class="item item-select">
+                            <span class="input-label">Default sales tax</span>
+                            <select ng-model="store_settings.sales_tax_id">
+                                <option value=''>Please select...</option>
+                                <option ng-repeat="sales_tax in sales_taxes" value="{{sales_tax.id}}">{{sales_tax.name}} {{sales_tax.name}} %</option>
                             </select>
                         </label>
                     </div>
@@ -38,7 +49,10 @@
             </div>
             <div class="item item-divider item-divider-paddingless">
                 <div class="row">
-                    <div class="col col-25 col-offset-75">
+                    <div class="col col-25 col-offset-50">
+                        <button type='button' class="button button-small button-block button-light rounded" ng-click='cancel_store_settings_click()'>Cancel</button>
+                    </div>
+                    <div class="col col-25">
                         <button type='submit' class="button button-small button-block button-light rounded">
                             Save
                         </button>

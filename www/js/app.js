@@ -54,8 +54,7 @@ app.constant('App_URLs',
              });
 
 function initApp(DbUtil, Drop_SQLs, Schema_SQLs, Initialization_SQLs){
-    var is_development = true;
-    var reinit_db = true;
+    var reinit_db = false;
     
     var SQLs ;
     

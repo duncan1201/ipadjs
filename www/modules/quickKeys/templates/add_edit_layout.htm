@@ -98,7 +98,7 @@
                         <div id='groups_container'>
                             <div class='row' style='border:0px solid black'>
                                 <div class='col' ng-repeat="group in layout.groups" style='border:0px solid yellow'>
-                                    <div class='group-item' ng-class='{active_group: layout.active_group_id == group.id}'>
+                                    <div class='group-item' ng-class='{group_item_active: layout.active_group_id == group.id}'>
                                         <a class="text"  ng-style="get_text_style({{layout.groups.length}})" ng-click='group_text_click({{group}})'>{{group.name}}</a>
                                         <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" style='width:30px' ng-click="group_icon_click($event, {{group}})">
                                         </button>
