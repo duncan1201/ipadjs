@@ -130,6 +130,16 @@ app.controller('layoutCtrl',
                         $scope.new_group_popover.hide();
                     };
                
+                    $scope.get_text_style = function (group_count) {
+                        var g_container = angular.element(document.querySelector('#groups_container'));
+                        var g_width = g_container.css('width');
+                        var total_width = parseInt(g_width);
+                        var gear_width = 31;
+                        var ret = Math.floor(Math.floor(total_width / group_count) - 3 - gear_width);
+                        //console.log("get_style.ret=" + ret);
+                        return {'width': ret + 'px'}
+                    };
+               
                     $scope.new_group_click = function($event){
                         $scope.new_group_popover.scope.group = {name: '', layout_id: $scope.layout.id};
                         $scope.new_group_popover.show($event);

@@ -42,10 +42,16 @@
     border-radius:0px;
 }
 
-.group-item {
+#groups_container {
+    float:left;
+    width:458px;
+    border:0px solid blue;
+}
+
+div.group-item {
     float:left;
     display: inline-block;
-    width:90px;
+    
     height:35px;
     line-height: 35px;
     border-left:0px solid darkgray;
@@ -57,6 +63,7 @@
     margin-right:0px;
     margin-top:0;
     margin-bottom:0;
+    color:black;
 }
 
 .group-item .text {
@@ -64,21 +71,25 @@
     vertical-align:middle;
     height:100%;
     line-height: 35px;
-    margin:0;
     padding-left:4px;
     padding-top:0;
     padding-bottom:0;
     overflow:hidden;
     margin-top:0;
-    margin-right:0;
+    margin-right:auto;
+    margin-bottom:0;
+    margin-left:0px;
     padding-top:0;
     font-size:small;
     vertical-align:top;
     cursor: pointer;
     cursor: hand;
+    border:0px solid cyan;
+    text-align:center;
 }
 
 .group-item .icon-button {
+    display: inline-block;
     background-color:darkblue;
     vertical-align:middle;
     height:100%;

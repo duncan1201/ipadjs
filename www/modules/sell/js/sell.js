@@ -194,6 +194,15 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                     console.log("open_sale_click=" + sale_id);
                 }; // end of open_sale_click
                
+               $scope.get_text_style = function(group_count){
+               var g_container = angular.element(document.querySelector('#groups_container'));
+               var g_width = g_container.css('width');
+               var total = 499;
+               var ret = Math.floor(total / group_count - 1);
+               console.log("get_text_style=" + ret);
+               return {'width': ret + 'px','box-sizing':'border-box'};
+               };
+               
                $scope.pay_click = function(sale_id) {
                     var callback = function() {
                         Sales.get_current_sale();

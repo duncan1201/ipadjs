@@ -1,21 +1,22 @@
 app.constant('Schema_SQLs',
              [
               /* development purpose */
-              //'Drop table if exists settings',
-              //'Drop table if exists sales_taxes',
-              //'Drop table if exists suppliers',
-              //'Drop table if exists product_types',
-              //'Drop table if exists products',
-              //'Drop table if exists brands',
-              //'Drop table if exists tags',
-              //'Drop table if exists layouts',
-              //'Drop table if exists layout_groups',
-              //'Drop table if exists layout_group_keys',
-              //'Drop table if exists outlets',
-              //'Drop table if exists registers',
-              //'Drop table if exists sales',
-              //'Drop table if exists sale_items',
-              'Drop table if exists orders',
+              /*
+              'Drop table if exists settings',
+              'Drop table if exists sales_taxes',
+              'Drop table if exists suppliers',
+              'Drop table if exists product_types',
+              'Drop table if exists products',
+              'Drop table if exists brands',
+              'Drop table if exists tags',
+              'Drop table if exists layouts',
+              'Drop table if exists layout_groups',
+              'Drop table if exists layout_group_keys',
+              'Drop table if exists outlets',
+              'Drop table if exists registers',
+              'Drop table if exists sales',
+              'Drop table if exists sale_items',
+              'Drop table if exists orders',*/
               
               /* settings table */
               'Create table if not exists settings(id integer primary key, tag varchar(50), name varchar(50) unique, value varchar(50))',
@@ -67,16 +68,20 @@ app.constant('Schema_SQLs',
               'Create table if not exists sale_items (id integer primary key, quantity integer, unit_price real, name varchar(50), sale_id integer, product_id integer)',
               
               /* orders */
-              'Create table if not exists orders (id integer primary key, name varchar(50), supplier_id integer, due_at datetime)'
+              'Create table if not exists orders (id integer primary key, name varchar(50), supplier_id integer, due_at datetime)',
               ])
 .constant('Initialization_SQLs', [
-            //'insert into layouts (id, name, creation_date) values (1, "Default Quick Keys", datetime("now"))',
-            //'insert into layout_groups (id, name, is_active, layout_id) values (1, "Group 1", 1, 1)',
-            //'insert into sales_taxes (id, name, rate, system_generated) values (1, "No Tax", 0, 1)',
-            //'insert into registers (id, name, layout_id) values (1, "Main Register", 1)',
-            //'insert into outlets(id, name, is_current, sales_tax_id, register_id) values (1, "Main outlet", 1, 1, 1)',
+/*
+            'insert into layouts (id, name, creation_date) values (1, "Default Quick Keys", datetime("now"))',
+            'insert into layout_groups (id, name, is_active, layout_id) values (1, "Group 1", 1, 1)',
+            'insert into sales_taxes (id, name, rate, system_generated) values (1, "No Tax", 0, 1)',
+            'insert into registers (id, name, layout_id) values (1, "Main Register", 1)',
+            'insert into outlets(id, name, is_current, sales_tax_id, register_id) values (1, "Main outlet", 1, 1, 1)',
             
-            //'insert into settings (tag, name, value) values ("store_settings", "default_currency", upper("SGD"))',
-            //'insert into settings (tag, name, value) values ("store_settings", "display_prices", upper("Tax exclusive"))',
-            //'insert into settings (tag, name, value) values ("address", "physical_city", upper("Singapore"))'
+            'insert into settings (tag, name, value) values ("store_settings", "default_currency", upper("SGD"))',
+            'insert into settings (tag, name, value) values ("store_settings", "display_prices", upper("Tax exclusive"))',
+            'insert into settings (tag, name, value) values ("address", "physical_city", upper("Singapore"))'*/
           ]);
+
+
+

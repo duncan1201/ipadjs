@@ -94,20 +94,24 @@
                 
                 <!-- layout groups -->
                 <div class="item item-divider item-divider-paddingless">
-                    <div class="row">
-                        <div class="col">
-                            <div ng-repeat="group in layout.groups">
-                                <div class='group-item' ng-class='{active_group: layout.active_group_id == group.id}'>
-                                    <div class="text"  ng-click='group_text_click({{group}})'>{{group.name}}</div>
-                                    <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" ng-click="group_icon_click($event, {{group}})">
-                                    </button>
+                   
+                        <div id='groups_container'>
+                            <div class='row' style='border:0px solid black'>
+                                <div class='col' ng-repeat="group in layout.groups" style='border:0px solid yellow'>
+                                    <div class='group-item' ng-class='{active_group: layout.active_group_id == group.id}'>
+                                        <a class="text"  ng-style="get_text_style({{layout.groups.length}})" ng-click='group_text_click({{group}})'>{{group.name}}</a>
+                                        <button type="button" class="button button-small button-clear button-dark icon-right ion-gear-b icon-button" style='width:30px' ng-click="group_icon_click($event, {{group}})">
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <button type="button" class="button button-small button-icon float-right" ng-click="new_group_click($event)">
+                        </div>
+                        <div style='float:right;width:40px;border:0px solid darkgray'>
+                            <button type="button" class="button button-small button-icon float-right" style='border:0px solid blue' ng-click="new_group_click($event)">
                                 <i class="icon ion-plus-round"></i>
                             </button>
                         </div>
-                    </div>
+                   
                 </div>
                 <!-- layout keys -->
                 <div class="item" id="layout_keys_container">

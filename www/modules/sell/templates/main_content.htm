@@ -188,7 +188,7 @@ button.unit_price {
                     <div class="col">
                         <div ng-repeat="group in layout.groups">
                             <div class='group-item' ng-class='{active_group: layout.active_group_id == group.id}'>
-                                <div class="text"  ng-click='group_text_click({{group}})'>{{group.name}}</div>
+                                <div class="text"  ng-style='get_text_style({{layout.groups.length}})' ng-click='group_text_click({{group}})'>{{group.name}}</div>
                             </div>
                         </div>
                     </div>
