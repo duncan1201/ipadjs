@@ -84,7 +84,7 @@ product.factory('Products',
                                     reorder_point: item.reorder_point,
                                     reorder_amount: item.reorder_amount
                                 };
-                                console.log("ret.json="+angular.toJson(ret));
+                                //console.log("ret.json="+angular.toJson(ret));
                                 var scope = angular.element(document.querySelector('#product_add_edit')).scope();
                                 scope.$apply(function(){
                                     scope.product = ret;

@@ -17,6 +17,15 @@ app.controller('productCtrl',
                         Products.all_summary();
                     }; // end of store_settings_cb_main_content
                
+                    var get_sales_tax_rate = function(sales_tax_id, sales_taxes) {
+                        for(var i = 0; i < sales_taxes.length; i++) {
+                            if (sales_tax_id == sales_taxes[i].id){
+                                return sales_taxes[i].rate;
+                            }
+                        }
+                        return null;
+                    };
+               
                     var store_settings_cb_add_edit = function(tx, rlts) {
                         var store_settings = Generals.parse_store_settings(rlts);
                         $scope.$apply(function(){
@@ -184,19 +193,20 @@ app.controller('productCtrl',
                     };
                
                     $scope.supply_price_change = function() {
-                        calcuate_retail_price();
+                        calcuate_retail_prices();
                     };
                
                     $scope.markup_change = function() {
-                        calcuate_retail_price();
+                        calcuate_retail_prices();
                     };
                
-                    var calcuate_retail_price = function(){
+                    var calcuate_retail_prices = function(){
                         var markup = $scope.product.markup;
                         var supply_price = $scope.product.supply_price;
                         if (angular.isDefined(markup) && angular.isDefined(supply_price)){
-                            console.log("calculating retail price...");
-                            $scope.product.retail_price_excluding_tax = (1 + markup / 100.0) * supply_price;
+                            $scope.product.retail_price_excluding_tax = Math.round((1 + markup / 100.0) * supply_price * 100) / 100;
+                            var rate = get_sales_tax_rate($scope.product.sales_tax_id, $scope.sales_taxes);
+                            $scope.product.retail_price_including_tax = Math.round(($scope.product.retail_price_excluding_tax + ($scope.product.retail_price_excluding_tax * rate / 100)) * 100 ) / 100;
                         }
                     };
                
@@ -213,6 +223,10 @@ app.controller('productCtrl',
                         }else{
                             Products.create_product(product);
                         }
+                    };
+               
+                    $scope.sales_tax_change = function() {
+                        calcuate_retail_prices();
                     };
                
                     $scope.edit_click = function(id){
