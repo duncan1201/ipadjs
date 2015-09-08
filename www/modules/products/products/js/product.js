@@ -1,9 +1,10 @@
 app.controller('productCtrl',
-               function($rootScope, $scope, $ionicModal, $ionicSideMenuDelegate, Products, Tags, ProductTypes, Suppliers, Brands, Generals, App_URLs, Util){
+               function($rootScope, $scope, $ionicModal, $ionicSideMenuDelegate, Products, Tags, ProductTypes, Suppliers, Brands, Generals, General_CNSTs, App_URLs, Util){
                     var self = this;
                
                     var store_settings_callback = function(tx, rlts) {
-                        var store_settings = parse_store_settings.parse_store_settings(rlts);
+                        var store_settings = Generals.parse_store_settings(rlts);
+                        console.log("store_settings=" + angular.toJson(store_settings) + "\tgeneral cnst=" + General_CNSTs.TAX_INCLUSIVE_ID);
                         $scope.$apply(function(){
                             $scope.store_settings = store_settings;
                         });
@@ -64,6 +65,22 @@ app.controller('productCtrl',
                             };
                         } // end of if
                     }
+               
+                    $scope.is_price_include_tax = function(){
+                        if (angular.isDefined($scope.store_settings)){
+                            return $scope.store_settings['display_prices'].id == General_CNSTs.TAX_INCLUSIVE_ID;
+                        } else {
+                            return false;
+                        }
+                    };
+               
+                    $scope.is_price_exclude_tax = function(){
+                        if (angular.isDefined($scope.store_settings)){
+                            return $scope.store_settings['display_prices'].id == General_CNSTs.TAX_EXCLUSIVE_ID;
+                        } else {
+                            return false;
+                        }
+               };
                
                     $rootScope.$on('$includeContentLoaded', function(event, url){
                         if(url == App_URLs.product_add_edit){

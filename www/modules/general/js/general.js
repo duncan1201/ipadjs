@@ -1,5 +1,6 @@
 app.constant('General_CNSTs', {
-             TAX_INCLUSIVE_ID: 'TAX INCLUSIVE'
+             TAX_INCLUSIVE_ID: 'TAX INCLUSIVE',
+             TAX_EXCLUSIVE_ID: 'TAX EXCLUSIVE'
              });
 
 app.controller('GeneralCtrl', function($rootScope, $scope, General_CNSTs, App_URLs, SalesTaxes, Generals, Util){
@@ -21,7 +22,7 @@ app.controller('GeneralCtrl', function($rootScope, $scope, General_CNSTs, App_UR
                         id: General_CNSTs.TAX_INCLUSIVE_ID,
                         label: "Tax inclusive"
                     }, {
-                        id: "Tax exclusive".toUpperCase(),
+                        id: General_CNSTs.TAX_EXCLUSIVE_ID,
                         label: "Tax exclusive"
                     }
                ];

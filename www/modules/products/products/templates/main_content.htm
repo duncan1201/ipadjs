@@ -65,7 +65,11 @@
         <div class="col">Type</div>
         <div class="col">Brand</div>
         <div class="col">Supplier</div>
-        <div class="col">Price</div>
+        <div class="col">
+            Price
+            <span ng-show="is_price_include_tax()">(w/ tax)</span>
+            <span ng-show="is_price_exclude_tax()">(w/o tax)</span>
+        </div>
         <div class="col">Count</div>
         <div class="col">&nbsp;</div>
     </div>
@@ -80,7 +84,12 @@
         <div class="col">{{product.product_type}}&nbsp;</div>
         <div class="col">{{product.brand_name}}&nbsp;</div>
         <div class="col">{{product.supplier_name}}&nbsp;</div>
-        <div class="col">{{product.retail_price_excluding_tax}}&nbsp;</div>
+        <div class="col" ng-show="is_price_include_tax()">
+            {{product.retail_price_including_tax}}&nbsp;
+        </div>
+        <div class="col" ng-show="is_price_exclude_tax()">
+            {{product.retail_price_excluding_tax}}&nbsp;
+        </div>
         <div class="col">{{product.current_stock}}&nbsp;</div>
         <div class="col">
             <button class="button button-small button-clear button-positive" ng-click="edit_click({{product.id}})">Edit</button>
