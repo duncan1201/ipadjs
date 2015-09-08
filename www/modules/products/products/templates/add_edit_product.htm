@@ -110,8 +110,8 @@
                     <div class="col">Supply price</div>
                     <div class="col">X Markup (%)</div>
                     <div class="col">= Retail price</div>
-                    <div class="col">+ Sales tax</div>
-                    <div class="col">= Retail price</div>
+                    <div class="col" ng-show="is_price_include_tax()">+ Sales tax</div>
+                    <div class="col" ng-show="is_price_include_tax()">= Retail price</div>
                 </div>
                 <div class="row">
                     <div class="col"><input type="number" min="0" step="0.01" class="lightgray-outline" ng-model="product.supply_price" ng-change="supply_price_change()"></div>
@@ -121,8 +121,12 @@
                     <div class="col">
                         <input type="number" min="0" step="0.01" class="lightgray-outline" ng-model="product.retail_price_excluding_tax">
                     </div>
-                    <div class='col'>test</div>
-                    <div class='col'>
+                    <div class='col' ng-show="is_price_include_tax()">
+                        <select ng-model='product.sales_tax_id'>
+                            <option ng-repeat='sales_tax in sales_taxes' value='{{sales_tax.id}}'>{{sales_tax.name}} {{sales_tax.rate}} %</option>
+                        </select>
+                    </div>
+                    <div class='col' ng-show="is_price_include_tax()">
                         <input type="number" min="0" step="0.01" class="lightgray-outline" ng-model="product.retail_price_including_tax">
                     </div>
                 </div>
@@ -130,8 +134,8 @@
                     <div class="col gray-color" style='font-size:small'>Excluding tax</div>
                     <div class="col gray-color" style='font-size:small'>&nbsp;</div>
                     <div class="col gray-color" style='font-size:small'>Excluding tax</div>
-                    <div class="col gray-color" style='font-size:small'>Currently, No Tax (0%)</div>
-                    <div class="col gray-color" style='font-size:small'>Including tax</div>
+                    <div class="col gray-color" style='font-size:small' ng-show="is_price_include_tax()">Currently, No Tax (0%)</div>
+                    <div class="col gray-color" style='font-size:small' ng-show="is_price_include_tax()">Including tax</div>
                 </div>
             </div>
         </div>

@@ -1,15 +1,45 @@
 app.controller('productCtrl',
-               function($rootScope, $scope, $ionicModal, $ionicSideMenuDelegate, Products, Tags, ProductTypes, Suppliers, Brands, Generals, General_CNSTs, App_URLs, Util){
+               function($rootScope, $scope, $ionicModal, $ionicSideMenuDelegate, Products, Tags, ProductTypes, Suppliers, Brands, Generals, SalesTaxes, General_CNSTs, App_URLs, Util){
                     var self = this;
                
-                    var store_settings_callback = function(tx, rlts) {
+                    var sales_taxes_callback = function(tx, rlts){
+                        $scope.$apply(function(){
+                            $scope.sales_taxes = SalesTaxes.parse_rlts(rlts);
+                        });
+                        Generals.get_store_settings(store_settings_cb_add_edit);
+                    }; // sales_taxes_callback
+               
+                    var store_settings_cb_main_content = function(tx, rlts) {
                         var store_settings = Generals.parse_store_settings(rlts);
-                        console.log("store_settings=" + angular.toJson(store_settings) + "\tgeneral cnst=" + General_CNSTs.TAX_INCLUSIVE_ID);
                         $scope.$apply(function(){
                             $scope.store_settings = store_settings;
                         });
                         Products.all_summary();
-                    };
+                    }; // end of store_settings_cb_main_content
+               
+                    var store_settings_cb_add_edit = function(tx, rlts) {
+                        var store_settings = Generals.parse_store_settings(rlts);
+                        $scope.$apply(function(){
+                             $scope.store_settings = store_settings;
+                        });
+                        if (Util.is_undefined_or_null($rootScope.product_id_for_edit)){
+                            var product = {};
+               
+                            product.supply_price = 0;
+                            product.markup = 0;
+                            product.retail_price_excluding_tax = 0;
+                            product.retail_price_including_tax = 0;
+                            product.current_stock = 0;
+                            if (store_settings['display_prices'].id == 'TAX INCLUSIVE'){
+                                product.sales_tax_id = store_settings['sales_tax_id'];
+                            }
+                            $scope.$apply(function(){
+                                $scope.product = product;
+                            });
+                        } else {
+                            Products.get_product($rootScope.product_id_for_edit);
+                        }
+                    }; // end of store_settings_cb_add_edit
                
                     var tags_callback = function(tx, results){
                         var rows = results.rows;
@@ -80,7 +110,7 @@ app.controller('productCtrl',
                         } else {
                             return false;
                         }
-               };
+                    };
                
                     $rootScope.$on('$includeContentLoaded', function(event, url){
                         if(url == App_URLs.product_add_edit){
@@ -89,18 +119,22 @@ app.controller('productCtrl',
                             ProductTypes.all_summary(product_types_callback);
                             Tags.all(tags_callback);
                                    
-                            if (Util.is_undefined_or_null($rootScope.product_id_for_edit)){
-                                   $scope.product = {supply_price: 0, markup: 0, retail_price_excluding_tax: 0, retail_price_including_tax: 0, current_stock: 0};
-                            } else {
-                                Products.get_product($rootScope.product_id_for_edit);
-                            }
+                            
+                            /* 
+                             steps:
+                             1. load sales taxes first
+                             2. load store settings for including tax or excluding tax
+                             3. load the product
+                            */
+                            SalesTaxes.all(sales_taxes_callback);
+                             
                         } else if (url == App_URLs.product_main_content) {
                             Brands.all(brands_callback);
                             Suppliers.all_summary(suppliers_callback);
                             ProductTypes.all_summary(product_types_callback);
                             Tags.all(tags_callback);
                                    
-                            Generals.get_store_settings(store_settings_callback);
+                            Generals.get_store_settings(store_settings_cb_main_content);
                                    
                             if(!angular.isDefined($scope.tag_to_be_add)){
                                 $scope.tag_to_be_add = "";
@@ -129,7 +163,6 @@ app.controller('productCtrl',
                     };
                
                     $scope.tag_remove_click = function(tag){
-                        console.log("tag_remove_click...=" + tag);
                         var index = $scope.product.tags.indexOf(tag);
                         if(index > -1){
                             $scope.product.tags.splice(index, 1);
