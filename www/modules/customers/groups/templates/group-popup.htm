@@ -1,0 +1,32 @@
+<div class="modal" style="width:55%">
+    
+    <!-- modal header bar -->
+    <ion-header-bar>
+        <h1 class="title">{{popup_title}}</h1>
+        <button class="button button-clear button-positive" ng-click="group_popup_cancel_click()">Cancel</button>
+    </ion-header-bar>
+    
+    <!-- modal content area -->
+    <ion-content>
+        <form name="group_form" ng-submit="group_form_submit_click(group)">
+            <input type="hidden" ng-model="group.id"/>
+            <div class="row">
+                <div class="col col-20">Group ID</div>
+                <div class="col col-80">
+                    <input type="text" placeholder="Group ID" ng-model="group.group_id" class='lightgray-outline' style="width:90%">
+                        </div>
+            </div>
+            <div class="row">
+                <div class="col col-20">Name</div>
+                <div class="col col-80">
+                    <input type="text" placeholder="Name" ng-model="group.name" class='lightgray-outline' style="width:90%">
+                        </div>
+            </div>
+            
+            <div class="padding">
+                <button type="submit" class="button button-block button-positive rounded">Save customer group</button>
+            </div>
+        </form>
+    </ion-content>
+    
+</div>

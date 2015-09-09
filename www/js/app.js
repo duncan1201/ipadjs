@@ -6,7 +6,7 @@
 
 
 
-var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout', 'productType', 'outlet', 'sale', 'register']);
+var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout', 'productType', 'outlet', 'sale', 'register', 'cgroup']);
 
 app.run(function($ionicPlatform, DbUtil, App_URLs, Drop_SQLs, Schema_SQLs, Initialization_SQLs) {
         var ready_function = function(){
@@ -51,7 +51,11 @@ app.constant('App_URLs',
                 general_main_content: 'modules/general/templates/main_content.htm',
                 tag_main_content: 'modules/products/tags/templates/main_content.htm',
                 stock_ctrl_main_content: 'modules/products/stockControl/templates/main_content.htm'
-             });
+             }).
+constant('Routers', [
+            ['Customer Groups', 'modules/customers/groups/templates/header_bar.htm', 'modules/customers/groups/templates/main_content.htm'],
+            ['Customers', 'modules/customers/customers/templates/header_bar.htm', 'modules/customers/customers/templates/main_content.htm']
+             ]);
 
 function initApp(DbUtil, Drop_SQLs, Schema_SQLs, Initialization_SQLs){
     var reinit_db = false;
@@ -80,7 +84,7 @@ function initApp(DbUtil, Drop_SQLs, Schema_SQLs, Initialization_SQLs){
                    }); // end of transaction
 };
 
-app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Menus, $ionicSideMenuDelegate, App_URLs){
+app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Menus, $ionicSideMenuDelegate, App_URLs, Routers){
                
                if(!angular.isDefined($rootScope.ion_header_bar_template)){
                     console.log("setting ion_header_bar_template");
@@ -136,6 +140,16 @@ app.controller('AppCtrl', function($rootScope, $scope, $timeout, $ionicModal, Me
                         $rootScope.ion_header_bar_template = "modules/quickKeys/templates/header_bar.htm";
                         $rootScope.ion_content_template = App_URLs.layout_main_content;
                     }
+               
+                    for (var i = 0; i < Routers.length; i++) {
+                        var entry = Routers[i];
+                        if (entry[0] == submenuTitle) {
+                            $rootScope.ion_header_bar_template = entry[1];
+                            $rootScope.ion_content_template = entry[2];
+                            return;
+                        }
+                    }
+               
                };
 
                
@@ -182,10 +196,17 @@ app.factory('Menus', function(){
                             },
                             {
                                 title: "",
+                                submenus:[
+                                    {title: "Customers", icon: "ion-ios-person"},
+                                    {title: "Customer Groups", icon: "ion-ios-circle-outline"}
+                                ]
+                            },
+                            {
+                                title: "",
                                 submenus: [
                                            {title:"General", icon: "ion-ios-gear"},
                                            {title:"Outlets and Registers", icon: "ion-ios-circle-outline"},
-                                           {title:"Quick Keys", icon: "ion-ios-circle-outline"}, {title:"Sales Taxes", icon: "ion-ios-circle-outline"}]
+                                           {title:"Quick Keys", icon: "ion-ios-keypad-outline"}, {title:"Sales Taxes", icon: "ion-ios-circle-outline"}]
                             }
                             ];
                 } // end of all

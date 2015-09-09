@@ -6,6 +6,8 @@ app.constant('Drop_SQLs', [
                            'Drop table if exists products',
                            'Drop table if exists brands',
                            'Drop table if exists tags',
+                           'Drop table if exists customers',
+                           'Drop table if exists cgroups',
                            'Drop table if exists layouts',
                            'Drop table if exists layout_groups',
                            'Drop table if exists layout_group_keys',
@@ -37,6 +39,12 @@ app.constant('Drop_SQLs', [
               
               /* tags table */
               'Create table if not exists tags(id integer primary key, name varchar(50))',
+              
+              /* customers */
+              'Create table if not exists customers(id integer primary key, name varchar(50))',
+              
+              /* customer groups */
+              'Create table if not exists cgroups(id integer primary key, group_id varchar(50), name varchar(50))',
               
               /* Layout */
               'Create table if not exists layouts(id integer primary key, name varchar(50), creation_date datetime)',
