@@ -15,8 +15,6 @@ app.controller('GeneralCtrl', function($rootScope, $scope, General_CNSTs, App_UR
                                        label: 'US Dollars'
                                        }];
                
-               
-               
                $scope.display_prices_values = [
                     {
                         id: General_CNSTs.TAX_INCLUSIVE_ID,
@@ -27,7 +25,6 @@ app.controller('GeneralCtrl', function($rootScope, $scope, General_CNSTs, App_UR
                     }
                ];
 
-               
                $rootScope.$on('$includeContentLoaded', function(event, url){
                     if(url == App_URLs.general_main_content){
                         //Generals.get_store_settings();

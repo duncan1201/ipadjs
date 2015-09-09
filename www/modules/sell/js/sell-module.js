@@ -37,7 +37,8 @@ sale.factory('Sales', function(DbUtil, General_CNSTs, SalesTaxes, Generals){
                                             sale_items.push({
                                                         id: sale_item.id,
                                                         quantity: sale_item.quantity,
-                                                        unit_price: sale_item.unit_price,
+                                                        unit_price_excluding_tax: sale_item.unit_price_excluding_tax,
+                                                        unit_price_including_tax: sale_item.unit_price_including_tax,
                                                         name: sale_item.name,
                                                         sale_id: sale.id
                                             });
@@ -105,16 +106,17 @@ sale.factory('Sales', function(DbUtil, General_CNSTs, SalesTaxes, Generals){
                         };
                         Generals.get_store_settings(general_cb);
                     }, // end of create_sale
-                    add_sale_item: function (sale_id, key, callback_fun) {
+                    add_sale_item: function (sale_id, price_include_tax, key, callback_fun) {
+             console.log("key=" + angular.toJson(key));
                         // add sale item
-                        var stmt = "insert into sale_items (name, quantity, unit_price, sale_id, product_id) values (?, 1, ?, ?, ?)";
-                        var json_insert = {sql: stmt, params:[key.display_name, key.retail_price_excluding_tax, sale_id, key.product_id]};
+                        var stmt = "insert into sale_items (name, quantity, unit_price_excluding_tax, unit_price_including_tax, sale_id, product_id) values (?, 1, ?, ?, ?, ?)";
+                        var json_insert = {sql: stmt, params:[key.display_name, key.retail_price_excluding_tax, key.retail_price_including_tax, sale_id, key.product_id]};
              
                         // update subtotal
-                        var json_subtotal = this.create_update_subtotal_json(sale_id);
+                        var json_subtotal = this.create_update_subtotal_json(sale_id, price_include_tax);
              
                         // update total tax
-                        var json_total_tax = this.create_update_total_tax_json(sale_id);
+                        var json_total_tax = this.create_update_total_tax_json(sale_id, price_include_tax);
              
                         // update total
                         var json_total = this.create_update_total_json(sale_id);
@@ -122,7 +124,7 @@ sale.factory('Sales', function(DbUtil, General_CNSTs, SalesTaxes, Generals){
                         // sqls execution
                         DbUtil.executeSqls([json_insert, json_subtotal, json_total_tax, json_total], callback_fun);
                     }, // end of add_sale_item
-                    delete_sale_item: function (sale_id, item_id) {
+                    delete_sale_item: function (sale_id, price_include_tax, item_id) {
                         var self = this;
                         // delete sale item
                         var stmt = 'delete from sale_items where id = ?';
@@ -130,13 +132,13 @@ sale.factory('Sales', function(DbUtil, General_CNSTs, SalesTaxes, Generals){
              
 
                         // update subtotal
-                        var json_subtotal = this.create_update_subtotal_json(sale_id);
+                        var json_subtotal = this.create_update_subtotal_json(sale_id, price_include_tax);
+             
+                        // update total tax
+                        var json_total_tax = this.create_update_total_tax_json(sale_id, price_include_tax);
              
                         // update total
                         var json_total = this.create_update_total_json(sale_id);
-             
-                        // update total tax
-                        var json_total_tax = this.create_update_total_tax_json(sale_id);
              
                         var callback_fun = function() {
                             self.get_current_sale();
@@ -145,35 +147,42 @@ sale.factory('Sales', function(DbUtil, General_CNSTs, SalesTaxes, Generals){
                         DbUtil.executeSqls([json_delete, json_subtotal, json_total_tax, json_total],
                                            callback_fun);
                     }, // delete_sale_item
-                    create_update_subtotal_json: function (sale_id) {
-                        var subtotal = "select sum(unit_price * quantity) from sale_items where sale_id = " + sale_id;
+                    create_update_subtotal_json: function (sale_id, price_include_tax) {
+                        var subtotal = "select sum(unit_price_excluding_tax * quantity) from sale_items where sale_id = " + sale_id;
+             
                         var stmt = "update sales set subtotal = (" + subtotal + ") where id = ?";
                         var ret = {sql: stmt, params:[sale_id]};
                         return ret;
                     }, // create_update_subtotal_json
                     create_update_total_json: function(sale_id) {
-                        var total_query = "select sum(unit_price * quantity) from sale_items where sale_id = " + sale_id;
+                        var total_query = "select (total_tax + subtotal) as total from sale_items where sale_id = " + sale_id;
                         var stmt = "update sales set total = (" + total_query + ") where id = ?";
                         var ret = {sql: stmt, params:[sale_id]};
                         return ret;
                     }, // end create_update_total_json
-                    create_update_total_tax_json: function(sale_id) {
-                        var tax_rate_query = "(select sales_tax_rate from sales where id = " + sale_id + ")";
-                        var total_tax_query = "select sum(unit_price * quantity) * 0.01 * " +tax_rate_query +" from sale_items where sale_id = " + sale_id;
-                        var stmt = "update sales set total_tax = (" + total_tax_query + ") where id = ?";
+                    create_update_total_tax_json: function(sale_id, price_include_tax) {
+                        var stmt;
+                        if (price_include_tax){
+                            var total_tax_query = "select sum((unit_price_including_tax - unit_price_excluding_tax) * quantity) from sale_items where sale_id = " + sale_id;
+                            stmt = "update sales set total_tax = (" + total_tax_query + ") where id = ?";
+                        } else {
+                            var tax_rate_query = "(select sales_tax_rate from sales where id = " + sale_id + ")";
+                            var total_tax_query = "select sum(unit_price_excluding_tax * quantity) * 0.01 * " +tax_rate_query +" from sale_items where sale_id = " + sale_id;
+                            stmt = "update sales set total_tax = (" + total_tax_query + ") where id = ?";
+                        }
                         var ret = {sql: stmt, params:[sale_id]};
                         return ret;
                     }, // create_update_total_tax_json
-                    update_item_quantity : function (sale_id, item_id, quantity, callback) {
+                    update_item_quantity : function (sale_id, price_include_tax, item_id, quantity, callback) {
                         var stmt = "update sale_items set quantity = ? where id = ?";
              
                         var json_quantity = {sql: stmt, params:[quantity, item_id]};
              
                         // update total tax
-                        var json_subtotal = this.create_update_subtotal_json(sale_id);
+                        var json_subtotal = this.create_update_subtotal_json(sale_id, price_include_tax);
              
                         // update total tax
-                        var json_total_tax = this.create_update_total_tax_json(sale_id);
+                        var json_total_tax = this.create_update_total_tax_json(sale_id, price_include_tax);
              
                         // update total
                         var json_total = this.create_update_total_json(sale_id);

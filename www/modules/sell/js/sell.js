@@ -1,4 +1,4 @@
-app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover, $ionicPopup, App_URLs, Layouts, Products, Sales, Util) {
+app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicPopover, $ionicPopup, App_URLs, Layouts, Products, Sales, Generals, Util) {
                
               
                // start of init method
@@ -22,7 +22,7 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                }; // end of sale_item_quantity_click
                
                $scope.sale_item_delete_click = function (sale_id, sale_item_id) {
-                    Sales.delete_sale_item(sale_id, sale_item_id);
+                    Sales.delete_sale_item(sale_id, this.is_price_include_tax(), sale_item_id);
                }; // end of sale_item_delete_click
                
                $scope.toggle_side_menu = function () {
@@ -41,11 +41,11 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                
                $scope.key_click = function(key){
                     console.log("key click..." + angular.toJson(key));
-               
+                    var self = this;
                     if ($scope.current_sale.id == ''){
                         var callback_fun = function(tx, results) {
                             $scope.current_sale.id = results.insertId;
-                            Sales.add_sale_item($scope.current_sale.id, key, function(tx, rlts){
+                            Sales.add_sale_item($scope.current_sale.id, self.is_price_include_tax(), key, function(tx, rlts){
                                 Sales.get_current_sale();
                             });
                         }; // end of callback_fun
@@ -53,16 +53,22 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                         Sales.create_sale(callback_fun);
                     } // end if
                     else {
-                        Sales.add_sale_item($scope.current_sale.id, key, function(tx, rlts){
+                        Sales.add_sale_item($scope.current_sale.id, self.is_price_include_tax(), key, function(tx, rlts){
                             Sales.get_current_sale();
                         });
                     } // end of else
                }; // end of key_click
                
+               $scope.is_price_include_tax = function(){
+                    if (angular.isDefined($scope.store_settings)){
+                        return $scope.store_settings['display_prices'].id == 'TAX INCLUSIVE';
+                    } else {
+                        return false;
+                    }
+               };
+               
                $rootScope.$on('$includeContentLoaded', function(event, url){
                     if(url == App_URLs.sell_main_content){
-                        
-                        var scope = angular.element(document.querySelector('#sell_main_content')).scope();
                               
                         // callback for get_current_layout
                         var layout_callback = function(tx, results) {
@@ -74,9 +80,8 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                               
                                     var self = this;
 
-                                    console.log("scope == null ?" + (scope == null));
-                                    scope.$apply(function(){
-                                           scope.layout = self.layout_obj;
+                                    $scope.$apply(function(){
+                                           $scope.layout = self.layout_obj;
                                     });
                                 }
                                 console.log("before get_layout_group_keys_for_edit...");
@@ -84,10 +89,18 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                             }
                         }; // end of layout_callback
                         
+                        // generals_callback
+                        var store_settings_callback = function(tx, rlts) {
+                            var store_settings = Generals.parse_store_settings(rlts);
+                            $scope.store_settings = store_settings;
+                        }; // end of generals_callback
+                              
                         Layouts.get_current_layout(layout_callback);
                               
                         // get current sale
                         Sales.get_current_sale();
+                              
+                        Generals.get_store_settings(store_settings_callback);
                               
                         // parked sale callback
                         var parked_sale_callback = function(tx, rlts) {
@@ -220,6 +233,14 @@ app.controller('sellCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, 
                     Sales.get_sale_items_product_id_n_qty(sale_id, get_sale_items_callback);
                }; // end of pay_click
                
+               $scope.get_unit_price_for_ui = function(sale_item){
+                    if (this.is_price_include_tax()){
+                        return sale_item.unit_price_including_tax;
+                    } else {
+                        return sale_item.unit_price_excluding_tax;
+                    }
+               };// end of get_unit_price_for_display
+               
                $scope.get_display_color = function(color){
                     return Util.get_display_color(color);
                };
@@ -235,6 +256,6 @@ app.controller('itemQuantiyCtrl', function($scope, Sales){
                         $scope.$parent.hide_quantity_popover();
                     } ; // end of callback_fun
                
-                    Sales.update_item_quantity(sale_item.sale_id, sale_item.id, sale_item.quantity, callback);
+                    Sales.update_item_quantity(sale_item.sale_id, $scope.$parent.is_price_include_tax(), sale_item.id, sale_item.quantity, callback);
                } // end of done_click
 }); // itemQuantiyCtrl

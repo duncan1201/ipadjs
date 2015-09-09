@@ -65,7 +65,6 @@ function initApp(DbUtil, Drop_SQLs, Schema_SQLs, Initialization_SQLs){
         //SQLs = Drop_SQLs.concat(Schema_SQLs).concat(Initialization_SQLs);
         SQLs = Schema_SQLs;
     }
-    console.log("SQLs.lenght=" + SQLs.length);
     
     var db = DbUtil.openDb();
     db.transaction(function(tx){

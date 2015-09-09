@@ -64,7 +64,7 @@ app.constant('Drop_SQLs', [
               'Create table if not exists sales (id integer primary key, sales_tax_name varchar(50), sales_tax_rate real, subtotal real DEFAULT 0, total_tax real DEFAULT 0, total real DEFAULT 0, creation_date datetime, status varchar(50) DEFAULT "current")',
               
               /* sale_items */
-              'Create table if not exists sale_items (id integer primary key, quantity integer, unit_price real, name varchar(50), sale_id integer, product_id integer)',
+              'Create table if not exists sale_items (id integer primary key, quantity integer, unit_price_excluding_tax real, unit_price_including_tax real, name varchar(50), sale_id integer, product_id integer)',
               
               /* orders */
               'Create table if not exists orders (id integer primary key, name varchar(50), supplier_id integer, due_at datetime)',

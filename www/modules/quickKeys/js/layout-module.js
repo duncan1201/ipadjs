@@ -147,6 +147,7 @@ layout.factory('Layouts',
                                   color: item.color,
                                   display_name: item.display_name,
                                   retail_price_excluding_tax: item.retail_price_excluding_tax,
+                                  retail_price_including_tax: item.retail_price_including_tax,
                                   product_id: item.product_id
                                 });
                             }
@@ -156,7 +157,7 @@ layout.factory('Layouts',
                             }
 
                         }; // end of key_callback
-                        var selectSql = "select k.*, p.retail_price_excluding_tax as retail_price_excluding_tax from layout_group_keys k left join products p on p.id = k.product_id where layout_group_id = ? ";
+                        var selectSql = "select k.*, p.retail_price_excluding_tax as retail_price_excluding_tax, p.retail_price_including_tax as retail_price_including_tax from layout_group_keys k left join products p on p.id = k.product_id where layout_group_id = ? ";
                         var json = {sql: selectSql, params:[group.id], callback: key_callback};
                         DbUtil.executeSql(json);
                     }, // end of get_layout_group_keys_for_edit
