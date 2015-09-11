@@ -1,4 +1,4 @@
-app.controller('customerGroupCtrl', function($rootScope, $scope, $ionicModal, CGroups, App_URLs){
+app.controller('customerGroupCtrl', function($rootScope, $scope, $ionicModal, CGroups, App_URLs, DbUtil){
                
                $ionicModal.fromTemplateUrl('modules/customers/groups/templates/group-popup.htm',
                                            function(modal) {
@@ -18,8 +18,28 @@ app.controller('customerGroupCtrl', function($rootScope, $scope, $ionicModal, CG
                     var callback = function(tx, rlts){
                         console.log("angular.toJson(rlts)=" + angular.toJson(rlts));
                         CGroups.all();
+                        $scope.customerGroupModal.hide();
                     };
-                    CGroups.create_group(group, callback);
+                    //CGroups.create_group(group, callback);
+                    if(angular.isDefined(group.id)){
+                        CGroups.update_group(group, callback);
+                    } else {
+                        CGroups.create_group(group, callback);
+                    }
+               };
+               
+               $scope.edit_click = function(id) {
+                    var callback = function(tx, rlts){
+                        var rows = rlts.rows;
+               
+                        if(rows.length > 0){
+                            var item = rows.item(0);
+                            $scope.popup_title = "Edit customer group";
+                            $scope.group = {id: item.id, name: item.name, group_id: item.group_id};
+                            $scope.customerGroupModal.show();
+                        }
+                    }; // end of callback
+                    CGroups.get_group(id, callback);
                };
                
                $rootScope.$on('$includeContentLoaded', function(event, url){
@@ -27,4 +47,8 @@ app.controller('customerGroupCtrl', function($rootScope, $scope, $ionicModal, CG
                         CGroups.all();
                     }
                }); // end of on
+               
+               $scope.cancel_click = function() {
+                    $scope.customerGroupModal.hide();
+               };
 });

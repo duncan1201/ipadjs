@@ -41,7 +41,7 @@ app.constant('Drop_SQLs', [
               'Create table if not exists tags(id integer primary key, name varchar(50))',
               
               /* customers */
-              'Create table if not exists customers(id integer primary key, name varchar(50))',
+              'Create table if not exists customers(id integer primary key, first_name varchar(50), last_name varchar(50), company varchar(50), cgroup_id integer, date_of_birth date, gender varchar(10))',
               
               /* customer groups */
               'Create table if not exists cgroups(id integer primary key, group_id varchar(50), name varchar(50))',

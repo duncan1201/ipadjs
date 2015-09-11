@@ -6,7 +6,7 @@
 
 
 
-var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout', 'productType', 'outlet', 'sale', 'register', 'cgroup']);
+var app = angular.module('starter', ['ionic', 'util', 'salesTax', 'general', 'supplier', 'product', 'brand', 'tag', 'layout', 'productType', 'outlet', 'sale', 'register', 'customer', 'cgroup']);
 
 app.run(function($ionicPlatform, DbUtil, App_URLs, Drop_SQLs, Schema_SQLs, Initialization_SQLs) {
         var ready_function = function(){
@@ -58,7 +58,7 @@ constant('Routers', [
              ]);
 
 function initApp(DbUtil, Drop_SQLs, Schema_SQLs, Initialization_SQLs){
-    var reinit_db = false;
+    var reinit_db = true;
     
     var SQLs ;
     

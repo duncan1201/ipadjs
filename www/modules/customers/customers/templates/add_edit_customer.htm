@@ -1,0 +1,159 @@
+<ion-content scroll="true" id='general_main_content' ng-controller="GeneralCtrl">
+    <div class="row">
+        <div class="col">Customers &gt; New Customer </div>
+    </div>
+    
+    <div class="card">
+        <form ng-submit="save_store_settings_click(store_settings)">
+            <div class="item item-divider">
+                Customer Details
+            </div>
+            <div class="item">
+                <div class="row">
+                    <div class='col'>Contact name</div>
+                    <div class='col'>
+                        <input type='text' placeholder="First"/><input type='text' placeholder='Last'/>
+                    </div>
+                </div>
+                
+                <div class='row'>
+                    <div class='col'>
+                        Company
+                    </div>
+                    <div class='col'>
+                        <input type='text' placeholder='Company'/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+   
+   <div class="card">
+       <div class="item item-divider">Contact Information</div>
+       <div class="item item-paddingless">
+           <div class="row">
+               <div class="col col-50">
+                   <div class="list">
+                       <label class="item item-input item-stacked-label">
+                           <span>Phone</span>
+                           <input type="tel" placeholder="Phone" ng-model="supplier.phone">
+                               </label>
+                       <label class="item item-input item-stacked-label">
+                           <span>Mobile</span>
+                           <input type="tel" placeholder="Mobile" ng-model="supplier.mobile">
+                               </label>
+                       <label class="item item-input item-stacked-label">
+                           <span>Fax</span>
+                           <input type="text" placeholder="Fax" ng-model="supplier.fax">
+                               </label>
+                   </div>
+               </div>
+               <div class="col">
+                   <div class="list">
+                       <label class="item item-input item-stacked-label">
+                           <span>Email</span>
+                           <input type="email" placeholder="Email" ng-model="supplier.email">
+                               </label>
+                       <label class="item item-input item-stacked-label">
+                           <span>Website</span>
+                           <input type="text" placeholder="Website" ng-model="supplier.website">
+                               </label>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+   
+   <div class="card ">
+        <form ng-submit="save_address_click(address)">
+            <div class="item item-divider">
+                Address
+            </div>
+            <div class="item item-paddingless">
+                <div class="row">
+                    <div class="col">
+                        <div class="card card-marginless">
+                            <div class="item item-divider">
+                                Physical Address
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Street</span>
+                                    <input type="text" placeholder="Street" ng-model="address.physical_street1">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Street</span>
+                                    <input type="text" placeholder="Street" ng-model="address.physical_street2">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Suburb</span>
+                                    <input type="text" placeholder="Suburb" ng-model="address.physical_suburb">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">City</span>
+                                    <input type="text" placeholder="City" ng-model="address.physical_city">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Postcode</span>
+                                    <input type="text" placeholder="Postcode" ng-model="address.physical_postcode">
+                                        </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card card-marginless">
+                            <div class="item item-divider">
+                                Postal Address <a href='#' style='font-size:12px;text-decoration: none;' ng-click="same_as_physical_address_click()">Same as Physical Address</a>                        </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Street</span>
+                                    <input type="text" placeholder="Enter street" ng-model="address.postal_street1">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Street</span>
+                                    <input type="text" placeholder="Enter street" ng-model="address.postal_street2">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Suburb</span>
+                                    <input type="text" placeholder="Suburb" ng-model="address.postal_suburb">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">City</span>
+                                    <input type="text" placeholder="City" ng-model="address.postal_city">
+                                        </label>
+                            </div>
+                            <div class="item">
+                                <label class="item item-input">
+                                    <span class="input-label">Postcode</span>
+                                    <input type="text" placeholder="Postcode" ng-model="address.postal_postcode">
+                                        </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item item-divider item-divider-paddingless">
+                <div class="row">
+                    <div class="col col-25 col-offset-75">
+                        <button type='submit' class="button button-small button-block button-light  rounded" ng-click="save_address_click(address)">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--end of address -->
+</ion-content>

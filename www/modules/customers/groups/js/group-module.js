@@ -5,6 +5,7 @@ cgroups.factory('CGroups', function(DbUtil){
                     all: function(external_cb) {
                         var self = this;
                         var stmt = "select * from cgroups";
+                        //var stmt = "select * from products";
                         var _callback = null;
                         if (angular.isDefined(external_cb)){
                             _callback = external_cb;
@@ -17,12 +18,15 @@ cgroups.factory('CGroups', function(DbUtil){
                                 });
                             };
                         }
-                        var json = {sql:stmt, params:[], callback: function(tx, results){
-                            console.log("rlts=" + angular.toJson(results));
-                        }};
+                        var json = {sql:stmt, params:[], callback: _callback};
                         DbUtil.executeSql(json);
                     }, // end of all
-                    parse_rlts: function(tx, rlts) {
+                    get_group: function(id, _callback) {
+                        var stmt = "select * from cgroups where id = ?";
+                        var json = {sql: stmt, params:[id], callback: _callback};
+                        DbUtil.executeSql(json);
+                    }, // end of get_group
+                    parse_rlts: function(rlts) {
                         console.log("rlts=" + angular.toJson(rlts));
                         var rows = rlts.rows;
                         var ret = [];
@@ -37,6 +41,16 @@ cgroups.factory('CGroups', function(DbUtil){
                         var json = {sql:stmt, params:[group.group_id, group.name], callback: _callback};
                         DbUtil.executeSql(json);
                     }, // end of create_group
+                    update_group: function(group, _callback){
+                        var stmt = "update cgroups set group_id = ?, name = ? where id = ?";
+                        var json = {sql: stmt, params:[group.group_id, group.name, group.id], callback: _callback};
+                        DbUtil.executeSql(json);
+                    }, // end of update_group
+                    delete_group: function(id, _callback) {
+                        var stmt = "delete from cgroups where id = ?";
+                        var json = {sql: stmt, params:[id], callback: _callback};
+                        DbUtil.executeSql(json);
+                    },
                     get_scope: function() {
                         var ret = angular.element(document.querySelector('#cgroups_main_content')).scope();
                         return ret;
